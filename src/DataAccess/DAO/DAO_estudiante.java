@@ -18,71 +18,70 @@ import Framework.PatException;
 public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
 
     @Override
-    public DTO_estudiante readBy(Integer id) throws Exception {
-        DTO_estudiante estudiante = new DTO_estudiante();
-        String query = " SELECT IdEstudiante, NombreEstudiante, ApellidoEstudiante, CedulaEstudiante, "
-                     + " CorreoEstudiante, UsuarioEstudiante, ClaveEstudiante, QREstudiante, "
-                     + " FechaRegistro, FechaModifica, Estado "
-                     + " FROM Estudiante "
-                     + " WHERE Estado = 'A' AND IdEstudiante = " + id.toString();
-        try {
-            Connection conn = openConnection();         // Conectar a la base de datos
-            Statement stmt = conn.createStatement();    // Crear una declaración SQL
-            ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
-            while (rs.next()) {
-                estudiante = new DTO_estudiante(
-                    rs.getInt(1),           // IdEstudiante
-                    rs.getString(2),        // NombreEstudiante
-                    rs.getString(3),        // ApellidoEstudiante
-                    rs.getString(4),        // CedulaEstudiante
-                    rs.getString(5),        // CorreoEstudiante
-                    rs.getString(6),        // UsuarioEstudiante
-                    rs.getString(7),        // ClaveEstudiante
-                    rs.getString(8),        // QREstudiante
-                    rs.getString(9),        // FechaRegistro
-                    rs.getString(10),       // FechaModifica
-                    rs.getString(11)        // Estado
-                );
-            }
-        } catch (SQLException e) {
-            throw new PatException(e.getMessage(), getClass().getName(), "readBy()");
+public DTO_estudiante readBy(Integer idEstudiante) throws Exception {
+    DTO_estudiante estudiante = new DTO_estudiante();
+    String query = " SELECT IdEstudiante, NombreEstudiante, ApellidoEstudiante, CedulaEstudiante, "
+                 + " CorreoEstudiante, UsuarioEstudiante, ClaveEstudiante, QREstudiante, "
+                 + " FechaRegistro, FechaModifica, Estado "
+                 + " FROM Estudiante "
+                 + " WHERE Estado = 'A' AND IdEstudiante = " + idEstudiante.toString();
+    try {
+        Connection conn = openConnection();         // Conectar a la base de datos
+        Statement stmt = conn.createStatement();    // Crear una declaración SQL
+        ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
+        while (rs.next()) {
+            estudiante = new DTO_estudiante(
+                rs.getInt("IdEstudiante"),           // IdEstudiante
+                rs.getString("NombreEstudiante"),    // NombreEstudiante
+                rs.getString("ApellidoEstudiante"),  // ApellidoEstudiante
+                rs.getString("CedulaEstudiante"),    // CedulaEstudiante
+                rs.getString("CorreoEstudiante"),    // CorreoEstudiante
+                rs.getString("UsuarioEstudiante"),   // UsuarioEstudiante
+                rs.getString("ClaveEstudiante"),     // ClaveEstudiante
+                rs.getString("QREstudiante"),        // QREstudiante
+                rs.getTimestamp("FechaRegistro").toLocalDateTime(),  // FechaRegistro
+                rs.getTimestamp("FechaModifica") != null ? rs.getTimestamp("FechaModifica").toLocalDateTime() : null,  // FechaModifica
+                rs.getString("Estado").charAt(0)     // Estado
+            );
         }
-        return estudiante;
+    } catch (SQLException e) {
+        throw new PatException(e.getMessage(), getClass().getName(), "readBy()");
     }
-
-    @Override
-    public List<DTO_estudiante> readAll() throws Exception {
-        List<DTO_estudiante> estudiantes = new ArrayList<>();
-        String query = " SELECT IdEstudiante, NombreEstudiante, ApellidoEstudiante, CedulaEstudiante, "
-                     + " CorreoEstudiante, UsuarioEstudiante, ClaveEstudiante, QREstudiante, "
-                     + " FechaRegistro, FechaModifica, Estado "
-                     + " FROM Estudiante "
-                     + " WHERE Estado = 'A' ";
-        try {
-            Connection conn = openConnection();         // Conectar a la base de datos
-            Statement stmt = conn.createStatement();    // Crear una declaración SQL
-            ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
-            while (rs.next()) {
-                DTO_estudiante estudiante = new DTO_estudiante(
-                    rs.getInt(1),           // IdEstudiante
-                    rs.getString(2),        // NombreEstudiante
-                    rs.getString(3),        // ApellidoEstudiante
-                    rs.getString(4),        // CedulaEstudiante
-                    rs.getString(5),        // CorreoEstudiante
-                    rs.getString(6),        // UsuarioEstudiante
-                    rs.getString(7),        // ClaveEstudiante
-                    rs.getString(8),        // QREstudiante
-                    rs.getString(9),        // FechaRegistro
-                    rs.getString(10),       // FechaModifica
-                    rs.getString(11)        // Estado
-                );
-                estudiantes.add(estudiante);
-            }
-        } catch (SQLException e) {
-            throw e; // Lanzar la excepción en caso de error
+    return estudiante;
+}
+@Override
+public List<DTO_estudiante> readAll() throws Exception {
+    List<DTO_estudiante> estudiantes = new ArrayList<>();
+    String query = " SELECT IdEstudiante, NombreEstudiante, ApellidoEstudiante, CedulaEstudiante, "
+                 + " CorreoEstudiante, UsuarioEstudiante, ClaveEstudiante, QREstudiante, "
+                 + " FechaRegistro, FechaModifica, Estado "
+                 + " FROM Estudiante "
+                 + " WHERE Estado = 'A' ";
+    try {
+        Connection conn = openConnection();         // Conectar a la base de datos
+        Statement stmt = conn.createStatement();    // Crear una declaración SQL
+        ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
+        while (rs.next()) {
+            DTO_estudiante estudiante = new DTO_estudiante(
+                rs.getInt("IdEstudiante"),           // IdEstudiante
+                rs.getString("NombreEstudiante"),    // NombreEstudiante
+                rs.getString("ApellidoEstudiante"),  // ApellidoEstudiante
+                rs.getString("CedulaEstudiante"),    // CedulaEstudiante
+                rs.getString("CorreoEstudiante"),    // CorreoEstudiante
+                rs.getString("UsuarioEstudiante"),   // UsuarioEstudiante
+                rs.getString("ClaveEstudiante"),     // ClaveEstudiante
+                rs.getString("QREstudiante"),        // QREstudiante
+                rs.getTimestamp("FechaRegistro").toLocalDateTime(),  // FechaRegistro
+                rs.getTimestamp("FechaModifica") != null ? rs.getTimestamp("FechaModifica").toLocalDateTime() : null,  // FechaModifica
+                rs.getString("Estado").charAt(0)     // Estado
+            );
+            estudiantes.add(estudiante);
         }
-        return estudiantes;
+    } catch (SQLException e) {
+        throw e; // Lanzar la excepción en caso de error
     }
+    return estudiantes;
+}
 
     @Override
 public boolean create(DTO_estudiante entity) throws Exception {
@@ -147,13 +146,13 @@ public boolean create(DTO_estudiante entity) throws Exception {
     }
 
     @Override
-    public boolean delete(Integer id) throws Exception {
+    public boolean delete(Integer idEstudiante) throws Exception {
         String query = " UPDATE Estudiante SET Estado = ? WHERE IdEstudiante = ? ";
         try {
             Connection conn = openConnection(); // Abrir la conexión con la base de datos
             PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.setString(1, "X"); // Cambiar el estado a inactivo
-            pstmt.setInt(2, id);     // IdEstudiante (condición WHERE)
+            pstmt.setInt(2, idEstudiante);     // IdEstudiante (condición WHERE)
             pstmt.executeUpdate();   // Ejecutar la consulta de actualización
             return true; // Retornar true si la operación fue exitosa
         } catch (SQLException e) {

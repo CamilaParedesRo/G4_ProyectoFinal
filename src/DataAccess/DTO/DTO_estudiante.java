@@ -14,7 +14,7 @@ public class DTO_estudiante {
     private String qrEstudiante;
     private LocalDateTime fechaRegistro;
     private LocalDateTime fechaModifica;
-    private char estado;
+    private char  estado;
 
     
     public DTO_estudiante() {
