@@ -6,7 +6,6 @@ Fecha: 20-01-2025
 DDL--Data base para crear las bases principales del sistema PoliAsistencia. 
 */ 
 -- 1. Deshabilitar claves foráneas temporalmente
-PRAGMA foreign_keys = OFF;
 
 -- 2. Eliminar tablas en el orden correcto
 DROP TABLE IF EXISTS asistencia;
@@ -75,5 +74,3 @@ CREATE TABLE QRS (
     estado CHAR(1) NOT NULL DEFAULT 'A'
 );
 
--- 8. Reactivar las restricciones de claves foráneas
-PRAGMA foreign_keys = ON;

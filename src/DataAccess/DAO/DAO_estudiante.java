@@ -152,6 +152,27 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
         }
     }
 
+    public DTO_estudiante findByCedula(String cedula) throws Exception {
+        DTO_estudiante estudiante = null;
+        String query = " SELECT CedulaEstudiante"
+                     + " FROM Estudiante "
+                     + " WHERE Estado = 'A' AND CedulaEstudiante = '" + cedula ;
+        try {
+            Connection conn = openConnection();         // Conectar a la base de datos
+            Statement stmt = conn.createStatement();    // Crear una declaración SQL
+            ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
+            while (rs.next()) {
+                estudiante = new DTO_estudiante(
+                    rs.getString("CedulaEstudiante")   // CedulaEstudiante
+                );
+            }
+        } catch (SQLException e) {
+            throw new PatException(e.getMessage(), getClass().getName(), "findByCedula()");
+        }
+        return estudiante;
+    }
+
+
     public Integer getMaxRow() throws Exception {
         String query = " SELECT COUNT(*) TotalReg FROM Estudiante "
                      + " WHERE Estado = 'A' ";

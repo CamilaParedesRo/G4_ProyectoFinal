@@ -18,13 +18,12 @@ public class DTO_estudiante {
     private char  estado;
 
     
-    public DTO_estudiante() {
-        this.fechaRegistro = LocalDateTime.now(); 
-        this.estado = 'A'; 
+    public DTO_estudiante() {}
+    public DTO_estudiante(String cedulaEstudiante) {
+        this.cedulaEstudiante = cedulaEstudiante;
     }
 
-
-    public DTO_estudiante(int idEstudiante, String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
+    public DTO_estudiante(int idEstudiante, String  cedulaEstudiante, String nombreEstudiante, String apellidoEstudiante,
                          String correoEstudiante, String usuarioEstudiante, String claveEstudiante,
                          LocalDateTime fechaRegistro, LocalDateTime fechaModifica, char estado) {
         this.idEstudiante = idEstudiante;

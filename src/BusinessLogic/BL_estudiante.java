@@ -27,6 +27,14 @@ public class BL_estudiante {
     public boolean delete(int idEstudiante) throws Exception{
         return sDAO.delete(idEstudiante);
     }
+    public boolean findByCedula(String cedula) throws Exception{
+        if (sDAO.findByCedula(cedula) == null) {
+            return true;
+        } else {
+            return false;
+        }
+      
+    }
     public Integer getMaxRow() throws Exception{
         return sDAO.getMaxRow();
     }
