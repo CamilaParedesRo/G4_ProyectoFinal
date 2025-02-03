@@ -8,10 +8,11 @@ public class DTO_estudiante {
     private String nombreEstudiante;
     private String apellidoEstudiante;
     private String cedulaEstudiante;
+    private Integer id_sexo;
     private String correoEstudiante;
     private String usuarioEstudiante;
     private String claveEstudiante;
-    private String qrEstudiante;
+    private Integer id_clase;
     private LocalDateTime fechaRegistro;
     private LocalDateTime fechaModifica;
     private char  estado;
@@ -22,9 +23,9 @@ public class DTO_estudiante {
         this.estado = 'A'; 
     }
 
-    
+
     public DTO_estudiante(int idEstudiante, String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
-                         String correoEstudiante, String usuarioEstudiante, String claveEstudiante, String qrEstudiante,
+                         String correoEstudiante, String usuarioEstudiante, String claveEstudiante,
                          LocalDateTime fechaRegistro, LocalDateTime fechaModifica, char estado) {
         this.idEstudiante = idEstudiante;
         this.nombreEstudiante = nombreEstudiante;
@@ -33,7 +34,6 @@ public class DTO_estudiante {
         this.correoEstudiante = correoEstudiante;
         this.usuarioEstudiante = usuarioEstudiante;
         this.claveEstudiante = claveEstudiante;
-        this.qrEstudiante = qrEstudiante;
         this.fechaRegistro = fechaRegistro;
         this.fechaModifica = fechaModifica;
         this.estado = estado;
@@ -41,18 +41,19 @@ public class DTO_estudiante {
 
     
     public DTO_estudiante(String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
-                         String correoEstudiante, String usuarioEstudiante, String claveEstudiante, String qrEstudiante) {
-        this.nombreEstudiante = nombreEstudiante;
-        this.apellidoEstudiante = apellidoEstudiante;
-        this.cedulaEstudiante = cedulaEstudiante;
-        this.correoEstudiante = correoEstudiante;
-        this.usuarioEstudiante = usuarioEstudiante;
-        this.claveEstudiante = claveEstudiante;
-        this.qrEstudiante = qrEstudiante;
-        this.fechaRegistro = LocalDateTime.now(); 
-        this.fechaModifica = null; 
-        this.estado = 'A'; 
-    }
+    String correoEstudiante, String usuarioEstudiante, String claveEstudiante, Integer id_sexo) {
+    this.nombreEstudiante = nombreEstudiante;
+    this.apellidoEstudiante = apellidoEstudiante;
+    this.cedulaEstudiante = cedulaEstudiante;
+    this.correoEstudiante = correoEstudiante;
+    this.usuarioEstudiante = usuarioEstudiante;
+    this.claveEstudiante = claveEstudiante;
+    this.id_sexo = id_sexo; // Aquí asignas el valor de id_sexo
+    this.fechaRegistro = LocalDateTime.now(); 
+    this.fechaModifica = null; 
+    this.estado = 'A'; 
+}
+
 
 
     // Getters y Setters
@@ -112,14 +113,6 @@ public class DTO_estudiante {
         this.claveEstudiante = claveEstudiante;
     }
 
-    public String getQrEstudiante() {
-        return qrEstudiante;
-    }
-
-    public void setQrEstudiante(String qrEstudiante) {
-        this.qrEstudiante = qrEstudiante;
-    }
-
     public LocalDateTime getFechaRegistro() {
         return fechaRegistro;
     }
@@ -144,6 +137,25 @@ public class DTO_estudiante {
         this.estado = estado;
     }
 
+    public Integer getId_sexo() {
+        return id_sexo;
+    }
+
+
+    public void setId_sexo(Integer id_sexo) {
+        this.id_sexo = id_sexo;
+    }
+
+    public Integer getId_clase() {
+        return id_clase;
+    }
+
+
+    public void setId_clase(Integer id_clase) {
+        this.id_clase = id_clase;
+    }
+
+
     // Método toString para representación en texto
     @Override
     public String toString() {
@@ -155,7 +167,6 @@ public class DTO_estudiante {
             + "\n CorreoEstudiante:     " + getCorreoEstudiante()
             + "\n UsuarioEstudiante:    " + getUsuarioEstudiante()
             + "\n ClaveEstudiante:      " + getClaveEstudiante()
-            + "\n QREstudiante:         " + getQrEstudiante()
             + "\n FechaRegistro:        " + getFechaRegistro()
             + "\n FechaModifica:        " + (getFechaModifica() != null ? getFechaModifica() : "N/A")
             + "\n Estado:               " + getEstado();

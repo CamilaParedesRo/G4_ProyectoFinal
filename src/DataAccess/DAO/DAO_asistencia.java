@@ -26,14 +26,13 @@ public class DAO_asistencia extends DataHelper implements IDAO<DTO_asistencia> {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    asistencia = new DTO_asistencia(
-                        rs.getInt("ID_Asistencia"),             // ID de la asistencia
-                        rs.getString("Nombre_Estudiante"),      // Nombre del estudiante
-                        rs.getString("Apellido_Estudiante"),    // Apellido del estudiante
-                        rs.getString("Cedula_Estudiante"),      // Cédula del estudiante
-                        rs.getTimestamp("Fecha").toLocalDateTime(),  // Fecha de asistencia
-                        rs.getString("Metodo")                 // Método de asistencia
-                    );
+                    asistencia = new DTO_asistencia();
+                    asistencia.setIdAsistencia(rs.getInt("ID_Asistencia"));
+                    asistencia.setNombreEstudiante(rs.getString("Nombre_Estudiante"));
+                    asistencia.setApellidoEstudiante(rs.getString("Apellido_Estudiante"));
+                    asistencia.setCedulaEstudiante(rs.getString("Cedula_Estudiante"));
+                    asistencia.setFechaAsistencia(rs.getTimestamp("Fecha").toLocalDateTime());
+                    asistencia.setMetodoAsistencia(rs.getString("Metodo"));
                 }
             }
         } catch (SQLException e) {
@@ -52,14 +51,14 @@ public class DAO_asistencia extends DataHelper implements IDAO<DTO_asistencia> {
              ResultSet rs = pstmt.executeQuery()) {
     
             while (rs.next()) {
-                asistencias.add(new DTO_asistencia(
-                    rs.getInt("ID_Asistencia"),             // ID de la asistencia
-                    rs.getString("Nombre_Estudiante"),      // Nombre del estudiante
-                    rs.getString("Apellido_Estudiante"),    // Apellido del estudiante
-                    rs.getString("Cedula_Estudiante"),      // Cédula del estudiante
-                    rs.getTimestamp("Fecha").toLocalDateTime(),  // Fecha de asistencia
-                    rs.getString("Metodo")                 // Método de asistencia
-                ));
+                DTO_asistencia asistencia = new DTO_asistencia();
+                asistencia.setIdAsistencia(rs.getInt("ID_Asistencia"));
+                asistencia.setNombreEstudiante(rs.getString("Nombre_Estudiante")); 
+                asistencia.setApellidoEstudiante(rs.getString("Apellido_Estudiante"));
+                asistencia.setCedulaEstudiante(rs.getString("Cedula_Estudiante"));
+                asistencia.setFechaAsistencia(rs.getTimestamp("Fecha").toLocalDateTime());
+                asistencia.setMetodoAsistencia(rs.getString("Metodo"));
+                asistencias.add(asistencia);
             }
         } catch (SQLException e) {
             throw new PatException(e.getMessage(), getClass().getName(), "readAll()");
@@ -130,4 +129,3 @@ public class DAO_asistencia extends DataHelper implements IDAO<DTO_asistencia> {
         }
     }
 }
-

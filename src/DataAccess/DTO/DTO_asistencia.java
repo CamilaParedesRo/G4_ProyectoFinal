@@ -8,50 +8,32 @@ public class DTO_asistencia {
     private int idEstudiante;
     private LocalDateTime fechaAsistencia;
     private String metodoAsistencia;
-    private LocalDateTime fechaRegistro;
-    private LocalDateTime fechaModifica;
-    private char estado;
-
-    // Nuevos atributos para los datos del estudiante
     private String nombreEstudiante;
     private String apellidoEstudiante;
     private String cedulaEstudiante;
+    private LocalDateTime fecha_registro;
+    private LocalDateTime fecha_modifica;
+    private char estado;
 
-   
-    // Constructor por defecto
-    public DTO_asistencia() {
-        this.fechaAsistencia = LocalDateTime.now();
-        this.fechaRegistro = LocalDateTime.now();
-        this.estado = 'A';
-    }
+    // Constructor 
+    public DTO_asistencia() {}
 
     // Constructor básico
-    public DTO_asistencia(int idAsistencia, int idEstudiante, LocalDateTime fechaAsistencia, String metodoAsistencia) {
-        this(idAsistencia, idEstudiante, fechaAsistencia, metodoAsistencia, LocalDateTime.now(), null, 'A');
+    public DTO_asistencia(String metodoAsistencia) {
+        this.metodoAsistencia = metodoAsistencia;
     }
 
     // Constructor con todos los atributos
     public DTO_asistencia(int idAsistencia, int idEstudiante, LocalDateTime fechaAsistencia,
-                          String metodoAsistencia, LocalDateTime fechaRegistro,
-                          LocalDateTime fechaModifica, char estado) {
+                          String metodoAsistencia, LocalDateTime fecha_registro,
+                          LocalDateTime fecha_modifica, char Estado ) {  
         this.idAsistencia = idAsistencia;
         this.idEstudiante = idEstudiante;
         this.fechaAsistencia = fechaAsistencia;
         this.metodoAsistencia = metodoAsistencia;
-        this.fechaRegistro = fechaRegistro;
-        this.fechaModifica = fechaModifica;
-        this.estado = estado;
-    }
-
-    // Constructor con datos del estudiante
-    public DTO_asistencia(int idAsistencia, String nombreEstudiante, String apellidoEstudiante,
-                          String cedulaEstudiante, LocalDateTime fechaAsistencia, String metodoAsistencia) {
-        this.idAsistencia = idAsistencia;
-        this.nombreEstudiante = nombreEstudiante;
-        this.apellidoEstudiante = apellidoEstudiante;
-        this.cedulaEstudiante = cedulaEstudiante;
-        this.fechaAsistencia = fechaAsistencia;
-        this.metodoAsistencia = metodoAsistencia;
+        this.fecha_registro = fecha_registro;
+        this.fecha_modifica = fecha_modifica;
+        this.estado = Estado;
     }
 
     // Getters y Setters
@@ -88,19 +70,19 @@ public class DTO_asistencia {
     }
 
     public LocalDateTime getFechaRegistro() {
-        return fechaRegistro;
+        return fecha_registro;
     }
 
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
+    public void setFechaRegistro(LocalDateTime fecha_registro) {
+        this.fecha_registro = fecha_registro;
     }
 
     public LocalDateTime getFechaModifica() {
-        return fechaModifica;
+        return fecha_modifica;
     }
 
-    public void setFechaModifica(LocalDateTime fechaModifica) {
-        this.fechaModifica = fechaModifica;
+    public void setFechaModifica(LocalDateTime fecha_modifica) {
+        this.fecha_modifica = fecha_modifica;
     }
 
     public char getEstado() {
