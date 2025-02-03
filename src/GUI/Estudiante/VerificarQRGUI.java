@@ -76,9 +76,9 @@ public class VerificarQRGUI {
         // Comparar QR ingresado con el QR generado
         if (Objects.equals(qrIngresado, qrGenerado)) {
             JOptionPane.showMessageDialog(panel, "QR verificado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            // Aquí puedes redirigir a la siguiente pantalla, por ejemplo, a la pantalla principal
+      
         } else {
-            JOptionPane.showMessageDialog(panel, "Error: El QR ingresado no coincide.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(panel, "Error: El QR ingresado no es correcto.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
