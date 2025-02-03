@@ -11,6 +11,7 @@ public class DTO_profesor {
     private String nombreProfesor;
     private String apellidoProfesor;
     private String cedulaProfesor;
+    private Integer id_sexo;
     private String correoProfesor;
     private String usuarioProfesor;
     private String claveProfesor;
@@ -19,10 +20,7 @@ public class DTO_profesor {
     private char estado;
 
     // Constructor vacío
-    public DTO_profesor() {
-        this.fechaRegistro = LocalDateTime.now(); // Valor por defecto
-        this.estado = 'A'; // Valor por defecto
-    }
+    public DTO_profesor() { }
 
     // Constructor con todos los campos
     public DTO_profesor(int idProfesor, String nombreProfesor, String apellidoProfesor, String cedulaProfesor,
@@ -85,6 +83,14 @@ public class DTO_profesor {
 
     public void setCedulaProfesor(String cedulaProfesor) {
         this.cedulaProfesor = cedulaProfesor;
+    }
+
+    public Integer getId_sexo() {
+        return id_sexo;
+    }
+
+    public void setId_sexo(Integer id_sexo) {
+        this.id_sexo = id_sexo;
     }
 
     public String getCorreoProfesor() {
