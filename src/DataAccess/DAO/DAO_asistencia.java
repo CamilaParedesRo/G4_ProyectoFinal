@@ -18,8 +18,8 @@ public class DAO_asistencia extends DataHelper implements IDAO<DTO_asistencia> {
     @Override
     public DTO_asistencia readBy(Integer id) throws Exception {
         DTO_asistencia asistencia = null;
-        String query = "SELECT ID_Asistencia, Nombre_Estudiante, Apellido_Estudiante, Cedula_Estudiante, Fecha, Metodo "
-                     + "FROM vista_asistencia WHERE ID_Asistencia = ?";
+        String query = "SELECT ID_Asistencia, Nombre_Estudiante, Apellido_Estudiante, Cedula_Estudiante, Codigo_Unico_Estudiante, Fecha, Metodo "
+                     + "FROM vista_historial_asistencia  WHERE ID_Asistencia = ?";
     
         try (Connection conn = openConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -30,6 +30,7 @@ public class DAO_asistencia extends DataHelper implements IDAO<DTO_asistencia> {
                     asistencia.setIdAsistencia(rs.getInt("ID_Asistencia"));
                     asistencia.setNombreEstudiante(rs.getString("Nombre_Estudiante"));
                     asistencia.setApellidoEstudiante(rs.getString("Apellido_Estudiante"));
+                    asistencia.setCodigoEstudiante(rs.getString("Codigo_Unico_Estudiante"));
                     asistencia.setCedulaEstudiante(rs.getString("Cedula_Estudiante"));
                     asistencia.setFechaAsistencia(rs.getTimestamp("Fecha").toLocalDateTime());
                     asistencia.setMetodoAsistencia(rs.getString("Metodo"));
@@ -44,7 +45,7 @@ public class DAO_asistencia extends DataHelper implements IDAO<DTO_asistencia> {
     @Override
     public List<DTO_asistencia> readAll() throws Exception {
         List<DTO_asistencia> asistencias = new ArrayList<>();
-        String query = "SELECT ID_Asistencia, Nombre_Estudiante, Apellido_Estudiante, Cedula_Estudiante, Fecha, Metodo FROM vista_asistencia";
+        String query = "SELECT ID_Asistencia, Nombre_Estudiante, Apellido_Estudiante, Cedula_Estudiante,Codigo_Unico_Estudiante,Fecha, Metodo FROM vista_asistencia";
     
         try (Connection conn = openConnection();
              PreparedStatement pstmt = conn.prepareStatement(query);
@@ -56,6 +57,7 @@ public class DAO_asistencia extends DataHelper implements IDAO<DTO_asistencia> {
                 asistencia.setNombreEstudiante(rs.getString("Nombre_Estudiante")); 
                 asistencia.setApellidoEstudiante(rs.getString("Apellido_Estudiante"));
                 asistencia.setCedulaEstudiante(rs.getString("Cedula_Estudiante"));
+                asistencia.setCodigoEstudiante(rs.getString("Codigo_Unico_Estudiante"));
                 asistencia.setFechaAsistencia(rs.getTimestamp("Fecha").toLocalDateTime());
                 asistencia.setMetodoAsistencia(rs.getString("Metodo"));
                 asistencias.add(asistencia);

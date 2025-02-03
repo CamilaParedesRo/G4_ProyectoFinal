@@ -11,6 +11,7 @@ public class DTO_asistencia {
     private String nombreEstudiante;
     private String apellidoEstudiante;
     private String cedulaEstudiante;
+    private String codigoEstudiante; 
     private LocalDateTime fecha_registro;
     private LocalDateTime fecha_modifica;
     private char estado;
@@ -116,6 +117,13 @@ public class DTO_asistencia {
     public void setCedulaEstudiante(String cedulaEstudiante) {
         this.cedulaEstudiante = cedulaEstudiante;
     }
+    public String getCodigoEstudiante() {
+        return codigoEstudiante;
+    }
+
+    public void setCodigoEstudiante(String codigoEstudiante) {
+        this.codigoEstudiante = codigoEstudiante;
+    }
 
     // Método toString para representación en texto
     @Override
@@ -125,6 +133,7 @@ public class DTO_asistencia {
             + "\n Nombre Estudiante:  " + getNombreEstudiante()
             + "\n Apellido Estudiante:" + getApellidoEstudiante()
             + "\n Cédula Estudiante:  " + getCedulaEstudiante()
+            + "\n Código Asistencia:  " + getCodigoEstudiante()
             + "\n FechaAsistencia:    " + getFechaAsistencia()
             + "\n MetodoAsistencia:   " + getMetodoAsistencia()
             + "\n FechaRegistro:      " + getFechaRegistro()

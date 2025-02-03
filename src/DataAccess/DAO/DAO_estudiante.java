@@ -34,6 +34,7 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
                     rs.getString("NombreEstudiante"),    // NombreEstudiante
                     rs.getString("ApellidoEstudiante"),  // ApellidoEstudiante
                     rs.getString("CedulaEstudiante"),    // CedulaEstudiante
+                    rs.getString("CodigoEstudiante"),    // CodigoEstudiante
                     rs.getString("CorreoEstudiante"),    // CorreoEstudiante
                     rs.getString("UsuarioEstudiante"),   // UsuarioEstudiante
                     rs.getString("ClaveEstudiante"),     // ClaveEstudiante
@@ -65,6 +66,7 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
                     rs.getString("NombreEstudiante"),    // NombreEstudiante
                     rs.getString("ApellidoEstudiante"),  // ApellidoEstudiante
                     rs.getString("CedulaEstudiante"),    // CedulaEstudiante
+                    rs.getString("CodigoEstudiante"),    // CodigoEstudiante
                     rs.getString("CorreoEstudiante"),    // CorreoEstudiante
                     rs.getString("UsuarioEstudiante"),   // UsuarioEstudiante
                     rs.getString("ClaveEstudiante"),     // ClaveEstudiante

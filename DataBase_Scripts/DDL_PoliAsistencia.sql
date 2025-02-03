@@ -45,6 +45,7 @@ CREATE TABLE estudiante (
     nombre_estudiante VARCHAR(50) NOT NULL,
     apellido_estudiante VARCHAR(50) NOT NULL,
     cedula_estudiante VARCHAR(10) UNIQUE NOT NULL,
+    codigo_unico_estudiante VARCHAR(10) UNIQUE NOT NULL,
     id_sexo INTEGER NOT NULL REFERENCES sexo(id_sexo) ON DELETE CASCADE,
     correo_estudiante VARCHAR(50) UNIQUE NOT NULL,
     usuario_estudiante VARCHAR(50) UNIQUE NOT NULL,

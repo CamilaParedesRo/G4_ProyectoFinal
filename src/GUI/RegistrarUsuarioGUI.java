@@ -1,6 +1,8 @@
 package GUI;
 
 import javax.swing.*;
+import DataAccess.DAO.DAO_estudiante;
+import DataAccess.DTO.DTO_estudiante;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,13 +46,23 @@ public class RegistrarUsuarioGUI implements Pantalla {
         JTextField nameField = new JTextField(15);
         panel.add(nameField, gbc);
 
-        addField("Código Único:", gbc, panel);
-        JTextField codeField = new JTextField(15);
-        panel.add(codeField, gbc);
+        addField("Apellido:", gbc, panel);
+        JTextField apellidoField = new JTextField(15);
+        panel.add(apellidoField, gbc);
+
+        addField("Sexo:", gbc, panel);
+        // Crear un JComboBox con opciones predefinidas
+        String[] sexOptions = {"Masculino", "Femenino"};
+        JComboBox<String> sexoComboBox = new JComboBox<>(sexOptions);
+        panel.add(sexoComboBox, gbc);
 
         addField("Número de Cédula:", gbc, panel);
         JTextField cedulaField = new JTextField(15);
         panel.add(cedulaField, gbc);
+
+        addField("Correo:", gbc, panel);  // Agregar campo de correo
+        JTextField correoField = new JTextField(15);
+        panel.add(correoField, gbc);
 
         addField("Usuario:", gbc, panel);
         JTextField userField = new JTextField(15);
@@ -74,14 +86,17 @@ public class RegistrarUsuarioGUI implements Pantalla {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Obtener los datos del formulario
                 String nombre = nameField.getText().trim();
-                String codigo = codeField.getText().trim();
+                String apellido = apellidoField.getText().trim();
+                String sexo = (String) sexoComboBox.getSelectedItem();
                 String cedula = cedulaField.getText().trim();
+                String correo = correoField.getText().trim();
                 String usuario = userField.getText().trim();
-                String contraseña = new String(passField.getPassword());
+                String contrasena = new String(passField.getPassword());
 
                 // Validación: Todos los campos son obligatorios
-                if (nombre.isEmpty() || codigo.isEmpty() || cedula.isEmpty() || usuario.isEmpty() || contraseña.isEmpty()) {
+                if (nombre.isEmpty() || apellido.isEmpty() || sexo.isEmpty() || cedula.isEmpty() || correo.isEmpty() || usuario.isEmpty() || contrasena.isEmpty()) {
                     JOptionPane.showMessageDialog(panel, "Error: Todos los campos deben ser completados.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -91,22 +106,41 @@ public class RegistrarUsuarioGUI implements Pantalla {
                     JOptionPane.showMessageDialog(panel, "Error: El nombre solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                if (!codigo.matches("^\\d{9}$")) {
-                    JOptionPane.showMessageDialog(panel, "Error: El código único debe tener exactamente 9 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
+                if (!apellido.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+                    JOptionPane.showMessageDialog(panel, "Error: El apellido solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (!cedula.matches("^\\d{10}$")) {
                     JOptionPane.showMessageDialog(panel, "Error: La cédula debe tener exactamente 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                if (!correo.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
+                    JOptionPane.showMessageDialog(panel, "Error: El correo no tiene un formato válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                // Aquí en el futuro se agregará la lógica para guardar los datos en la base de datos
-                System.out.println("Usuario registrado exitosamente:");
-                System.out.println("Nombre: " + nombre);
-                System.out.println("Código Único: " + codigo);
-                System.out.println("Cédula: " + cedula);
-                System.out.println("Usuario: " + usuario);
-                JOptionPane.showMessageDialog(panel, "Registro exitoso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                // Crear un objeto DTO_estudiante con los datos
+                DTO_estudiante estudianteDTO = new DTO_estudiante(nombre, apellido, cedula ,codigo,
+                 correo, usuario, contrasena);
+                // Establecer valores adicionales como fecha de registro, estado, etc.
+
+                // Aquí asumimos que tienes un DAO para interactuar con la base de datos
+                DAO_estudiante usuarioDAO = new DAO_estudiante();
+                
+                // Insertar el estudiante en la base de datos
+                boolean registrado = false;
+                try {
+                    registrado = usuarioDAO.create(estudianteDTO);
+                } catch (Exception e1) {
+
+                    e1.printStackTrace();
+                }
+
+                if (registrado) {
+                    JOptionPane.showMessageDialog(panel, "Usuario registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Error al registrar el usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
