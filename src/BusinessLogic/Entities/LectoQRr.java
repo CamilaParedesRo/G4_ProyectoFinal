@@ -15,7 +15,7 @@ public class LectoQRr {
 
     }
 
-    public boolean validarBataBase (String cedula) throws Exception {
+    public boolean validarDataBase (String cedula) throws Exception {
         BL_estudiante blEstudiante = new BL_estudiante();
         if(blEstudiante.findByCedula(cedula)) {
             System.out.println("Funciona");
