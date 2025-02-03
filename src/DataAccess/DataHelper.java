@@ -9,7 +9,7 @@ public abstract class DataHelper {
     private static Connection conn = null;
     
     protected DataHelper(){}
-    protected static synchronized Connection openConnection() throws Exception{
+    public static synchronized Connection openConnection() throws Exception{
         try {
             if(conn == null)
                 conn = DriverManager.getConnection(DBPathConnection);
@@ -19,7 +19,7 @@ public abstract class DataHelper {
         return conn;
     }
 
-    protected static void closeConnection() throws Exception{
+    public static void closeConnection() throws Exception{
         try {
             if (conn != null)
                 conn.close();

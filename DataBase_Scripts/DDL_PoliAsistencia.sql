@@ -15,7 +15,7 @@ CREATE TABLE estudiante (
     ,nombre_estudiante VARCHAR(50) NOT NULL
     ,apellido_estudiante VARCHAR(50) NOT NULL
     ,cedula_estudiante VARCHAR(10) UNIQUE NOT NULL
-    ,correo_estudiante VARCHAR(50) UNIQUE NOT NULL
+    ,código_unico_estudiante VARCHAR(10) UNIQUE NOT NULL
     ,usuario_estudiante VARCHAR(50) UNIQUE NOT NULL
     ,clave_estudiante VARCHAR(225) NOT NULL
     ,QR_estudiante VARCHAR(225) UNIQUE NOT NULL

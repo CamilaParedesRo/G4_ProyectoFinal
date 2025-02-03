@@ -13,10 +13,11 @@ SELECT
     a.id_asistencia  AS ID_Asistencia
     ,e.nombre_estudiante AS Nombre_Estudiante
     ,e.apellido_estudiante AS Apellido_Estudiante
-    ,e.cedula_estudiante AS Cedula_Estudiante
+    ,e.código_unico_estudiante AS Código_Unico
     ,a.fecha_asistencia  AS Fecha 
     ,a.metodo_asistencia AS Metodo
 FROM
     asistencia a
 JOIN
     estudiante e ON a.id_estudiante = e.id_estudiante;
+    
