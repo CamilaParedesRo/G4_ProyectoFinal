@@ -81,7 +81,7 @@ public class AdvertenciaRegistroGUI {
             JOptionPane.showMessageDialog(panel, "Advertencia: Ya estás registrado en el sistema.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         } else {
             // Si el estudiante no está registrado
-            JOptionPane.showMessageDialog(panel, "Cédula no registrada. Puedes continuar con el registro.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(panel, "Cédula no registrada.", "Información", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
