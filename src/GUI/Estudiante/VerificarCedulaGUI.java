@@ -70,7 +70,7 @@ public class VerificarCedulaGUI {
         backButton.setFocusPainted(false);
         backButton.addActionListener(e -> {
             System.out.println("Volviendo al Login...");
-            // MainApp.mostrarPantalla(new LoginPanelGeneralGUI().getPanel());  // Descomentar para regresar a la pantalla de login
+
         });
 
         gbc.gridy++;
@@ -100,7 +100,7 @@ public class VerificarCedulaGUI {
         if (estudiante != null) {
             // Si la cédula existe en la base de datos
             JOptionPane.showMessageDialog(panel, "Cédula verificada con éxito. Bienvenido, " + estudiante.getNombre() + ".", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            // Aquí puedes redirigir a la siguiente pantalla o realizar alguna acción
+            
         } else {
             // Si la cédula no existe en la base de datos
             JOptionPane.showMessageDialog(panel, "Error: La cédula no está registrada.", "Error", JOptionPane.ERROR_MESSAGE);
