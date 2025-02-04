@@ -139,7 +139,7 @@ public class EstudiantePanel implements Pantalla {
 
             AsistenciaCedula asistenciaCedula = new AsistenciaCedula();
             try {
-                boolean registrado = asistenciaCedula.registrarAsistenciaPorCedula(cedula, "Manual");
+                boolean registrado = asistenciaCedula.registrarAsistencia(cedula);
                 if (registrado) {
                     statusLabel.setText("Asistencia registrada correctamente.");
                     statusLabel.setForeground(Color.GREEN);
