@@ -19,7 +19,7 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
     @Override
     public DTO_estudiante readBy(Integer idEstudiante) throws Exception {
         DTO_estudiante estudiante = new DTO_estudiante();
-        String query = " SELECT IdEstudiante, NombreEstudiante, ApellidoEstudiante, CedulaEstudiante, "
+        String query = " SELECT IdEstudiante, NombreEstudiante, ApellidoEstudiante, CedulaEstudiante, CodigpEstudiante, "
                      + " CorreoEstudiante, UsuarioEstudiante, ClaveEstudiante, "
                      + " FechaRegistro, FechaModifica, Estado "
                      + " FROM Estudiante "
@@ -34,12 +34,13 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
                     rs.getString("NombreEstudiante"),    // NombreEstudiante
                     rs.getString("ApellidoEstudiante"),  // ApellidoEstudiante
                     rs.getString("CedulaEstudiante"),    // CedulaEstudiante
+                    rs.getString("CodigoEstudiante"),    // CodigoEstudiante
                     rs.getString("CorreoEstudiante"),    // CorreoEstudiante
                     rs.getString("UsuarioEstudiante"),   // UsuarioEstudiante
                     rs.getString("ClaveEstudiante"),     // ClaveEstudiante
                     rs.getTimestamp("FechaRegistro").toLocalDateTime(),  // FechaRegistro
                     rs.getTimestamp("FechaModifica") != null ? rs.getTimestamp("FechaModifica").toLocalDateTime() : null,  // FechaModifica
-                    rs.getString("Estado").charAt(0)     // Estado
+                    rs.getString("Estado").charAt(0)       // Estado
                 );
             }
         } catch (SQLException e) {
@@ -50,7 +51,7 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
     @Override
     public List<DTO_estudiante> readAll() throws Exception {
         List<DTO_estudiante> estudiantes = new ArrayList<>();
-        String query = " SELECT IdEstudiante, NombreEstudiante, ApellidoEstudiante, CedulaEstudiante, "
+        String query = " SELECT IdEstudiante, NombreEstudiante, ApellidoEstudiante, CedulaEstudiante, CodigoEstudiante"
                      + " CorreoEstudiante, UsuarioEstudiante, ClaveEstudiante, "
                      + " FechaRegistro, FechaModifica, Estado "
                      + " FROM Estudiante "
@@ -65,12 +66,13 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
                     rs.getString("NombreEstudiante"),    // NombreEstudiante
                     rs.getString("ApellidoEstudiante"),  // ApellidoEstudiante
                     rs.getString("CedulaEstudiante"),    // CedulaEstudiante
+                    rs.getString("CodigoEstudiante"),    // CodigoEstudiante
                     rs.getString("CorreoEstudiante"),    // CorreoEstudiante
                     rs.getString("UsuarioEstudiante"),   // UsuarioEstudiante
                     rs.getString("ClaveEstudiante"),     // ClaveEstudiante
                     rs.getTimestamp("FechaRegistro").toLocalDateTime(),  // FechaRegistro
                     rs.getTimestamp("FechaModifica") != null ? rs.getTimestamp("FechaModifica").toLocalDateTime() : null,  // FechaModifica
-                    rs.getString("Estado").charAt(0)     // Estado
+                    rs.getString("Estado").charAt(0)
                 );
                 estudiantes.add(estudiante);
             }
@@ -82,7 +84,7 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
 
     @Override
     public boolean create(DTO_estudiante entity) throws Exception {
-        String query = "INSERT INTO estudiante (nombre_estudiante, apellido_estudiante, cedula_estudiante, "
+        String query = "INSERT INTO estudiante (nombre_estudiante, apellido_estudiante, cedula_estudiante, codigo_estudiante, "
                      + "correo_estudiante, usuario_estudiante, clave_estudiante, id_sexo) "
                      + "VALUES (?, ?, ?, ?, ?, ?, ?)";
     
@@ -90,6 +92,7 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
             pstmt.setString(1, entity.getNombreEstudiante());
             pstmt.setString(2, entity.getApellidoEstudiante());
             pstmt.setString(3, entity.getCedulaEstudiante());
+            pstmt.setString(4, entity.getCodigoEstudiante());
             pstmt.setString(4, entity.getCorreoEstudiante());
             pstmt.setString(5, entity.getUsuarioEstudiante());
             pstmt.setString(6, entity.getClaveEstudiante());

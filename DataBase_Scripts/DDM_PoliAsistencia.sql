@@ -11,11 +11,11 @@ Autor: Anahi Pillajo, Camila Paredes, Eliana Pinargote, Adayeli
 Fecha: 20-01-2025
 DDM--Data PARA MOSTRAR LA ASISTENCIA DEL SISTEMA. 
 */ 
-
 -- Eliminar vistas en el orden correcto
 DROP VIEW IF EXISTS vista_historial_asistencia;
 DROP VIEW IF EXISTS vista_estudiantes;
 DROP VIEW IF EXISTS vista_profesores;
+
 
 -- Vista de estudiantes
 CREATE VIEW vista_estudiantes AS
@@ -23,6 +23,7 @@ SELECT
     e.id_estudiante AS ID_Estudiante,
     e.nombre_estudiante AS Nombre_Estudiante,
     e.apellido_estudiante AS Apellido_Estudiante,
+    e.codigo_unico_estudiante AS Codigo_Unico_Estudiante,
     e.cedula_estudiante AS Cedula_Estudiante,
     e.correo_estudiante AS Correo_Estudiante,
     e.usuario_estudiante AS Usuario_Estudiante,
@@ -59,6 +60,7 @@ SELECT
     a.id_asistencia AS ID_Asistencia,
     e.nombre_estudiante AS Nombre_Estudiante,
     e.apellido_estudiante AS Apellido_Estudiante,
+    e.codigo_unico_estudiante AS Codigo_Unico_Estudiante,
     a.fecha_asistencia AS Fecha_Asistencia,
     a.metodo_asistencia AS Metodo_Asistencia
 FROM
@@ -90,3 +92,4 @@ INSERT INTO asistencia (id_estudiante, fecha_asistencia, metodo_asistencia)
 VALUES 
 (1, datetime('now', 'localtime'), 'QR'),
 (2, datetime('now', 'localtime'), 'Cédula');
+    
