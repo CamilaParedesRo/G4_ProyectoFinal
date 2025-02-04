@@ -11,6 +11,7 @@ public class RegistrarUsuarioGUI implements Pantalla {
     private JPanel panel;
     private Image backgroundImage;
 
+    @SuppressWarnings("unused")
     public RegistrarUsuarioGUI() {
         // Cargar imagen de fondo
         backgroundImage = new ImageIcon("C:/Users/elian/G4_ProyectoFinal/src/GUI/Assets/fondo.png").getImage();

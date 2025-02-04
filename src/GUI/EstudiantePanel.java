@@ -67,7 +67,7 @@ private class AsistenciaPanel {
         optionLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         panel.add(optionLabel, gbc);
 
-        String[] options = {"Generar QR", "Ingresar Cédula"};
+        String[] options = {"Ingresar por QR", "Ingresar por Cédula"};
         registrationOptions = new JComboBox<>(options);
         registrationOptions.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         gbc.gridx = 1;
@@ -125,19 +125,19 @@ private class AsistenciaPanel {
         registrationOptions.addActionListener(e -> {
             String selectedOption = (String) registrationOptions.getSelectedItem();
             
-            if ("Generar QR".equals(selectedOption)) {
-                qrInputField.setVisible(true);  // Muestra el campo de texto para mostrar el QR
-                cedulaLabel.setVisible(false);  // Oculta la opción de ingresar cédula
-                cedulaField.setVisible(false);  // Oculta el campo para la cédula
-                statusLabel.setVisible(true);  // Muestra el statusLabel
-                qrLabel.setVisible(true); // Oculta el label para el QR escaneado
+        if ("Generar QR".equals(selectedOption)) { // Botones para "Generar QR"
+                qrInputField.setVisible(true); 
+                cedulaLabel.setVisible(false); 
+                cedulaField.setVisible(false); 
+                statusLabel.setVisible(true);  
+                qrLabel.setVisible(true); 
                 showQRButton.setVisible(true);
-            } else {
-                qrInputField.setVisible(false);  // Oculta el campo de texto para el QR
-                cedulaLabel.setVisible(true);   // Muestra la opción de ingresar cédula
-                cedulaField.setVisible(true);   // Muestra el campo para la cédula
-                statusLabel.setVisible(false);  // Oculta el statusLabel
-                qrLabel.setVisible(false); // Oculta el label para el QR escaneado
+            } else {                                    // Botones para "Ingresar Cédula"
+                qrInputField.setVisible(false);  
+                cedulaLabel.setVisible(true);   
+                cedulaField.setVisible(true);  
+                statusLabel.setVisible(false);  
+                qrLabel.setVisible(false); 
                 showQRButton.setVisible(false);
             }
         });

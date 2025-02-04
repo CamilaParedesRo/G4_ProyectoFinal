@@ -1,28 +1,17 @@
 package BusinessLogic.Entities;
 import java.awt.image.BufferedImage;
-import java.io.*;
 import java.sql.*;
-import java.util.*;
 import javax.imageio.ImageIO;
 import com.google.zxing.*;
-import com.google.zxing.common.*;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-
 import DataAccess.DataHelper;
-
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashMap;
-import javax.imageio.ImageIO;
-import com.google.zxing.*;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
