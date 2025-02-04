@@ -2,16 +2,21 @@ package GUI;
 
 import javax.swing.*;
 import GUI.Docente.ListaAsistencia;
+import DataAccess.DataHelper;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginPanelGeneralGUI implements Pantalla {
     private JPanel panel;
     private Image backgroundImage;
 
     public LoginPanelGeneralGUI() {
-        // BACKGROUND
+        // Cargar fondo de pantalla
         backgroundImage = new ImageIcon("C:/Users/elian/G4_ProyectoFinal/src/GUI/Assets/fondo.png").getImage();
 
         panel = new JPanel() {
@@ -99,19 +104,25 @@ public class LoginPanelGeneralGUI implements Pantalla {
             String contraseña = new String(passField.getPassword()).trim();
             String selectedRole = (String) roleSelect.getSelectedItem();
 
-            // Validar que usuario y contraseña no estén vacíos
             if (usuario.isEmpty() || contraseña.isEmpty()) {
                 JOptionPane.showMessageDialog(panel, "Error: Usuario y contraseña no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Simulación de autenticación con "base de datos"
-            if (validarCredenciales(usuario, contraseña)) {
-                if (selectedRole.equals("Docente")) {
-                    System.out.println("Usuario Docente autenticado. Redirigiendo a Lista de Asistencia...");
-                    MainApp.mostrarPantalla(new ListaAsistencia().getPanel()); // Redirigir a la lista de asistencia
+            boolean validLogin = false;
+            try {
+                validLogin = validarCredenciales(selectedRole, usuario, contraseña);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panel, "Error en la autenticación: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+
+            if (validLogin) {
+                if ("Docente".equals(selectedRole)) {
+                    System.out.println("Usuario Docente autenticado. Redirigiendo a la lista de asistencia...");
+                    MainApp.mostrarPantalla(new ListaAsistencia().getPanel());
                 } else {
-                    System.out.println("Usuario Estudiante autenticado. (Aquí se podrá redirigir a otra pantalla)");
+                    System.out.println("Usuario Estudiante autenticado.");
                     JOptionPane.showMessageDialog(panel, "Bienvenido, " + usuario + ". Redirección en proceso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
@@ -119,47 +130,33 @@ public class LoginPanelGeneralGUI implements Pantalla {
             }
         });
 
-        // Agregar efecto de hover
-        loginButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent evt) {
-                loginButton.setBackground(new Color(0, 180, 0));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent evt) {
-                loginButton.setBackground(new Color(0, 200, 0));
-            }
-        });
-
         panel.add(loginButton, gbc);
-
-        // REGISTRARSE (como enlace de texto)
-        gbc.gridy++;
-        JLabel registerLabel = new JLabel("Registrarse", SwingConstants.CENTER);
-        registerLabel.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-        registerLabel.setForeground(Color.BLACK);
-        registerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Subrayado solo en la palabra "Registrarse"
-        registerLabel.setText("<html><body><span style='text-decoration:underline;'>Registrarse</span></body></html>");
-
-        // Evento para redirigir a la pantalla de registro
-        registerLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("Redirigiendo a la pantalla de registro...");
-                MainApp.mostrarPantalla(new RegistrarUsuarioGUI().getPanel()); // Redirigir a la pantalla de registro
-            }
-        });
-
-        gbc.gridwidth = 2;
-        panel.add(registerLabel, gbc);
     }
 
-    // Método simulado para validar credenciales (en el futuro se conectará a la base de datos)
-    private boolean validarCredenciales(String usuario, String contraseña) {
-        return usuario.equals("admin") && contraseña.equals("1234"); // Simulación de usuario válido
+    private boolean validarCredenciales(String rol, String usuario, String contraseña) throws Exception {
+        boolean esValido = false;
+        String query;
+
+        if ("Estudiante".equals(rol)) {
+            query = "SELECT * FROM estudiante WHERE usuario_estudiante = ? AND clave_estudiante = ?";
+        } else if ("Docente".equals(rol)) {
+            query = "SELECT * FROM profesor WHERE usuario_profesor = ? AND clave_profesor = ?";
+        } else {
+            throw new Exception("Rol inválido");
+        }
+
+        try (Connection conn = DataHelper.openConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, usuario);
+            stmt.setString(2, contraseña);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                esValido = true;
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error en la consulta SQL: " + e.getMessage());
+        }
+        return esValido;
     }
 
     @Override

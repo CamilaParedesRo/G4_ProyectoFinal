@@ -1,7 +1,6 @@
 package GUI.Docente;
+
 import GUI.MainApp;
-
-
 import GUI.Pantalla;
 import GUI.LoginPanelGeneralGUI;
 import javax.swing.*;
