@@ -1,9 +1,7 @@
 package GUI;
 
 import javax.swing.*;
-
 import DataAccess.DataHelper;
-import GUI.Docente.ListaAsistencia;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -101,24 +99,23 @@ public class LoginPanelGeneralGUI implements Pantalla {
             String usuario = userField.getText().trim();
             String contraseña = new String(passField.getPassword()).trim();
             String selectedRole = (String) roleSelect.getSelectedItem();
-
+        
             if (usuario.isEmpty() || contraseña.isEmpty()) {
                 JOptionPane.showMessageDialog(panel, "Error: Usuario y contraseña no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+        
             boolean validLogin = false;
             try {
                 validLogin = validarCredenciales(selectedRole, usuario, contraseña);
             } catch (Exception e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-
+        
             if (validLogin) {
                 if (selectedRole.equals("Docente")) {
-                    System.out.println("Usuario Docente autenticado. Redirigiendo a Lista de Asistencia...");
-                    MainApp.mostrarPantalla(new ListaAsistencia().getPanel());
+                    System.out.println("Usuario Docente autenticado. Redirigiendo a la interfaz del docente...");
+                    MainApp.mostrarPantallaDocente(); // Cambia la vista y el tamaño de la ventana
                 } else {
                     System.out.println("Usuario Estudiante autenticado.");
                     JOptionPane.showMessageDialog(panel, "Bienvenido, " + usuario + ". Redirección en proceso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -126,8 +123,23 @@ public class LoginPanelGeneralGUI implements Pantalla {
             } else {
                 JOptionPane.showMessageDialog(panel, "Error: Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        });
 
+            if (validLogin) {
+                if (selectedRole.equals("Estudiante")) {
+                    System.out.println("Usuario Estudiante autenticado. Redirigiendo a la interfaz del Estudiante...");
+                    MainApp.mostrarPantallaEstudiante(); // Cambia la vista y el tamaño de la ventana
+                } else {
+                    System.out.println("Usuario Estudiante autenticado.");
+                    JOptionPane.showMessageDialog(panel, "Bienvenido, " + usuario + ". Redirección en proceso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(panel, "Error: Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+
+
+        });
+        
         loginButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {

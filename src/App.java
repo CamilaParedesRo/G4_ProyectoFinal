@@ -10,11 +10,11 @@ public class App {
                 System.out.println("Iniciando la aplicación...");
         
         // Aquí podrías agregar lógica general, carga de datos, etc.
-        LectoQRr lectoQRr = new LectoQRr();
-        String cedula = lectoQRr.validarQR();
-        lectoQRr.validarDataBase(cedula);
+        // LectoQRr lectoQRr = new LectoQRr();
+        // String cedula = lectoQRr.validarQR();
+        // lectoQRr.validarDataBase(cedula);
         // Llamamos a la GUI
-       //MainApp.iniciarGUI();
+       MainApp.iniciarGUI();
     }
 }
 

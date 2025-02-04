@@ -1,9 +1,6 @@
 package GUI;
 
 
-import GUI.MainApp;
-import GUI.Pantalla;
-import GUI.RegistrarUsuarioGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,9 +34,9 @@ public class AsistenciaEstudiante implements Pantalla {
         gbc.gridwidth = 2;
 
         // TÍTULO
-        JLabel titleLabel = new JLabel("Registro Estudiante", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
-        panel.add(titleLabel, gbc);
+        // JLabel titleLabel = new JLabel("Registro Estudiante", SwingConstants.CENTER);
+        // titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
+        // panel.add(titleLabel, gbc);
 
         // Opciones para el tipo de registro
         gbc.gridwidth = 1; // Volver a una sola columna
