@@ -2,6 +2,9 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import BusinessLogic.Entities.AsistenciaCedula;
 
 public class EstudiantePanel implements Pantalla {
     private JPanel panel;
@@ -43,6 +46,10 @@ public class EstudiantePanel implements Pantalla {
     // Panel de Asistencia
     private class AsistenciaPanel {
         private JPanel panel;
+        private JTextField cedulaField;
+        private JComboBox<String> registrationOptions;
+        private JButton continueButton;
+        private JLabel statusLabel;
 
         public AsistenciaPanel() {
             panel = new JPanel(new GridBagLayout());
@@ -61,34 +68,93 @@ public class EstudiantePanel implements Pantalla {
 
             // ComboBox para elegir el tipo de registro
             String[] options = {"Generar QR", "Ingresar Cédula"};
-            JComboBox<String> registrationOptions = new JComboBox<>(options);
+            registrationOptions = new JComboBox<>(options);
             registrationOptions.setFont(new Font("Times New Roman", Font.PLAIN, 16));
             gbc.gridx = 1;
             panel.add(registrationOptions, gbc);
 
-            // Botón para continuar
+            // Campo de texto para la cédula (inicialmente oculto)
             gbc.gridx = 0;
-            gbc.gridy++;
+            gbc.gridy = 1;
             gbc.gridwidth = 2;
-            JButton continueButton = new JButton("Continuar");
+            JLabel cedulaLabel = new JLabel("Ingrese su cédula:");
+            cedulaLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+            panel.add(cedulaLabel, gbc);
+            cedulaLabel.setVisible(false);
+
+            gbc.gridy = 2;
+            cedulaField = new JTextField(10);
+            cedulaField.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+            panel.add(cedulaField, gbc);
+            cedulaField.setVisible(false);
+
+            // Botón para continuar
+            gbc.gridy = 3;
+            continueButton = new JButton("Registrar Asistencia");
             continueButton.setFont(new Font("Times New Roman", Font.BOLD, 18));
             continueButton.setBackground(new Color(0, 200, 0));
             continueButton.setForeground(Color.WHITE);
             continueButton.setFocusPainted(false);
+            panel.add(continueButton, gbc);
 
-            continueButton.addActionListener(e -> {
-                String selectedOption = (String) registrationOptions.getSelectedItem();
+            // Etiqueta para mostrar mensajes de estado
+            gbc.gridy = 4;
+            statusLabel = new JLabel(" ");
+            statusLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
+            statusLabel.setForeground(Color.RED);
+            panel.add(statusLabel, gbc);
 
-                if ("Generar QR".equals(selectedOption)) {
-                    System.out.println("Generar QR seleccionado.");
-                    JOptionPane.showMessageDialog(panel, "Funcionalidad de Generar QR no implementada aún.");
-                } else {
-                    System.out.println("Ingresar Cédula seleccionado.");
-                    JOptionPane.showMessageDialog(panel, "Funcionalidad de Ingresar Cédula no implementada aún.");
+            // Evento del JComboBox para mostrar u ocultar el campo de cédula
+            registrationOptions.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    boolean showCedula = "Ingresar Cédula".equals(registrationOptions.getSelectedItem());
+                    cedulaLabel.setVisible(showCedula);
+                    cedulaField.setVisible(showCedula);
+                    panel.revalidate();
+                    panel.repaint();
                 }
             });
 
-            panel.add(continueButton, gbc);
+            // Evento del botón
+            continueButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if ("Ingresar Cédula".equals(registrationOptions.getSelectedItem())) {
+                        registrarAsistencia();
+                    } else {
+                        JOptionPane.showMessageDialog(panel, "Funcionalidad de Generar QR no implementada aún.");
+                    }
+                }
+            });
+        }
+
+        private void registrarAsistencia() {
+            String cedula = cedulaField.getText().trim();
+
+            if (!validarCedula(cedula)) {
+                statusLabel.setText("Cédula inválida. Debe contener 10 dígitos numéricos.");
+                return;
+            }
+
+            AsistenciaCedula asistenciaCedula = new AsistenciaCedula();
+            try {
+                boolean registrado = asistenciaCedula.registrarAsistenciaPorCedula(cedula, "Manual");
+                if (registrado) {
+                    statusLabel.setText("Asistencia registrada correctamente.");
+                    statusLabel.setForeground(Color.GREEN);
+                } else {
+                    statusLabel.setText("No se pudo registrar. Puede haber duplicado.");
+                    statusLabel.setForeground(Color.RED);
+                }
+            } catch (Exception ex) {
+                statusLabel.setText("Error: " + ex.getMessage());
+                statusLabel.setForeground(Color.RED);
+            }
+        }
+
+        private boolean validarCedula(String cedula) {
+            return cedula.matches("\\d{10}");
         }
 
         public JPanel getPanel() {
