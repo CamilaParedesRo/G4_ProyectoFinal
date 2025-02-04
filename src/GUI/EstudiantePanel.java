@@ -3,10 +3,7 @@ package GUI;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import BusinessLogic.Entities.AsistenciaCedula;
@@ -56,6 +53,7 @@ private class AsistenciaPanel {
     private JLabel statusLabel;
     private JButton showQRButton;
 
+    @SuppressWarnings("unused")
     public AsistenciaPanel() {
         panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
