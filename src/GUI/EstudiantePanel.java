@@ -5,7 +5,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
 import BusinessLogic.Entities.AsistenciaCedula;
 import BusinessLogic.Entities.CreacionLecturaBaseDatos;
 import BusinessLogic.Entities.LectoQRr;
