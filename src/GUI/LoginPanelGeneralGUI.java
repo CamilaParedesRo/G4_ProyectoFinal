@@ -12,6 +12,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
     private JPanel panel;
     private Image backgroundImage;
 
+    @SuppressWarnings("unused")
     public LoginPanelGeneralGUI() {
         // BACKGROUND
         backgroundImage = new ImageIcon("C:/Users/elian/G4_ProyectoFinal/src/GUI/Assets/fondo.png").getImage();
@@ -205,7 +206,6 @@ public class LoginPanelGeneralGUI implements Pantalla {
         return panel;
     }
 }
-
 
 
 //   public class LoginPanelGeneralGUI implements Pantalla{

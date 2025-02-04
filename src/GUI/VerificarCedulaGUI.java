@@ -5,14 +5,12 @@ package GUI;
   import java.awt.event.ActionEvent;
   import java.awt.event.ActionListener;
 
-  import DataAccess.DAO.DAO_estudiante;    //Asegúrate de tener el DAO para interactuar con la base de datos
-  import DataAccess.DTO.DTO_estudiante;
-
   public class VerificarCedulaGUI {
 
       private JPanel panel;
       private JTextField cedulaField;
 
+      @SuppressWarnings("unused")
       public VerificarCedulaGUI() {
            // Crear panel principal
           panel = new JPanel();
