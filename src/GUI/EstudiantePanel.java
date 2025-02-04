@@ -124,7 +124,7 @@ private class AsistenciaPanel {
         registrationOptions.addActionListener(e -> {
             String selectedOption = (String) registrationOptions.getSelectedItem();
             
-        if ("Generar QR".equals(selectedOption)) { // Botones para "Generar QR"
+        if ("Ingresar por QR".equals(selectedOption)) { // Botones para "Generar QR"
                 qrInputField.setVisible(true); 
                 cedulaLabel.setVisible(false); 
                 cedulaField.setVisible(false); 
