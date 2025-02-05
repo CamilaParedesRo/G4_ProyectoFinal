@@ -11,10 +11,7 @@ public class DTO_asistencia {
     private String nombreEstudiante;
     private String apellidoEstudiante;
     private String cedulaEstudiante;
-<<<<<<< HEAD
-    private String codigoEstudiante; 
-=======
->>>>>>> origin/Main_Prueba
+    private String CodigoEstudiante;
     private LocalDateTime fecha_registro;
     private LocalDateTime fecha_modifica;
     private char estado;
@@ -121,11 +118,11 @@ public class DTO_asistencia {
         this.cedulaEstudiante = cedulaEstudiante;
     }
     public String getCodigoEstudiante() {
-        return codigoEstudiante;
+        return CodigoEstudiante;
     }
 
     public void setCodigoEstudiante(String codigoEstudiante) {
-        this.codigoEstudiante = codigoEstudiante;
+        this.CodigoEstudiante = codigoEstudiante;
     }
 
     // Método toString para representación en texto

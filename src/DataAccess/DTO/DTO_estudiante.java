@@ -24,16 +24,9 @@ public class DTO_estudiante {
         this.cedulaEstudiante = cedulaEstudiante;
     }
 
-<<<<<<< HEAD
-
-    public DTO_estudiante(int idEstudiante, String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
-                         String codigoEstudiante, String correoEstudiante, String usuarioEstudiante, String claveEstudiante,
-                         LocalDateTime fechaRegistro, LocalDateTime fechaModifica, char estado) {
-=======
     public DTO_estudiante(int idEstudiante, String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
                             String codigoEstudiante, String correoEstudiante, String usuarioEstudiante, String claveEstudiante,
                             LocalDateTime fechaRegistro, LocalDateTime fechaModifica, char estado){
->>>>>>> origin/Main_Prueba
         this.idEstudiante = idEstudiante;
         this.nombreEstudiante = nombreEstudiante;
         this.apellidoEstudiante = apellidoEstudiante;
@@ -49,25 +42,14 @@ public class DTO_estudiante {
 
     
     public DTO_estudiante(String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
-<<<<<<< HEAD
-    String codigoEstudiante, String correoEstudiante, String usuarioEstudiante, String claveEstudiante, Integer id_sexo) {
-=======
     String correoEstudiante, String usuarioEstudiante, String claveEstudiante, Integer id_sexo) {
->>>>>>> origin/Main_Prueba
     this.nombreEstudiante = nombreEstudiante;
     this.apellidoEstudiante = apellidoEstudiante;
     this.cedulaEstudiante = cedulaEstudiante;
     this.correoEstudiante = correoEstudiante;
-<<<<<<< HEAD
-    this.codigoEstudiante =codigoEstudiante;
-    this.usuarioEstudiante = usuarioEstudiante;
-    this.claveEstudiante = claveEstudiante;
-    this.id_sexo = id_sexo;
-=======
     this.usuarioEstudiante = usuarioEstudiante;
     this.claveEstudiante = claveEstudiante;
     this.id_sexo = id_sexo; // Aquí asignas el valor de id_sexo
->>>>>>> origin/Main_Prueba
     this.fechaRegistro = LocalDateTime.now(); 
     this.fechaModifica = null; 
     this.estado = 'A'; 
@@ -110,14 +92,6 @@ public class DTO_estudiante {
     public String getCodigoEstudiante() {
         return codigoEstudiante;
     }
-<<<<<<< HEAD
-
-
-    public void setCodigoEstudiante(String codigoEstudiante) {
-        this.codigoEstudiante = codigoEstudiante;
-    }
-=======
->>>>>>> origin/Main_Prueba
 
     public void setCodigoEstudiante(String codigoEstudiante) {
         this.codigoEstudiante = codigoEstudiante;

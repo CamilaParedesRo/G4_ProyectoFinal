@@ -11,10 +11,7 @@ public class RegistrarUsuarioGUI implements Pantalla {
     private JPanel panel;
     private Image backgroundImage;
 
-<<<<<<< HEAD
-=======
     @SuppressWarnings("unused")
->>>>>>> origin/Main_Prueba
     public RegistrarUsuarioGUI() {
         // Cargar imagen de fondo
         backgroundImage = new ImageIcon("C:/Users/elian/G4_ProyectoFinal/src/GUI/Assets/fondo.png").getImage();
@@ -124,12 +121,7 @@ public class RegistrarUsuarioGUI implements Pantalla {
                 }
 
                 // Crear un objeto DTO_estudiante con los datos
-<<<<<<< HEAD
-                DTO_estudiante estudianteDTO = new DTO_estudiante(nombre, apellido, cedula ,codigo,
-                 correo, usuario, contrasena);
-=======
                 DTO_estudiante estudianteDTO = new DTO_estudiante(nombre, apellido, cedula, correo, usuario, contrasena, null);
->>>>>>> origin/Main_Prueba
                 // Establecer valores adicionales como fecha de registro, estado, etc.
 
                 // Aquí asumimos que tienes un DAO para interactuar con la base de datos
@@ -185,8 +177,4 @@ public class RegistrarUsuarioGUI implements Pantalla {
     public JPanel getPanel() {
         return panel;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/Main_Prueba
