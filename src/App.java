@@ -7,5 +7,3 @@ public class App {
         MainApp.iniciarGUI();
     }
 }
-
-    
