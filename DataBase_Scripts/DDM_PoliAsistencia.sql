@@ -5,13 +5,27 @@ Autor: Anahi Pillajo, Camila Paredes, Eliana Pinargote, Adayeli
 Fecha: 20-01-2025
 DDM--Data PARA MOSTRAR LA ASISTENCIA DEL SISTEMA. 
 */ 
+/* 
+copyRigth Epn 2025
+Autor: Anahi Pillajo, Camila Paredes, Eliana Pinargote, Adayeli 
+Fecha: 20-01-2025
+DDM--Data PARA MOSTRAR LA ASISTENCIA DEL SISTEMA. 
+*/ 
+-- Eliminar vistas en el orden correcto
+DROP VIEW IF EXISTS vista_historial_asistencia;
+DROP VIEW IF EXISTS vista_estudiantes;
+DROP VIEW IF EXISTS vista_profesores;
 
+<<<<<<< HEAD
 -- Eliminar vistas en el orden correcto
 DROP VIEW IF EXISTS vista_historial_asistencia;
 DROP VIEW IF EXISTS vista_estudiantes;
 DROP VIEW IF EXISTS vista_profesores;
 
 
+=======
+
+>>>>>>> origin/Main_Prueba
 -- Vista de estudiantes
 CREATE VIEW vista_estudiantes AS
 SELECT
@@ -55,7 +69,11 @@ SELECT
     a.id_asistencia AS ID_Asistencia,
     e.nombre_estudiante AS Nombre_Estudiante,
     e.apellido_estudiante AS Apellido_Estudiante,
+<<<<<<< HEAD
     e.codigo_unico_estudiante AS Codigo_Unico_Estudiante,
+=======
+    e.codigo_estudiante AS Codigo_Unico_Estudiante,
+>>>>>>> origin/Main_Prueba
     a.fecha_asistencia AS Fecha_Asistencia,
     a.metodo_asistencia AS Metodo_Asistencia
 FROM
@@ -73,6 +91,7 @@ INSERT INTO sexo (nombre_sexo) VALUES
 -- Insertar profesores
 INSERT INTO profesor (nombre_profesor, apellido_profesor, cedula_profesor, id_sexo, correo_profesor, usuario_profesor, clave_profesor)
 VALUES 
+<<<<<<< HEAD
 ('Ana', 'Gómez', '0987654321', 2, 'ana.gomez@dominio.com', 'ana123', 'clave_encriptada'),
 ('Carlos', 'Pérez', '1234567890', 1, 'carlos.perez@dominio.com', 'carlos123', 'clave_encriptada');
 
@@ -81,6 +100,16 @@ INSERT INTO estudiante (nombre_estudiante, apellido_estudiante, cedula_estudiant
 VALUES 
 ('Juan', 'Pérez', '1122334455', 1, 'juan.perez@dominio.com', 'juan123', 'clave_encriptada'),
 ('María', 'Rodríguez', '2233445566', 2, 'maria.rodriguez@dominio.com', 'maria123', 'clave_encriptada');
+=======
+('Ana', 'Gómez', '0987654321', 2, 'ana.gomez@dominio.com', 'ana123', '000'),
+('Carlos', 'Pérez', '1234567890', 1, 'carlos.perez@dominio.com', 'carlos123', '111');
+
+-- Insertar estudiantes
+INSERT INTO estudiante (nombre_estudiante, apellido_estudiante, cedula_estudiante, codigo_estudiante, id_sexo, correo_estudiante, usuario_estudiante, clave_estudiante)
+VALUES 
+('Juan', 'Pérez', '1122334455', '23454', 1, 'juan.perez@dominio.com', 'juan123', '123'),
+('María', 'Rodríguez', '2233445566', '123456', 2, 'maria.rodriguez@dominio.com', 'maria123', '123');
+>>>>>>> origin/Main_Prueba
 
 -- Insertar asistencia
 INSERT INTO asistencia (id_estudiante, fecha_asistencia, metodo_asistencia)

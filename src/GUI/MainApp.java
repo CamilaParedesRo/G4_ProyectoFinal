@@ -1,11 +1,20 @@
 package GUI;
 
 import javax.swing.*;
+<<<<<<< HEAD
+=======
+
+import GUI.Docente.ProfesorPanel;
+>>>>>>> origin/Main_Prueba
 public class MainApp {
     private static JFrame frame;
 
     public static void iniciarGUI() {
         SwingUtilities.invokeLater(() -> {
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/Main_Prueba
             frame = new JFrame("Sistema de Registro");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 600);
@@ -13,7 +22,10 @@ public class MainApp {
 
             // Mostrar el panel de login al iniciar la aplicación
             mostrarPantalla(new LoginPanelGeneralGUI().getPanel());
+<<<<<<< HEAD
             mostrarPantalla(new RegistrarUsuarioGUI().getPanel()); 
+=======
+>>>>>>> origin/Main_Prueba
 
             frame.setVisible(true);
         });
@@ -26,6 +38,20 @@ public class MainApp {
         frame.repaint();     // Actualizar la interfaz
     }
 
+<<<<<<< HEAD
     // Método para redirigir a la pantalla de registro
 
+=======
+    public static void mostrarPantallaDocente() {
+        frame.setSize(900, 600); // Tamaño grande para el panel del docente
+        frame.setLocationRelativeTo(null); // Mantener centrado
+        mostrarPantalla(new ProfesorPanel().getPanel());
+    }
+
+    public static void mostrarPantallaEstudiante() {
+        frame.setSize(900, 600); // Tamaño grande para el panel del docente
+        frame.setLocationRelativeTo(null); // Mantener centrado
+        mostrarPantalla(new EstudiantePanel().getPanel());
+    }
+>>>>>>> origin/Main_Prueba
 }

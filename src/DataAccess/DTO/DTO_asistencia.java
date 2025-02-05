@@ -11,7 +11,10 @@ public class DTO_asistencia {
     private String nombreEstudiante;
     private String apellidoEstudiante;
     private String cedulaEstudiante;
+<<<<<<< HEAD
     private String codigoEstudiante; 
+=======
+>>>>>>> origin/Main_Prueba
     private LocalDateTime fecha_registro;
     private LocalDateTime fecha_modifica;
     private char estado;
