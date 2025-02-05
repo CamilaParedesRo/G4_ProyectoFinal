@@ -1,4 +1,3 @@
-
 import GUI.MainApp;
 
 public class App {

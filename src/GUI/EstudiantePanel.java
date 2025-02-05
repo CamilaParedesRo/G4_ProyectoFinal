@@ -29,7 +29,7 @@ public class EstudiantePanel implements Pantalla {
     public JPanel getPanel() {
         return panel;
     }
-
+     // Panel de Inicio
     private class InicioPanel {
         private JPanel panel;
 
@@ -62,6 +62,7 @@ private class AsistenciaPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 1;
         JLabel optionLabel = new JLabel("Elija cómo desea registrarse:");
         optionLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         panel.add(optionLabel, gbc);
@@ -74,6 +75,7 @@ private class AsistenciaPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.gridwidth = 2;
         JLabel cedulaLabel = new JLabel("Ingrese su cédula:");
         cedulaLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         panel.add(cedulaLabel, gbc);
@@ -90,6 +92,7 @@ private class AsistenciaPanel {
         continueButton.setFont(new Font("Times New Roman", Font.BOLD, 18));
         continueButton.setBackground(new Color(0, 200, 0));
         continueButton.setForeground(Color.WHITE);
+        continueButton.setFocusPainted(false);
         panel.add(continueButton, gbc);
 
         // Campo para mostrar el QR escaneado
