@@ -2,7 +2,9 @@ package GUI;
 
 import javax.swing.*;
 import DataAccess.DAO.DAO_estudiante;
+import DataAccess.DAO.DAO_profesor;
 import DataAccess.DTO.DTO_estudiante;
+import DataAccess.DTO.DTO_profesor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,11 +36,11 @@ public class RegistrarUsuarioGUI implements Pantalla {
         gbc.gridwidth = 1;
 
         // TÍTULO
-        gbc.gridwidth = 2; // Ocupar dos columnas
+        gbc.gridwidth = 2;
         JLabel titleLabel = new JLabel("Registro de Usuario", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
         panel.add(titleLabel, gbc);
-        gbc.gridwidth = 1; // Restaurar a una columna
+        gbc.gridwidth = 1;
 
         // CAMPOS
         addField("Nombre:", gbc, panel);
@@ -65,6 +67,12 @@ public class RegistrarUsuarioGUI implements Pantalla {
         JPasswordField passField = new JPasswordField(15);
         panel.add(passField, gbc);
 
+        // ComboBox para seleccionar el rol (Estudiante o Docente)
+        addField("Rol:", gbc, panel);
+        String[] roles = {"Estudiante", "Docente"};
+        JComboBox<String> roleComboBox = new JComboBox<>(roles);
+        panel.add(roleComboBox, gbc);
+
         // BOTÓN DE REGISTRO
         gbc.gridx = 0;
         gbc.gridy++;
@@ -76,40 +84,45 @@ public class RegistrarUsuarioGUI implements Pantalla {
         registerButton.setFocusPainted(false);
 
         // Evento del botón de registro con validaciones
-        // Evento del botón de registro con validaciones
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nombre = nameField.getText().trim();
                 String apellido = apellidoField.getText().trim();
                 String cedula = cedulaField.getText().trim();
-                String codigoUnico = JOptionPane.showInputDialog("Ingrese el código único del estudiante:").trim(); // Se
-                                                                                                                    // solicita
-                                                                                                                    // el
-                                                                                                                    // código
-                                                                                                                    // único
-                int idSexo = 1; // Asigna un valor predeterminado o reemplázalo con un ComboBox para seleccionar
-                                // sexo
                 String correo = correoField.getText().trim();
                 String usuario = userField.getText().trim();
                 String clave = new String(passField.getPassword()).trim();
+                String rolSeleccionado = (String) roleComboBox.getSelectedItem(); // Obtener el rol seleccionado
 
                 // Validar que ningún campo esté vacío
-                if (nombre.isEmpty() || apellido.isEmpty() || cedula.isEmpty() || codigoUnico.isEmpty() ||
+                if (nombre.isEmpty() || apellido.isEmpty() || cedula.isEmpty() ||
                         correo.isEmpty() || usuario.isEmpty() || clave.isEmpty()) {
                     JOptionPane.showMessageDialog(panel, "Error: Todos los campos deben ser completados.", "Error",
                             JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                // Crear objeto DTO con el nuevo constructor
-                DTO_estudiante estudianteDTO = new DTO_estudiante(nombre, apellido, cedula, codigoUnico, idSexo, correo,
-                        usuario, clave);
-                DAO_estudiante usuarioDAO = new DAO_estudiante();
-
                 boolean registrado = false;
                 try {
-                    registrado = usuarioDAO.create(estudianteDTO);
+                    if (rolSeleccionado.equals("Estudiante")) {
+                        String codigoUnico = JOptionPane.showInputDialog("Ingrese el código único del estudiante:").trim();
+                        int idSexo = 1; // Asigna un valor predeterminado o reemplázalo con un ComboBox
+
+                        // Crear objeto DTO para Estudiante
+                        DTO_estudiante estudianteDTO = new DTO_estudiante(nombre, apellido, cedula, codigoUnico, idSexo, correo, usuario, clave);
+                        DAO_estudiante estudianteDAO = new DAO_estudiante();
+
+                        registrado = estudianteDAO.create(estudianteDTO);
+                    } else if (rolSeleccionado.equals("Docente")) {
+                        int idSexo = 1; // Asigna un valor predeterminado o reemplázalo con un ComboBox
+
+                        // Crear objeto DTO para Docente
+                        DTO_profesor profesorDTO = new DTO_profesor(nombre, apellido, cedula, idSexo, correo, usuario, clave);
+                        DAO_profesor profesorDAO = new DAO_profesor();
+
+                        registrado = profesorDAO.create(profesorDTO);
+                    }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, "Error en la base de datos: " + ex.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
@@ -132,14 +145,14 @@ public class RegistrarUsuarioGUI implements Pantalla {
         gbc.gridy++;
         JButton backButton = new JButton("Regresar");
         backButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
-        backButton.setBackground(new Color(220, 50, 50)); // Rojo para destacar
+        backButton.setBackground(new Color(220, 50, 50));
         backButton.setForeground(Color.WHITE);
         backButton.setFocusPainted(false);
 
         // Evento para volver al login
         backButton.addActionListener(e -> {
             System.out.println("Volviendo al Login...");
-            MainApp.mostrarPantalla(new LoginPanelGeneralGUI().getPanel()); // Redirigir al Login
+            MainApp.mostrarPantalla(new LoginPanelGeneralGUI().getPanel());
         });
 
         panel.add(backButton, gbc);
