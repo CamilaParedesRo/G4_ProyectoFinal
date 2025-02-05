@@ -16,24 +16,59 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Map;
+import java.util.Base64;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+
+
 public class CreacionLecturaBaseDatos {
 
-    public BufferedImage procesarEstudiante() {
-        Set<String> processedIds = new HashSet<>();
-        BufferedImage qrImage = null; // Variable para almacenar la imagen QR final.
-        
+    private String usuario_estudiante; // Usuario logueado
+
+    public CreacionLecturaBaseDatos(String Usuario_estudiante) {
+        this.usuario_estudiante = Usuario_estudiante;
+    }
+
+    public BufferedImage generarQRUsuario() {
+        BufferedImage qrImage = null;
+
+        if (usuario_estudiante == null || usuario_estudiante.isEmpty()) {
+            System.out.println("Error: El nombre del estudiante es nulo o vacío.");
+            return null;
+        }
+
         try (Connection connection = DataHelper.openConnection()) {
-            createTableIfNotExists(connection);
-            String query = "SELECT * FROM estudiante";
-            try (Statement stmt = connection.createStatement();
-                 ResultSet rs = stmt.executeQuery(query)) {
-                while (rs.next()) {
-                    String idEstudiante = rs.getString("id_estudiante");
-                    String cedulaEstudiante = rs.getString("cedula_estudiante");
-                    if (!processedIds.contains(idEstudiante)) {
-                        qrImage = generate_qr(idEstudiante, cedulaEstudiante); // Genera la imagen QR
-                        insertQRCodeInDB(qrImage, idEstudiante, connection);
-                        processedIds.add(idEstudiante);
+            if (connection == null || connection.isClosed()) {
+                System.out.println("Error: No se pudo establecer la conexión con la base de datos.");
+                return null;
+            }
+
+            String query = "SELECT id_estudiante, cedula_estudiante FROM estudiante WHERE usuario_estudiante = ?";
+            System.out.println("Ejecutando consulta con usuario: " + usuario_estudiante);
+
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setString(1, usuario_estudiante.trim());
+
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        String idEstudiante = rs.getString("id_estudiante");
+                        String cedulaEstudiante = rs.getString("cedula_estudiante");
+
+                        System.out.println("Usuario encontrado: ID = " + idEstudiante + ", Cédula = " + cedulaEstudiante);
+
+                        // Generar el QR con la cédula del estudiante
+                        qrImage = generateQR(cedulaEstudiante);
+                    } else {
+                        System.out.println("No se encontró el usuario en la base de datos.");
                     }
                 }
             }
@@ -41,69 +76,23 @@ public class CreacionLecturaBaseDatos {
             e.printStackTrace();
         }
 
-        return qrImage; // Retorna la última imagen QR generada
+        return qrImage;
     }
 
-    private void createTableIfNotExists(Connection connection) throws SQLException {
-        String createTableQuery = "CREATE TABLE IF NOT EXISTS QRS ("
-                + "id_QR INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "QR VARCHAR(225) UNIQUE NOT NULL, "
-                + "fecha_registro DATETIME NOT NULL DEFAULT (datetime('now','localtime')), "
-                + "fecha_modifica DATETIME, "
-                + "estado CHAR(1) NOT NULL DEFAULT 'A', "
-                + "id_estudiante INTEGER, "
-                + "FOREIGN KEY (id_estudiante) REFERENCES estudiante(id_estudiante))";
-        try (Statement stmt = connection.createStatement()) {
-            stmt.execute(createTableQuery);
-            System.out.println("Tabla 'QRS' creada si no existía.");
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    public BufferedImage generate_qr(String imageName, String qrCodeData) {
+    private BufferedImage generateQR(String qrCodeData) {
         try {
-            String filePath = "QRs/" + imageName + ".png"; // Ruta del archivo QR
             String charset = "UTF-8";
-            Map<EncodeHintType, ErrorCorrectionLevel> hintMap = new HashMap<>();
-            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+            Map<EncodeHintType, ErrorCorrectionLevel> hintMap = Map.of(
+                    EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
 
             BitMatrix matrix = new MultiFormatWriter().encode(
                     new String(qrCodeData.getBytes(charset), charset),
                     BarcodeFormat.QR_CODE, 200, 200, hintMap);
 
-            File qrFile = new File(filePath);
-            qrFile.getParentFile().mkdirs();
-            MatrixToImageWriter.writeToFile(matrix, "PNG", qrFile);
-            System.out.println("QR Code image created successfully at " + filePath);
-
-            // Convertir la imagen QR en un BufferedImage
-            BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(matrix);
-            return qrImage;
-
+            return MatrixToImageWriter.toBufferedImage(matrix);
         } catch (Exception e) {
             System.err.println("Error al generar el QR: " + e);
             return null;
         }
     }
-
-    public void insertQRCodeInDB(BufferedImage qrImage, String idEstudiante, Connection connection) {
-        try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ImageIO.write(qrImage, "PNG", byteArrayOutputStream);
-            byte[] imageBytes = byteArrayOutputStream.toByteArray();
-            String qrBase64 = Base64.getEncoder().encodeToString(imageBytes);
-
-            String query = "INSERT INTO QRS (QR, id_estudiante) VALUES (?, ?)";
-            try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, qrBase64);
-                stmt.setString(2, idEstudiante);
-                stmt.executeUpdate();
-                System.out.println("QR Code inserted successfully for student ID: " + idEstudiante);
-            }
-        } catch (SQLException | IOException e) {
-            System.err.println("Error al insertar en la base de datos: " + e.getMessage());
-        }
-    }
 }
-
-

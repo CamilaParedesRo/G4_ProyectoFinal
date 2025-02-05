@@ -101,6 +101,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
             String contraseña = new String(passField.getPassword()).trim();
             String selectedRole = (String) roleSelect.getSelectedItem();
         
+            // Verificar que los campos no estén vacíos
             if (usuario.isEmpty() || contraseña.isEmpty()) {
                 JOptionPane.showMessageDialog(panel, "Error: Usuario y contraseña no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -108,38 +109,29 @@ public class LoginPanelGeneralGUI implements Pantalla {
         
             boolean validLogin = false;
             try {
+                // Validar credenciales con la base de datos o lógica de autenticación
                 validLogin = validarCredenciales(selectedRole, usuario, contraseña);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
         
             if (validLogin) {
+                // Guardar el usuario en la clase SesionUsuario
+                SesionUsuario.setUsuario(usuario);  // Guardamos el usuario autenticado
+        
                 if (selectedRole.equals("Docente")) {
                     System.out.println("Usuario Docente autenticado. Redirigiendo a la interfaz del docente...");
-                    MainApp.mostrarPantallaDocente(); // Cambia la vista y el tamaño de la ventana
-                } else {
-                    System.out.println("Usuario Estudiante autenticado.");
-                    JOptionPane.showMessageDialog(panel, "Bienvenido, " + usuario + ". Redirección en proceso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                }
-            } else {
-                JOptionPane.showMessageDialog(panel, "Error: Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-            if (validLogin) {
-                if (selectedRole.equals("Estudiante")) {
+                    MainApp.mostrarPantallaDocente();  // Cambia la vista y el tamaño de la ventana
+                } else if (selectedRole.equals("Estudiante")) {
                     System.out.println("Usuario Estudiante autenticado. Redirigiendo a la interfaz del Estudiante...");
-                    MainApp.mostrarPantallaEstudiante(); // Cambia la vista y el tamaño de la ventana
-                } else {
-                    System.out.println("Usuario Estudiante autenticado.");
                     JOptionPane.showMessageDialog(panel, "Bienvenido, " + usuario + ". Redirección en proceso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    MainApp.mostrarPantallaEstudiante();  // Cambia la vista y el tamaño de la ventana
                 }
             } else {
                 JOptionPane.showMessageDialog(panel, "Error: Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-
-
         });
+        
         
         loginButton.addMouseListener(new MouseAdapter() {
             @Override

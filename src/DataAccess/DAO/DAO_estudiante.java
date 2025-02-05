@@ -157,23 +157,30 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
 
     public DTO_estudiante findByCedula(String cedula) throws Exception {
         DTO_estudiante estudiante = null;
-        String query = " SELECT cedula_estudiante"
-                     + " FROM estudiante "
-                     + " WHERE Estado = 'A' AND cedula_estudiante = '" + cedula ;
-        try {
-            Connection conn = openConnection();         // Conectar a la base de datos
-            Statement stmt = conn.createStatement();    // Crear una declaración SQL
-            ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
-            while (rs.next()) {
+        String query = "SELECT cedula_estudiante FROM estudiante WHERE Estado = 'A' AND cedula_estudiante = '" + cedula + "'"; // Cierra comillas
+    
+        try (Connection conn = openConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+    
+            if (rs.next()) { // Si hay resultados en la BD
                 estudiante = new DTO_estudiante();
-                estudiante.setCedulaEstudiante(rs.getString("cedula_estudiante")); // CedulaEstudiante
+                estudiante.setCedulaEstudiante(rs.getString("cedula_estudiante"));
+                System.out.println("Cédula encontrada en BD dentro de findByCedula: " + estudiante.getCedulaEstudiante());
+            } else {
+                System.out.println("No se encontró ninguna cédula en la BD dentro de findByCedula.");
             }
+    
         } catch (SQLException e) {
             throw new PatException(e.getMessage(), getClass().getName(), "findByCedula()");
         }
-        return estudiante;
+    
+        return estudiante; // Devuelve null si no encontró nada
     }
-
+    
+    
+    
+    
 
     public Integer getMaxRow() throws Exception {
         String query = " SELECT COUNT(*) TotalReg FROM estudiante "
