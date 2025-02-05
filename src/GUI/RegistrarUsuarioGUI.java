@@ -76,38 +76,52 @@ public class RegistrarUsuarioGUI implements Pantalla {
         registerButton.setFocusPainted(false);
 
         // Evento del botón de registro con validaciones
+        // Evento del botón de registro con validaciones
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nombre = nameField.getText().trim();
                 String apellido = apellidoField.getText().trim();
                 String cedula = cedulaField.getText().trim();
+                String codigoUnico = JOptionPane.showInputDialog("Ingrese el código único del estudiante:").trim(); // Se
+                                                                                                                    // solicita
+                                                                                                                    // el
+                                                                                                                    // código
+                                                                                                                    // único
+                int idSexo = 1; // Asigna un valor predeterminado o reemplázalo con un ComboBox para seleccionar
+                                // sexo
                 String correo = correoField.getText().trim();
                 String usuario = userField.getText().trim();
                 String clave = new String(passField.getPassword()).trim();
 
-                if (nombre.isEmpty() || apellido.isEmpty() || cedula.isEmpty() || correo.isEmpty() || usuario.isEmpty() || clave.isEmpty()) {
-                    JOptionPane.showMessageDialog(panel, "Error: Todos los campos deben ser completados.", "Error", JOptionPane.ERROR_MESSAGE);
+                // Validar que ningún campo esté vacío
+                if (nombre.isEmpty() || apellido.isEmpty() || cedula.isEmpty() || codigoUnico.isEmpty() ||
+                        correo.isEmpty() || usuario.isEmpty() || clave.isEmpty()) {
+                    JOptionPane.showMessageDialog(panel, "Error: Todos los campos deben ser completados.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                // Crear objeto DTO con constructor adecuado
-                DTO_estudiante estudianteDTO = new DTO_estudiante(nombre, apellido, cedula, correo, usuario, clave);
-
+                // Crear objeto DTO con el nuevo constructor
+                DTO_estudiante estudianteDTO = new DTO_estudiante(nombre, apellido, cedula, codigoUnico, idSexo, correo,
+                        usuario, clave);
                 DAO_estudiante usuarioDAO = new DAO_estudiante();
 
                 boolean registrado = false;
                 try {
                     registrado = usuarioDAO.create(estudianteDTO);
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(panel, "Error en la base de datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, "Error en la base de datos: " + ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
                     ex.printStackTrace(); // Para depuración
                 }
 
                 if (registrado) {
-                    JOptionPane.showMessageDialog(panel, "Usuario registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, "Usuario registrado exitosamente.", "Éxito",
+                            JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(panel, "Error al registrar el usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, "Error al registrar el usuario.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

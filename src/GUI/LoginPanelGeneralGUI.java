@@ -4,8 +4,8 @@ import javax.swing.*;
 import GUI.Docente.ListaAsistencia;
 import DataAccess.DataHelper;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +16,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
     private Image backgroundImage;
 
     public LoginPanelGeneralGUI() {
-        // Cargar fondo de pantalla
+        // Cargar imagen de fondo
         backgroundImage = new ImageIcon("C:/Users/elian/G4_ProyectoFinal/src/GUI/Assets/fondo.png").getImage();
 
         panel = new JPanel() {
@@ -131,6 +131,25 @@ public class LoginPanelGeneralGUI implements Pantalla {
         });
 
         panel.add(loginButton, gbc);
+
+        // BOTÓN DE REGISTRO
+        gbc.gridy++;
+        JButton registerButton = new JButton("Registrarse");
+        registerButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        registerButton.setBackground(new Color(50, 150, 250)); // Azul para diferenciarlo
+        registerButton.setForeground(Color.WHITE);
+        registerButton.setFocusPainted(false);
+
+        // Evento para cambiar a la pantalla de registro
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Redirigiendo a la pantalla de registro...");
+                MainApp.mostrarPantalla(new RegistrarUsuarioGUI().getPanel()); // Redirigir al Registro
+            }
+        });
+
+        panel.add(registerButton, gbc);
     }
 
     private boolean validarCredenciales(String rol, String usuario, String contraseña) throws Exception {
