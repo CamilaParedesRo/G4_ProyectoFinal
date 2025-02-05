@@ -171,6 +171,7 @@ public class DTO_estudiante {
             + "\n NombreEstudiante:     " + getNombreEstudiante()
             + "\n ApellidoEstudiante:   " + getApellidoEstudiante()
             + "\n CedulaEstudiante:     " + getCedulaEstudiante()
+            + "\n CodigoEstudiante:     " + getCodigoEstudiante()
             + "\n CorreoEstudiante:     " + getCorreoEstudiante()
             + "\n UsuarioEstudiante:    " + getUsuarioEstudiante()
             + "\n ClaveEstudiante:      " + getClaveEstudiante()

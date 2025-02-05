@@ -4,9 +4,8 @@ copyRigth Epn 2025
 Autor: Anahi Pillajo, Camila Paredes, Eliana Pinargote, Adayeli 
 Fecha: 20-01-2025
 DDL--Data base para crear las bases principales del sistema PoliAsistencia. 
-*/ 
--- 1. Deshabilitar claves foráneas temporalmente
-PRAGMA foreign_keys = OFF;
+
+*/ PRAGMA foreign_keys = OFF;
 -- 2. Eliminar tablas en el orden correcto
 DROP TABLE IF EXISTS asistencia;
 DROP TABLE IF EXISTS QRS;

@@ -14,9 +14,9 @@ import Framework.PatException;
 public class AsistenciaCedula extends DataHelper {
     
     public boolean registrarAsistenciaPorCedula(String cedula, String metodoAsistencia) throws Exception {
-    String queryVerificarEstudiante = "SELECT idEstudiante FROM Estudiante WHERE Cedula = ?";
-    String queryVerificarAsistencia = "SELECT COUNT(*) FROM Asistencia WHERE idEstudiante = ? AND DATE(fechaAsistencia) = CURDATE()";
-    String queryInsertar = "INSERT INTO Asistencia (idEstudiante, fechaAsistencia, metodoAsistencia, fechaRegistro, estado) "
+    String queryVerificarEstudiante = "SELECT id_estudiante FROM estudiante WHERE cedula_estudiante = ?";
+    String queryVerificarAsistencia = "SELECT COUNT(*) FROM asistencia WHERE id_estudiante = ? AND DATE(fecha_asistencia) = ?";
+    String queryInsertar = "INSERT INTO asistencia (id_estudiante, fecha_asistencia, metodo_asistencia, fecha_registro, estado) "
                          + "VALUES (?, ?, ?, ?, ?)";
 
     try (Connection conn = openConnection();
@@ -25,7 +25,7 @@ public class AsistenciaCedula extends DataHelper {
         pstmtVerificarEstudiante.setString(1, cedula);
         try (ResultSet rsEstudiante = pstmtVerificarEstudiante.executeQuery()) {
             if (rsEstudiante.next()) {
-                int idEstudiante = rsEstudiante.getInt("idEstudiante");
+                int idEstudiante = rsEstudiante.getInt("id_estudiante");
 
                 // Verificar si ya hay un registro hoy
                 try (PreparedStatement pstmtVerificarAsistencia = conn.prepareStatement(queryVerificarAsistencia)) {

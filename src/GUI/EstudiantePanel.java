@@ -20,7 +20,7 @@ public class EstudiantePanel implements Pantalla {
         tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
         tabbedPane.addTab("Inicio", new InicioPanel().getPanel());
         tabbedPane.addTab("Asistencia", new AsistenciaPanel().getPanel());
-        tabbedPane.addTab("Perfil", new PerfilPanel().getPanel());
+        //tabbedPane.addTab("Perfil", new PerfilPanel().getPanel());
 
         panel.add(tabbedPane, BorderLayout.CENTER);
     }
@@ -29,8 +29,9 @@ public class EstudiantePanel implements Pantalla {
     public JPanel getPanel() {
         return panel;
     }
+
      // Panel de Inicio
-    private class InicioPanel {
+     private class InicioPanel {
         private JPanel panel;
 
         public InicioPanel() {
@@ -62,60 +63,60 @@ private class AsistenciaPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 1;
         JLabel optionLabel = new JLabel("Elija cómo desea registrarse:");
-        optionLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         panel.add(optionLabel, gbc);
 
         String[] options = {"Ingresar por QR", "Ingresar por Cédula"};
         registrationOptions = new JComboBox<>(options);
-        registrationOptions.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         gbc.gridx = 1;
         panel.add(registrationOptions, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 2;
         JLabel cedulaLabel = new JLabel("Ingrese su cédula:");
-        cedulaLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         panel.add(cedulaLabel, gbc);
         cedulaLabel.setVisible(false);
 
         gbc.gridy = 2;
         cedulaField = new JTextField(10);
-        cedulaField.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         panel.add(cedulaField, gbc);
         cedulaField.setVisible(false);
 
         gbc.gridy = 3;
         continueButton = new JButton("Registrar Asistencia");
-        continueButton.setFont(new Font("Times New Roman", Font.BOLD, 18));
-        continueButton.setBackground(new Color(0, 200, 0));
-        continueButton.setForeground(Color.WHITE);
-        continueButton.setFocusPainted(false);
         panel.add(continueButton, gbc);
 
-        // Campo para mostrar el QR escaneado
         gbc.gridy = 4;
+        qrInputField = new JTextField(20);
+        panel.add(qrInputField, gbc);
+        qrInputField.setVisible(false);
+
+        gbc.gridy = 5;
+        statusLabel = new JLabel(" ");
+        panel.add(statusLabel, gbc);
+        statusLabel.setVisible(false);
+
+        // Campo para mostrar el QR escaneado
+        gbc.gridy = 6;
         JLabel qrLabel = new JLabel("QR Escaneado:");
         qrLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         panel.add(qrLabel, gbc);
         qrLabel.setVisible(false);
         
-        gbc.gridy = 5;
+        gbc.gridy = 7;
         qrInputField = new JTextField(20);  // Este campo muestra el contenido del QR escaneado
         qrInputField.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         panel.add(qrInputField, gbc);
         qrInputField.setVisible(false); // Inicialmente invisible
 
-        gbc.gridy = 6;
+        gbc.gridy = 8;
         statusLabel = new JLabel(" ");
         statusLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
         statusLabel.setForeground(Color.RED);
         panel.add(statusLabel, gbc);
         statusLabel.setVisible(false); // Inicialmente invisible
 
-        gbc.gridy = 7;
+        gbc.gridy = 9 ;
         showQRButton = new JButton("Mostrar QR");
         showQRButton.setFont(new Font("Times New Roman", Font.BOLD, 18));
         showQRButton.setBackground(new Color(0, 100, 200));
@@ -144,115 +145,95 @@ private class AsistenciaPanel {
             }
         });
 
+        continueButton.addActionListener(e -> registrarAsistencia());
         showQRButton.addActionListener(e -> mostrarQR());
 
-        continueButton.addActionListener(e -> {
-            if ("Ingresar Cédula".equals(registrationOptions.getSelectedItem())) {
-                registrarAsistencia();
-            }
-        });
-
         // Agregar DocumentListener al campo qrInputField para detectar cambios
-        qrInputField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                validarQRIngresado();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                validarQRIngresado();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                validarQRIngresado();
-            }
-        });
-    }
-
-    private void registrarAsistencia() {
-        String cedula = cedulaField.getText().trim();
-        if (!cedula.matches("\\d{10}")) {
-            statusLabel.setText("Cédula inválida. Debe contener 10 dígitos numéricos.");
-            return;
+            qrInputField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) { validarQRIngresado(); }
+                @Override
+                public void removeUpdate(DocumentEvent e) { validarQRIngresado(); }
+                @Override
+                public void changedUpdate(DocumentEvent e) { validarQRIngresado(); }
+            });
         }
-        AsistenciaCedula asistenciaCedula = new AsistenciaCedula();
-        try {
-            boolean registrado = asistenciaCedula.registrarAsistenciaPorCedula(cedula, "Manual");
-            statusLabel.setText(registrado ? "Asistencia registrada correctamente." : "No se pudo registrar. Puede haber duplicado.");
-            statusLabel.setForeground(registrado ? Color.GREEN : Color.RED);
-        } catch (Exception ex) {
-            statusLabel.setText("Error: " + ex.getMessage());
-            statusLabel.setForeground(Color.RED);
-        }
-    }
 
-    // Método para validar el QR ingresado manualmente en qrInputField
-    private void validarQRIngresado() {
-        String qrData = qrInputField.getText().trim();
-        
-        if (!qrData.isEmpty()) {
-            LectoQRr lector = new LectoQRr();
+
+        private void registrarAsistencia() {
+            String cedula = cedulaField.getText().trim();
+            if (!cedula.matches("\\d{10}")) {
+                statusLabel.setText("Cédula inválida. Debe contener 10 dígitos.");
+                statusLabel.setForeground(Color.RED);
+                statusLabel.setVisible(true);
+                return;
+            }
+
+
+            AsistenciaCedula asistenciaCedula = new AsistenciaCedula();
             try {
-                if (lector.validarDataBase(qrData)) {
-                    AsistenciaCedula asistenciaCedula = new AsistenciaCedula();
-                    boolean registrado = asistenciaCedula.registrarAsistenciaPorCedula(qrData, "QR");
-                    statusLabel.setText(registrado ? "Asistencia registrada correctamente." : "No se pudo registrar. Puede haber duplicado.");
-                    statusLabel.setForeground(registrado ? Color.GREEN : Color.RED);
-                } else {
-                    statusLabel.setText("Código QR no válido en la base de datos.");
-                    statusLabel.setForeground(Color.RED);
-                }
+                boolean registrado = asistenciaCedula.registrarAsistenciaPorCedula(cedula, "Manual");
+                statusLabel.setText(registrado ? "Asistencia registrada." : "Registro duplicado.");
+                statusLabel.setForeground(registrado ? Color.GREEN : Color.RED);
+                statusLabel.setVisible(true);
             } catch (Exception ex) {
                 statusLabel.setText("Error: " + ex.getMessage());
                 statusLabel.setForeground(Color.RED);
+                statusLabel.setVisible(true);
             }
-        } else {
-            statusLabel.setText(" ");
         }
-    }
 
-    private void mostrarQR() {
-        CreacionLecturaBaseDatos creacionLecturaBaseDatos = new CreacionLecturaBaseDatos();
-        BufferedImage qrImage = creacionLecturaBaseDatos.procesarEstudiante();  // Obtener la imagen QR generada
-
-        if (qrImage != null) {
-            ImageIcon qrIcon = new ImageIcon(qrImage);
-            JLabel qrLabel = new JLabel(qrIcon);
-            JPanel qrPanel = new JPanel();
-            qrPanel.setLayout(new BorderLayout());
-            qrPanel.add(qrLabel, BorderLayout.CENTER);
-            // Mostrar el JPanel con el QR en una nueva ventana o en el mismo panel
-            JFrame qrFrame = new JFrame("Código QR");
-            qrFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            qrFrame.add(qrPanel);
-            qrFrame.pack();
-            qrFrame.setLocationRelativeTo(null);  // Centrar la ventana
-            qrFrame.setVisible(true);
-        } else {
-            statusLabel.setText("No se pudo generar el QR.");
-            statusLabel.setForeground(Color.RED);
+        private void validarQRIngresado() {
+            String qrData = qrInputField.getText().trim();
+            
+            if (!qrData.isEmpty()) {
+                LectoQRr lector = new LectoQRr();
+                try {
+                    if (lector.validarDataBase(qrData)) {
+                        AsistenciaCedula asistenciaCedula = new AsistenciaCedula();
+                        boolean registrado = asistenciaCedula.registrarAsistenciaPorCedula(qrData, "QR");
+                        statusLabel.setText(registrado ? "Asistencia registrada correctamente." : "No se pudo registrar. Puede haber duplicado.");
+                        statusLabel.setForeground(registrado ? Color.GREEN : Color.RED);
+                    } else {
+                        statusLabel.setText("Código QR no válido en la base de datos.");
+                        statusLabel.setForeground(Color.RED);
+                    }
+                } catch (Exception ex) {
+                    statusLabel.setText("Error: " + ex.getMessage());
+                    statusLabel.setForeground(Color.RED);
+                }
+            } else {
+                statusLabel.setText(" ");
+            }
         }
-    }
 
-    public JPanel getPanel() {
-        return panel;
-    }
 
+        private void mostrarQR() {
+            CreacionLecturaBaseDatos creacionLecturaBaseDatos = new CreacionLecturaBaseDatos();
+            BufferedImage qrImage = creacionLecturaBaseDatos.procesarEstudiante();  // Obtener la imagen QR generada
+    
+            if (qrImage != null) {
+                ImageIcon qrIcon = new ImageIcon(qrImage);
+                JLabel qrLabel = new JLabel(qrIcon);
+                JPanel qrPanel = new JPanel();
+                qrPanel.setLayout(new BorderLayout());
+                qrPanel.add(qrLabel, BorderLayout.CENTER);
+                // Mostrar el JPanel con el QR en una nueva ventana o en el mismo panel
+                JFrame qrFrame = new JFrame("Código QR");
+                qrFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                qrFrame.add(qrPanel);
+                qrFrame.pack();
+                qrFrame.setLocationRelativeTo(null);  // Centrar la ventana
+                qrFrame.setVisible(true);
+            } else {
+                statusLabel.setText("No se pudo generar el QR.");
+                statusLabel.setForeground(Color.RED);
+            }
+        }
+
+        public JPanel getPanel() { return panel; }
+
+    }
 
 }
-
-    private class PerfilPanel {
-        private JPanel panel;
-
-        public PerfilPanel() {
-            panel = new JPanel();
-            panel.add(new JLabel("Información del perfil del estudiante."));
-        }
-
-        public JPanel getPanel() {
-            return panel;
-        }
-    }
-}
+    

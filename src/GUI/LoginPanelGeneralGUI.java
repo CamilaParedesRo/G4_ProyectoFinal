@@ -137,6 +137,8 @@ public class LoginPanelGeneralGUI implements Pantalla {
                 JOptionPane.showMessageDialog(panel, "Error: Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
+
+
         });
         
         loginButton.addMouseListener(new MouseAdapter() {
@@ -204,6 +206,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
         return panel;
     }
 }
+
 
 
 
