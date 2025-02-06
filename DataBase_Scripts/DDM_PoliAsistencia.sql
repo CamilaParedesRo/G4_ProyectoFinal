@@ -60,7 +60,7 @@ SELECT
     a.id_asistencia AS ID_Asistencia,
     e.nombre_estudiante AS Nombre_Estudiante,
     e.apellido_estudiante AS Apellido_Estudiante,
-    e.codigo_unico_estudiante AS Codigo_Unico_Estudiante,
+    e.codigo_estudiante AS Codigo_Unico_Estudiante,
     a.fecha_asistencia AS Fecha_Asistencia,
     a.metodo_asistencia AS Metodo_Asistencia
 FROM
@@ -82,7 +82,7 @@ VALUES
 ('Carlos', 'Pérez', '1234567890', 1, 'carlos.perez@dominio.com', 'carlos123', '111');
 
 -- Insertar estudiantes
-INSERT INTO estudiante (nombre_estudiante, apellido_estudiante, cedula_estudiante, codigo_unico_estudiante, id_sexo, correo_estudiante, usuario_estudiante, clave_estudiante)
+INSERT INTO estudiante (nombre_estudiante, apellido_estudiante, cedula_estudiante, codigo_estudiante, id_sexo, correo_estudiante, usuario_estudiante, clave_estudiante)
 VALUES 
 ('Juan', 'Pérez', '1122334455', '23454', 1, 'juan.perez@dominio.com', 'juan123', '123'),
 ('María', 'Rodríguez', '2233445566', '123456', 2, 'maria.rodriguez@dominio.com', 'maria123', '123');
