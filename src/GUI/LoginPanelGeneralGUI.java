@@ -133,6 +133,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
         });
         
         
+        
         loginButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {

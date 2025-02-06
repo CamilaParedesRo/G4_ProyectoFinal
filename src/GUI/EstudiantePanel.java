@@ -218,30 +218,25 @@ private class AsistenciaPanel {
             }
         }
         
-
-
-
         private void mostrarQR() {
-
             String usuarioLogueado = SesionUsuario.getUsuario(); // Recuperar usuario
-
+        
             if (usuarioLogueado == null || usuarioLogueado.isEmpty()) {
                 statusLabel.setText("Error: Usuario no válido.");
                 statusLabel.setForeground(Color.RED);
                 return;
             }
         
-            CreacionLecturaBaseDatos CreacionQR = new CreacionLecturaBaseDatos(usuarioLogueado.trim()); // Evita espacios en blanco
-            BufferedImage qrImage = CreacionQR.generarQRUsuario(); // Generar el QR para el usuario
-        
+            CreacionLecturaBaseDatos CreacionQR = new CreacionLecturaBaseDatos(usuarioLogueado);
+            BufferedImage qrImage = CreacionQR.generarQRUsuario();
+            
             if (qrImage != null) {
                 ImageIcon qrIcon = new ImageIcon(qrImage);
                 JLabel qrLabel = new JLabel(qrIcon);
                 JPanel qrPanel = new JPanel();
                 qrPanel.setLayout(new BorderLayout());
                 qrPanel.add(qrLabel, BorderLayout.CENTER);
-        
-                // Mostrar QR en una nueva ventana
+                
                 JFrame qrFrame = new JFrame("Código QR");
                 qrFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 qrFrame.add(qrPanel);
@@ -253,6 +248,7 @@ private class AsistenciaPanel {
                 statusLabel.setForeground(Color.RED);
             }
         }
+        
         
         
         public JPanel getPanel() { return panel; }
