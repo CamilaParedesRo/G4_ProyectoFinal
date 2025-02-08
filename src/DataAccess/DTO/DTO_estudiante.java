@@ -40,6 +40,7 @@ public class DTO_estudiante {
         this.estado = estado;
     }
 
+
     
     public DTO_estudiante(String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
     String correoEstudiante, String usuarioEstudiante, String claveEstudiante, Integer id_sexo) {
@@ -53,6 +54,19 @@ public class DTO_estudiante {
     this.fechaRegistro = LocalDateTime.now(); 
     this.fechaModifica = null; 
     this.estado = 'A'; 
+}
+
+
+public DTO_estudiante(int idEstudiante, String nombreEstudiante, String apellidoEstudiante, 
+                      String cedulaEstudiante, String codigoUnicoEstudiante, 
+                      String correoEstudiante, String usuarioEstudiante) {
+    this.idEstudiante = idEstudiante;
+    this.nombreEstudiante = nombreEstudiante;
+    this.apellidoEstudiante = apellidoEstudiante;
+    this.cedulaEstudiante = cedulaEstudiante;
+    this.codigoEstudiante = codigoUnicoEstudiante; 
+    this.correoEstudiante = correoEstudiante;
+    this.usuarioEstudiante = usuarioEstudiante;
 }
 
 
