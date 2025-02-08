@@ -3,30 +3,36 @@ package GUI.Docente;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import GUI.LoginPanelGeneralGUI;
 import GUI.Pantalla;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class ProfesorPanel implements Pantalla {
     private JPanel panel;
     private JTabbedPane tabbedPane;
-
-    private static final String DB_URL = "jdbc:sqlite:Database/PoliAsistencia.sqlite"; // Ruta a la base de datos
+    private static final String DB_URL = "jdbc:sqlite:Database/PoliAsistencia.sqlite";
 
     public ProfesorPanel() {
         panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.decode("#F5F5F5")); // Fondo suave
+        panel.setBackground(Color.decode("#F5F5F5"));
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(Color.WHITE);
+        topPanel.add(createLogoutButton(), BorderLayout.EAST);
 
         tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
-        tabbedPane.setBackground(Color.decode("#E3F2FD")); // Color de pestañas
+        tabbedPane.setBackground(Color.decode("#E3F2FD"));
         tabbedPane.setFont(new Font("Sans-Serif", Font.BOLD, 14));
 
-        // Pestañas
         tabbedPane.addTab("Inicio", new InicioPanel().getPanel());
         tabbedPane.addTab("Listado de Estudiantes", new ListaEstudiantesPanel().getPanel());
         tabbedPane.addTab("Perfil", new InformacionProfesorPanel().getPanel());
 
+        panel.add(topPanel, BorderLayout.NORTH);
         panel.add(tabbedPane, BorderLayout.CENTER);
     }
 
@@ -35,17 +41,16 @@ public class ProfesorPanel implements Pantalla {
         return panel;
     }
 
-    // Panel de Inicio
     private class InicioPanel {
         private JPanel panel;
 
         public InicioPanel() {
             panel = new JPanel(new GridBagLayout());
-            panel.setBackground(Color.decode("#BBDEFB")); // Fondo azul claro
+            panel.setBackground(Color.decode("#BBDEFB"));
 
             JLabel label = new JLabel("Bienvenido al sistema de gestión de asistencia");
             label.setFont(new Font("Sans-Serif", Font.BOLD, 18));
-            label.setForeground(Color.decode("#1E88E5")); // Azul oscuro
+            label.setForeground(Color.decode("#1E88E5"));
 
             panel.add(label);
         }
@@ -55,6 +60,36 @@ public class ProfesorPanel implements Pantalla {
         }
     }
 
+    private JButton createLogoutButton() {
+        JButton logoutButton = new JButton("Cerrar Sesión");
+        logoutButton.setFont(new Font("Arial", Font.BOLD, 14));
+        logoutButton.setBackground(Color.RED);
+        logoutButton.setForeground(Color.WHITE);
+        logoutButton.setFocusPainted(false);
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea cerrar sesión?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    cerrarSesion();
+                }
+            }
+        });
+        return logoutButton;
+    }
+
+    private void cerrarSesion() {
+        JOptionPane.showMessageDialog(null, "Sesión cerrada correctamente.");
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+        if (frame != null) {
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(new LoginPanelGeneralGUI().getPanel());
+            frame.revalidate();
+            frame.repaint();
+        }
+    }
+
+    
     // Panel de Listado de Estudiantes
     private class ListaEstudiantesPanel {
         private JPanel panel;
