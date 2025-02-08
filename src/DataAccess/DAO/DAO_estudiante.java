@@ -1,10 +1,10 @@
 package DataAccess.DAO;
 
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -206,26 +206,62 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
         }
         return estudiante;
     }
-    
-    
-    
-    
-    
-    
+
+    // Método genérico para actualizar un campo específico
+private boolean updateCampo(String usuario, String columna, String nuevoValor) throws Exception {
+    String query = "UPDATE estudiante SET " + columna + " = ?, fecha_modifica = ? WHERE usuario_estudiante = ? AND estado = 'A'";
+
+    LocalDateTime now = LocalDateTime.now();
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    try (Connection conn = openConnection();
+         PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+        pstmt.setString(1, nuevoValor);
+        pstmt.setString(2, dtf.format(now));
+        pstmt.setString(3, usuario);
+
+        int filasActualizadas = pstmt.executeUpdate();
+        return filasActualizadas > 0;
+    } catch (SQLException e) {
+        throw new PatException(e.getMessage(), getClass().getName(), "updateCampo(" + columna + ")");
+    }
+}
+
+// Métodos específicos que usan `updateCampo`
+public boolean updateNombre(String usuario, String nuevoNombre) throws Exception {
+    return updateCampo(usuario, "nombre_estudiante", nuevoNombre);
+}
+
+public boolean updateApellido(String usuario, String nuevoApellido) throws Exception {
+    return updateCampo(usuario, "apellido_estudiante", nuevoApellido);
+}
+
+public boolean updateCedula(String usuario, String nuevaCedula) throws Exception {
+    return updateCampo(usuario, "cedula_estudiante", nuevaCedula);
+}
+
+public boolean updateCorreo(String usuario, String nuevoCorreo) throws Exception {
+    return updateCampo(usuario, "correo_estudiante", nuevoCorreo);
+}
+
+public boolean updateUsuario(String usuarioAntiguo, String nuevoUsuario) throws Exception {
+    return updateCampo(usuarioAntiguo, "usuario_estudiante", nuevoUsuario);
+}
 
     public Integer getMaxRow() throws Exception {
-        String query = " SELECT COUNT(*) TotalReg FROM estudiante "
-                     + " WHERE Estado = 'A' ";
-        try {
-            Connection conn = openConnection();         // Conectar a la base de datos
-            Statement stmt = conn.createStatement();    // Crear una declaración SQL
-            ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
-            while (rs.next()) {
-                return rs.getInt(1); // Retornar el total de registros
+        String query = "SELECT COUNT(*) FROM estudiante WHERE Estado = 'A'";
+
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
             }
         } catch (SQLException e) {
-            throw e; // Lanzar la excepción en caso de error
+            throw new PatException(e.getMessage(), getClass().getName(), "getMaxRow()");
         }
-        return 0; // Retornar 0 si no hay registros
+        return 0;
     }
 }
