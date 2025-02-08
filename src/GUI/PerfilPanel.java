@@ -1,11 +1,9 @@
 package GUI;
 import javax.swing.*;
-
 import BusinessLogic.BL_estudiante;
+import BusinessLogic.Entities.ModificarEstudiante;
 import DataAccess.DTO.DTO_estudiante;
-
 import java.awt.*;
-
 
 public class PerfilPanel {
     private JPanel panel;
@@ -16,7 +14,8 @@ public class PerfilPanel {
     private JLabel correoLabel;
     private JLabel usuarioLabel;
     private JLabel statusLabel;
-
+    
+    @SuppressWarnings("unused")
     public PerfilPanel() {
         panel = new JPanel(new GridBagLayout()); // Diseño flexible y centrado
         GridBagConstraints gbc = new GridBagConstraints();
@@ -35,11 +34,11 @@ public class PerfilPanel {
         statusLabel = new JLabel("", SwingConstants.CENTER);
         statusLabel.setFont(new Font("Arial", Font.ITALIC, 12));
 
-        nombreLabel = new JLabel("Nombre: ", SwingConstants.CENTER);
-        apellidoLabel = new JLabel("Apellido: ", SwingConstants.CENTER);
-        cedulaLabel = new JLabel("Cédula: ", SwingConstants.CENTER);
-        correoLabel = new JLabel("Correo: ", SwingConstants.CENTER);
-        usuarioLabel = new JLabel("Usuario: ", SwingConstants.CENTER);
+        nombreLabel = new JLabel("Nombre: ");
+        apellidoLabel = new JLabel("Apellido: ");
+        cedulaLabel = new JLabel("Cédula: ");
+        correoLabel = new JLabel("Correo: ");
+        usuarioLabel = new JLabel("Usuario: ");
 
         // Fuente y estilo
         Font font = new Font("Arial", Font.BOLD, 14);
@@ -48,21 +47,6 @@ public class PerfilPanel {
         cedulaLabel.setFont(font);
         correoLabel.setFont(font);
         usuarioLabel.setFont(font);
-
-        // Agregar los elementos al panel
-        panel.add(tituloLabel, gbc);
-        gbc.gridy++;
-        panel.add(statusLabel, gbc); // Ahora está más visible
-        gbc.gridy++;
-        panel.add(nombreLabel, gbc);
-        gbc.gridy++;
-        panel.add(apellidoLabel, gbc);
-        gbc.gridy++;
-        panel.add(cedulaLabel, gbc);
-        gbc.gridy++;
-        panel.add(correoLabel, gbc);
-        gbc.gridy++;
-        panel.add(usuarioLabel, gbc);
 
         // Obtener usuario logueado
         String usuarioLogueado = SesionUsuario.getUsuario();
@@ -83,7 +67,7 @@ public class PerfilPanel {
                 cedulaLabel.setText("Cédula: " + estudiante.getCedulaEstudiante());
                 correoLabel.setText("Correo: " + estudiante.getCorreoEstudiante());
                 usuarioLabel.setText("Usuario: " + estudiante.getUsuarioEstudiante());
-
+                
                 statusLabel.setForeground(Color.GREEN);
             } else {
                 statusLabel.setText("Error: No se encontró el estudiante.");
@@ -94,6 +78,71 @@ public class PerfilPanel {
             statusLabel.setText("Error al cargar el perfil.");
             statusLabel.setForeground(Color.RED);
         }
+
+        BL_estudiante blEstudiante = new BL_estudiante();
+        ModificarEstudiante modificarEstudiante = new ModificarEstudiante(blEstudiante);
+        // Botones Modificar
+        JButton modificarNombre = new JButton("Modificar");
+        JButton modificarApellido = new JButton("Modificar");
+        JButton modificarCedula = new JButton("Modificar");
+        JButton modificarCorreo = new JButton("Modificar");
+        JButton modificarUsuario = new JButton("Modificar");
+
+        // Agregar los elementos al panel
+        panel.add(tituloLabel, gbc);
+        gbc.gridy++;
+        panel.add(statusLabel, gbc);
+        gbc.gridy++;
+
+        agregarFila(panel, nombreLabel, modificarNombre, gbc);
+        agregarFila(panel, apellidoLabel, modificarApellido, gbc);
+        agregarFila(panel, cedulaLabel, modificarCedula, gbc);
+        agregarFila(panel, correoLabel, modificarCorreo, gbc);
+        agregarFila(panel, usuarioLabel, modificarUsuario, gbc);
+
+        modificarNombre.addActionListener(e -> {
+            try {
+                modificarEstudiante.modificarNombre(nombreLabel, usuarioLogueado);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+        modificarApellido.addActionListener(e -> {
+            try {
+                modificarEstudiante.modificarApellido(apellidoLabel, usuarioLogueado);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+        modificarCedula.addActionListener(e -> {
+            try {
+                modificarEstudiante.modificarCedula(cedulaLabel, usuarioLogueado);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+        modificarCorreo.addActionListener(e -> {
+            try {
+                modificarEstudiante.modificarCorreo(correoLabel, usuarioLogueado);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+        modificarUsuario.addActionListener(e -> {
+            try {
+                modificarEstudiante.modificarUsuario(usuarioLabel, usuarioLogueado);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
+    }
+
+    private void agregarFila(JPanel panel, JLabel label, JButton button, GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        panel.add(label, gbc);
+        gbc.gridx = 1;
+        panel.add(button, gbc);
+        gbc.gridy++;
     }
 
     public JPanel getPanel() {
@@ -102,4 +151,3 @@ public class PerfilPanel {
         return container;
     }
 }
-
