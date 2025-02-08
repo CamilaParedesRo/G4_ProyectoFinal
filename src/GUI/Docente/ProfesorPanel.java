@@ -6,6 +6,8 @@ import javax.swing.table.DefaultTableModel;
 import GUI.Pantalla;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class ProfesorPanel implements Pantalla {
@@ -27,6 +29,34 @@ public class ProfesorPanel implements Pantalla {
         tabbedPane.addTab("Listado de Estudiantes", new ListaEstudiantesPanel().getPanel());
         tabbedPane.addTab("Perfil", new InformacionProfesorPanel().getPanel());
 
+        // Botón de cerrar sesión
+        JButton cerrarSesionButton = new JButton("Cerrar sesión");
+        cerrarSesionButton.setFont(new Font("Sans-Serif", Font.BOLD, 14));
+        cerrarSesionButton.setBackground(Color.decode("#FFCDD2")); // Color rojo suave
+        cerrarSesionButton.setForeground(Color.WHITE);
+        cerrarSesionButton.setFocusPainted(false);
+        cerrarSesionButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        
+        cerrarSesionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int confirm = JOptionPane.showConfirmDialog(panel, "¿Está seguro de que desea cerrar sesión?", "Confirmar cierre de sesión", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    // Lógica para volver a la pantalla de inicio
+                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+                    frame.getContentPane().removeAll();
+                    frame.getContentPane().add(new InicioPanel().getPanel()); // Redirigir al panel de inicio de sesión
+                    frame.revalidate();
+                    frame.repaint();
+                }
+            }
+        });
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(Color.decode("#F5F5F5"));
+        topPanel.add(cerrarSesionButton, BorderLayout.EAST);
+
+        panel.add(topPanel, BorderLayout.NORTH);
         panel.add(tabbedPane, BorderLayout.CENTER);
     }
 
