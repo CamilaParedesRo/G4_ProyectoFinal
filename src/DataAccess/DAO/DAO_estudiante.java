@@ -178,6 +178,37 @@ public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
         return estudiante; // Devuelve null si no encontró nada
     }
     
+    public DTO_estudiante readByUsuario(String usuario) throws Exception {
+        String sql = "SELECT * FROM estudiante WHERE usuario_estudiante = ?";
+        DTO_estudiante estudiante = null;
+    
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    
+            pstmt.setString(1, usuario);  // Asignamos el valor al parámetro `?`
+            System.out.println("Ejecutando consulta con usuario: " + usuario);
+    
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    estudiante = new DTO_estudiante(
+                        rs.getInt("id_estudiante"),
+                        rs.getString("nombre_estudiante"),
+                        rs.getString("apellido_estudiante"),
+                        rs.getString("cedula_estudiante"),
+                        rs.getString("codigo_unico_estudiante"),
+                        rs.getString("correo_estudiante"),
+                        rs.getString("usuario_estudiante")
+                    );
+                } else {
+                    System.out.println("No se encontró el estudiante con usuario: " + usuario);
+                }
+            }
+        }
+        return estudiante;
+    }
+    
+    
+    
     
     
     

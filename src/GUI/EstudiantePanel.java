@@ -20,7 +20,7 @@ public class EstudiantePanel implements Pantalla {
         tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
         tabbedPane.addTab("Inicio", new InicioPanel().getPanel());
         tabbedPane.addTab("Asistencia", new AsistenciaPanel().getPanel());
-        //tabbedPane.addTab("Perfil", new PerfilPanel().getPanel());
+        tabbedPane.addTab("Perfil", new PerfilPanel().getPanel());
 
         panel.add(tabbedPane, BorderLayout.CENTER);
     }
@@ -149,8 +149,8 @@ private class AsistenciaPanel {
         });
 
         continueButton.addActionListener(e -> registrarAsistencia());
-      
         showQRButton.addActionListener(e -> mostrarQR());
+
 
         // Agregar DocumentListener al campo codigoQRField para detectar cambios
             codigoQRField.getDocument().addDocumentListener(new DocumentListener() {
@@ -248,8 +248,8 @@ private class AsistenciaPanel {
                 statusLabel.setForeground(Color.RED);
             }
         }
-        
-        
+
+  
         
         public JPanel getPanel() { return panel; }
 }

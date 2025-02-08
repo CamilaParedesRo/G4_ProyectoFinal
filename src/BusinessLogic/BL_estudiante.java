@@ -34,5 +34,15 @@ public class BL_estudiante {
     public Integer getMaxRow() throws Exception{
         return sDAO.getMaxRow();
     }
+
+    public DTO_estudiante getByUsuario(String usuario) throws Exception {
+        DAO_estudiante daoEstudiante = new DAO_estudiante();
+        return daoEstudiante.readByUsuario(usuario);  // Ahora sí existe este método
+    }
+    
+    
+    
+
+
 }
 
