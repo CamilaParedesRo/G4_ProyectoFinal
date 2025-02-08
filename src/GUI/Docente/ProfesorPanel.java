@@ -2,6 +2,8 @@ package GUI.Docente;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import GUI.LoginPanelGeneralGUI;
 import GUI.Pantalla;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,36 +28,19 @@ public class ProfesorPanel implements Pantalla {
 
         // Pestañas
         tabbedPane.addTab("Inicio", new InicioPanel().getPanel());
-        tabbedPane.addTab("Listado de Estudiantes", new ListaEstudiantesPanel().getPanel());
+        tabbedPane.addTab("Listado de Estudiantes", new ListaEstudiantesPanel().getPanel());// Dentro del constructor de ProfesorPanel
+        tabbedPane.addTab("Historial de Asistencia", new ListaAsistencia().getPanel());
         tabbedPane.addTab("Perfil", new InformacionProfesorPanel().getPanel());
 
-        // Botón de cerrar sesión
-        JButton cerrarSesionButton = new JButton("Cerrar sesión");
-        cerrarSesionButton.setFont(new Font("Sans-Serif", Font.BOLD, 14));
-        cerrarSesionButton.setBackground(Color.decode("#FFCDD2")); // Color rojo suave
-        cerrarSesionButton.setForeground(Color.WHITE);
-        cerrarSesionButton.setFocusPainted(false);
-        cerrarSesionButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        // Crear el botón de cerrar sesión
+        JButton logoutButton = createLogoutButton();
 
-        cerrarSesionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int confirm = JOptionPane.showConfirmDialog(panel, "¿Está seguro de que desea cerrar sesión?", "Confirmar cierre de sesión", JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    // Lógica para volver a la pantalla de inicio
-                    JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-                    frame.getContentPane().removeAll();
-                    frame.getContentPane().add(new InicioPanel().getPanel()); // Redirigir al panel de inicio de sesión
-                    frame.revalidate();
-                    frame.repaint();
-                }
-            }
-        });
-
+        // Panel superior con el botón de cerrar sesión
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(Color.decode("#F5F5F5"));
-        topPanel.add(cerrarSesionButton, BorderLayout.EAST);
+        topPanel.add(logoutButton, BorderLayout.EAST);
 
+        // Agregar el panel superior y el tabbedPane al panel principal
         panel.add(topPanel, BorderLayout.NORTH);
         panel.add(tabbedPane, BorderLayout.CENTER);
     }
@@ -63,6 +48,54 @@ public class ProfesorPanel implements Pantalla {
     @Override
     public JPanel getPanel() {
         return panel;
+    }
+
+    // Método para crear el botón de cerrar sesión
+    private JButton createLogoutButton() {
+        JButton logoutButton = new JButton("Cerrar Sesión");
+        logoutButton.setFont(new Font("Arial", Font.BOLD, 14));
+        logoutButton.setBackground(Color.RED);
+        logoutButton.setForeground(Color.WHITE);
+        logoutButton.setFocusPainted(false);
+        logoutButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Margen interno
+        logoutButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambiar el cursor al pasar sobre el botón
+
+        // Efecto de cambio de color al pasar el ratón
+        logoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                logoutButton.setBackground(new Color(255, 80, 80)); // Rojo más claro
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                logoutButton.setBackground(Color.RED); // Volver al color original
+            }
+        });
+
+        // Acción al hacer clic
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int confirm = JOptionPane.showConfirmDialog(panel, "¿Está seguro de que desea cerrar sesión?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    cerrarSesion();
+                }
+            }
+        });
+        return logoutButton;
+    }
+
+    // Método para cerrar sesión
+    private void cerrarSesion() {
+        JOptionPane.showMessageDialog(panel, "Sesión cerrada correctamente.");
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+        if (frame != null) {
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(new LoginPanelGeneralGUI().getPanel());
+            frame.revalidate();
+            frame.repaint();
+        } else {
+            JOptionPane.showMessageDialog(panel, "No se pudo encontrar la ventana principal.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     // Panel de Inicio
@@ -93,7 +126,7 @@ public class ProfesorPanel implements Pantalla {
             return panel;
         }
     }
-    
+
     // Panel de Listado de Estudiantes
     private class ListaEstudiantesPanel {
         private JPanel panel;
