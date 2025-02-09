@@ -21,7 +21,6 @@ public class BL_estudiante {
 
     // Crear un estudiante (ahora con código único)
     public boolean create(DTO_estudiante dto_estudiante) throws Exception {
-        // Validar que el código único esté presente
         if (dto_estudiante.getCodigoUnicoEstudiante() == null || dto_estudiante.getCodigoUnicoEstudiante().trim().isEmpty()) {
             throw new Exception("El código único del estudiante es obligatorio.");
         }
@@ -38,9 +37,9 @@ public class BL_estudiante {
         return sDAO.delete(idEstudiante);
     }
 
-    // Buscar estudiante por cédula
-    public boolean findByCedula(String cedula) throws Exception {
-        return sDAO.findByCedula(cedula) != null;
+    // Buscar estudiante por cédula y devolver DTO_estudiante
+    public DTO_estudiante findByCedula(String cedula) throws Exception {
+        return sDAO.findByCedula(cedula); // Ahora sí devuelve un objeto DTO_estudiante o null
     }
 
     // Obtener el ID máximo de estudiante
@@ -48,5 +47,8 @@ public class BL_estudiante {
         return sDAO.getMaxRow();
     }
 
-    
+    // Buscar estudiante por usuario
+    public DTO_estudiante getByUsuario(String usuario) throws Exception {
+        return sDAO.readByUsuario(usuario);
+    }
 }

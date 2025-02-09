@@ -8,7 +8,7 @@ public class DTO_estudiante {
     private String nombreEstudiante;
     private String apellidoEstudiante;
     private String cedulaEstudiante;
-    private String codigoUnicoEstudiante; // Nuevo campo obligatorio
+    private String codigoUnicoEstudiante;
     private int id_sexo;
     private String correoEstudiante;
     private String usuarioEstudiante;
@@ -16,16 +16,18 @@ public class DTO_estudiante {
     private LocalDateTime fechaRegistro;
     private LocalDateTime fechaModifica;
     private char estado;
+    
 
     // Constructor vacío
     public DTO_estudiante() {}
 
     // Constructor para registro de estudiantes
-    public DTO_estudiante(String nombre, String apellido, String cedula, String codigoUnico, int id_sexo, String correo, String usuario, String clave) {
+    public DTO_estudiante(String nombre, String apellido, String cedula, String codigoUnico, int id_sexo, 
+                        String correo, String usuario, String clave) {
         this.nombreEstudiante = nombre;
         this.apellidoEstudiante = apellido;
         this.cedulaEstudiante = cedula;
-        this.codigoUnicoEstudiante = codigoUnico; // IMPORTANTE: Se añade este campo
+        this.codigoUnicoEstudiante = codigoUnico;
         this.id_sexo = id_sexo;
         this.correoEstudiante = correo;
         this.usuarioEstudiante = usuario;
@@ -34,15 +36,15 @@ public class DTO_estudiante {
         this.estado = 'A'; // Estado activo por defecto
     }
 
-    // Constructor completo (para la base de datos)
+    // Constructor completo para la base de datos
     public DTO_estudiante(int idEstudiante, String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
-                          String codigoUnicoEstudiante, int id_sexo, String correoEstudiante, String usuarioEstudiante, 
-                          String claveEstudiante, LocalDateTime fechaRegistro, LocalDateTime fechaModifica, char estado) {
+                        String codigoUnicoEstudiante, int id_sexo, String correoEstudiante, String usuarioEstudiante, 
+                        String claveEstudiante, LocalDateTime fechaRegistro, LocalDateTime fechaModifica, char estado) {
         this.idEstudiante = idEstudiante;
         this.nombreEstudiante = nombreEstudiante;
         this.apellidoEstudiante = apellidoEstudiante;
         this.cedulaEstudiante = cedulaEstudiante;
-        this.codigoUnicoEstudiante = codigoUnicoEstudiante; // IMPORTANTE: Campo obligatorio en SQLite
+        this.codigoUnicoEstudiante = codigoUnicoEstudiante;
         this.id_sexo = id_sexo;
         this.correoEstudiante = correoEstudiante;
         this.usuarioEstudiante = usuarioEstudiante;
@@ -50,6 +52,20 @@ public class DTO_estudiante {
         this.fechaRegistro = fechaRegistro;
         this.fechaModifica = fechaModifica;
         this.estado = estado;
+    }
+
+    // Constructor adicional para búsqueda por cédula
+    public DTO_estudiante(String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
+                        String correoEstudiante, String usuarioEstudiante, String claveEstudiante, Integer id_sexo) {
+        this.nombreEstudiante = nombreEstudiante;
+        this.apellidoEstudiante = apellidoEstudiante;
+        this.cedulaEstudiante = cedulaEstudiante;
+        this.correoEstudiante = correoEstudiante;
+        this.usuarioEstudiante = usuarioEstudiante;
+        this.claveEstudiante = claveEstudiante;
+        this.id_sexo = id_sexo;
+        this.fechaRegistro = LocalDateTime.now();
+        this.estado = 'A';
     }
 
     // Getters y Setters
@@ -65,7 +81,7 @@ public class DTO_estudiante {
     public String getCedulaEstudiante() { return cedulaEstudiante; }
     public void setCedulaEstudiante(String cedulaEstudiante) { this.cedulaEstudiante = cedulaEstudiante; }
 
-    public String getCodigoUnicoEstudiante() { return codigoUnicoEstudiante; } // Getter del campo nuevo
+    public String getCodigoUnicoEstudiante() { return codigoUnicoEstudiante; }
     public void setCodigoUnicoEstudiante(String codigoUnicoEstudiante) { this.codigoUnicoEstudiante = codigoUnicoEstudiante; }
 
     public int getId_sexo() { return id_sexo; }
@@ -88,4 +104,25 @@ public class DTO_estudiante {
 
     public char getEstado() { return estado; }
     public void setEstado(char estado) { this.estado = estado; }
+
+
+
+    // Método toString para depuración
+    @Override
+    public String toString() {
+        return "DTO_estudiante{" +
+                "idEstudiante=" + idEstudiante +
+                ", nombreEstudiante='" + nombreEstudiante + '\'' +
+                ", apellidoEstudiante='" + apellidoEstudiante + '\'' +
+                ", cedulaEstudiante='" + cedulaEstudiante + '\'' +
+                ", codigoUnicoEstudiante='" + codigoUnicoEstudiante + '\'' +
+                ", id_sexo=" + id_sexo +
+                ", correoEstudiante='" + correoEstudiante + '\'' +
+                ", usuarioEstudiante='" + usuarioEstudiante + '\'' +
+                ", claveEstudiante='" + claveEstudiante + '\'' +
+                ", fechaRegistro=" + fechaRegistro +
+                ", fechaModifica=" + (fechaModifica != null ? fechaModifica : "N/A") +
+                ", estado=" + estado +
+                '}';
+    }
 }

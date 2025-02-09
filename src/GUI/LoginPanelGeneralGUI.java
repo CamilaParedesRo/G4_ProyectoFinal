@@ -2,10 +2,9 @@ package GUI;
 
 import javax.swing.*;
 import GUI.Docente.ListaAsistencia;
+import GUI.Estudiante.AsistenciaEstudiante;
 import DataAccess.DataHelper;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -104,6 +103,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
             String contraseña = new String(passField.getPassword()).trim();
             String selectedRole = (String) roleSelect.getSelectedItem();
 
+            // Verificar que los campos no estén vacíos
             if (usuario.isEmpty() || contraseña.isEmpty()) {
                 JOptionPane.showMessageDialog(panel, "Error: Usuario y contraseña no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -124,6 +124,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
                 } else {
                     System.out.println("Usuario Estudiante autenticado.");
                     JOptionPane.showMessageDialog(panel, "Bienvenido, " + usuario + ". Redirección en proceso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    MainApp.mostrarPantalla(new AsistenciaEstudiante().getPanel());
                 }
             } else {
                 JOptionPane.showMessageDialog(panel, "Error: Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -141,12 +142,9 @@ public class LoginPanelGeneralGUI implements Pantalla {
         registerButton.setFocusPainted(false);
 
         // Evento para cambiar a la pantalla de registro
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Redirigiendo a la pantalla de registro...");
-                MainApp.mostrarPantalla(new RegistrarUsuarioGUI().getPanel()); // Redirigir al Registro
-            }
+        registerButton.addActionListener(e -> {
+            System.out.println("Redirigiendo a la pantalla de registro...");
+            MainApp.mostrarPantalla(new RegistrarUsuarioGUI().getPanel());
         });
 
         panel.add(registerButton, gbc);

@@ -60,7 +60,7 @@ SELECT
     a.id_asistencia AS ID_Asistencia,
     e.nombre_estudiante AS Nombre_Estudiante,
     e.apellido_estudiante AS Apellido_Estudiante,
-    e.codigo_unico_estudiante AS Codigo_Unico_Estudiante,
+    e.codigo_estudiante AS Codigo_Unico_Estudiante,
     a.fecha_asistencia AS Fecha_Asistencia,
     a.metodo_asistencia AS Metodo_Asistencia
 FROM

@@ -1,26 +1,40 @@
 package BusinessLogic.Entities;
 
 import java.util.Scanner;
-
 import BusinessLogic.BL_estudiante;
+import DataAccess.DTO.DTO_estudiante;
 
 public class LectoQRr {
 
+    /**
+     * Método para la lectura del QR (comentado por ahora).
+     * Simula la lectura del QR pidiendo manualmente la cédula si no se tiene escáner.
+     */
     public String validarQR() {
-    @SuppressWarnings("resource")
-    
-    Scanner scanner = new Scanner(System.in);
-    System.out.println("Lectura del QR");
-    return scanner.nextLine();
+        @SuppressWarnings("resource")
+        Scanner scanner = new Scanner(System.in);
 
+        // 📌 Si se tiene escáner, aquí se debería leer el QR automáticamente.
+        // System.out.println("🔍 Escaneando QR...");
+        // return metodoDeLecturaQR();  // Aquí iría la función que lee el QR.
+
+        // ⬇ Modo de validación manual por cédula si no hay escáner
+        System.out.println("🔹 No se detectó escáner. Ingrese manualmente la cédula del estudiante:");
+        return scanner.nextLine();
     }
 
-    public boolean validarDataBase (String cedula) throws Exception {
+    /**
+     * Valida si la cédula del estudiante existe en la base de datos.
+     */
+    public boolean validarDataBase(String cedula) throws Exception {
         BL_estudiante blEstudiante = new BL_estudiante();
-        if(blEstudiante.findByCedula(cedula)) {
-            System.out.println("Funciona");
+        DTO_estudiante estudiante = blEstudiante.findByCedula(cedula); // Buscar estudiante por cédula
+    
+        if (estudiante != null) {
+            System.out.println("✅ Cédula encontrada en BD: " + estudiante.getCedulaEstudiante());
             return true;
         } else {
+            System.out.println("❌ No se encontró la cédula en la BD.");
             return false;
         }
     }

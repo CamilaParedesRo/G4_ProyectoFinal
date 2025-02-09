@@ -39,6 +39,6 @@ public class MainApp {
     public static void mostrarPantallaEstudiante() {
         frame.setSize(900, 600); // Ajustar tamaño grande para el panel del estudiante
         frame.setLocationRelativeTo(null); // Mantener centrado
-        mostrarPantalla(new AsistenciaEstudiante().getPanel());
+        mostrarPantalla(new EstudiantePanel().getPanel());
     }
 }
