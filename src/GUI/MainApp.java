@@ -8,7 +8,11 @@ public class MainApp {
     private static JFrame frame;
 
     public static void iniciarGUI() {
+        
         SwingUtilities.invokeLater(() -> {
+            
+            new SplashScreen().mostrar();
+
             frame = new JFrame("Sistema de Registro");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 600);
