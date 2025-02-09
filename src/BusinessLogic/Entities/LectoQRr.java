@@ -13,12 +13,6 @@ public class LectoQRr {
     public String validarQR() {
         @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
-
-        // 📌 Si se tiene escáner, aquí se debería leer el QR automáticamente.
-        // System.out.println("🔍 Escaneando QR...");
-        // return metodoDeLecturaQR();  // Aquí iría la función que lee el QR.
-
-        // ⬇ Modo de validación manual por cédula si no hay escáner
         System.out.println("🔹 No se detectó escáner. Ingrese manualmente la cédula del estudiante:");
         return scanner.nextLine();
     }
@@ -31,10 +25,10 @@ public class LectoQRr {
         DTO_estudiante estudiante = blEstudiante.findByCedula(cedula); // Buscar estudiante por cédula
     
         if (estudiante != null) {
-            System.out.println("✅ Cédula encontrada en BD: " + estudiante.getCedulaEstudiante());
+            System.out.println("Cédula encontrada en BD: " + estudiante.getCedulaEstudiante());
             return true;
         } else {
-            System.out.println("❌ No se encontró la cédula en la BD.");
+            System.out.println(" No se encontró la cédula en la BD.");
             return false;
         }
     }

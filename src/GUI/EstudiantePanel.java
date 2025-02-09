@@ -214,9 +214,6 @@ private class InicioPanel {
             });
         }
 
-        
-
-
         private void registrarAsistencia() {
             String cedula = cedulaField.getText().trim();
             if (!cedula.matches("\\d{10}")) {
@@ -240,36 +237,36 @@ private class InicioPanel {
             }
         }
 
-        private void validarQRIngresado() {
-            String codigoQR = codigoQRField.getText().trim().replaceAll("\"", ""); // Elimina comillas dobles
-            System.out.println("QR ingresado: " + codigoQR);
-        
-            if (!codigoQR.isEmpty()) {
-                LectoQRr lector = new LectoQRr();
-                try {
-                    boolean existe = lector.validarDataBase(codigoQR);
-                    System.out.println("Existe en BD: " + existe);
-        
-                    if (existe) {
-                        AsistenciaCedula asistenciaCedula = new AsistenciaCedula();
-                        boolean registrado = asistenciaCedula.registrarAsistenciaPorCedula(codigoQR, "QR");
-                        System.out.println("Registro de asistencia: " + registrado);
-        
-                        statusLabel.setText(registrado ? "Asistencia registrada correctamente." : "No se pudo registrar. Puede haber duplicado.");
-                        statusLabel.setForeground(registrado ? Color.GREEN : Color.RED);
-                    } else {
-                        statusLabel.setText("Código QR no válido en la base de datos.");
+            private void validarQRIngresado() {
+                String codigoQR = codigoQRField.getText().trim().replaceAll("\"", ""); // Elimina comillas dobles
+                System.out.println("QR ingresado: " + codigoQR);
+            
+                if (!codigoQR.isEmpty()) {
+                    LectoQRr lector = new LectoQRr();
+                    try {
+                        boolean existe = lector.validarDataBase(codigoQR);
+                        System.out.println("Existe en BD: " + existe);
+            
+                        if (existe) {
+                            AsistenciaCedula asistenciaCedula = new AsistenciaCedula();
+                            boolean registrado = asistenciaCedula.registrarAsistenciaPorCedula(codigoQR, "QR");
+                            System.out.println("Registro de asistencia: " + registrado);
+            
+                            statusLabel.setText(registrado ? "Asistencia registrada correctamente." : "No se pudo registrar. Puede haber duplicado.");
+                            statusLabel.setForeground(registrado ? Color.GREEN : Color.RED);
+                        } else {
+                            statusLabel.setText("Código QR no válido en la base de datos.");
+                            statusLabel.setForeground(Color.RED);
+                        }
+                    } catch (Exception ex) {
+                        statusLabel.setText("Error: " + ex.getMessage());
                         statusLabel.setForeground(Color.RED);
+                        ex.printStackTrace(); // Muestra errores detallados en la consola
                     }
-                } catch (Exception ex) {
-                    statusLabel.setText("Error: " + ex.getMessage());
-                    statusLabel.setForeground(Color.RED);
-                    ex.printStackTrace(); // Muestra errores detallados en la consola
+                } else {
+                    statusLabel.setText(" ");
                 }
-            } else {
-                statusLabel.setText(" ");
             }
-        }
         
         private void mostrarQR() {
             String usuarioLogueado = SesionUsuario.getUsuario();
