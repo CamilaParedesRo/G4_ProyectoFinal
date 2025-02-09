@@ -1,7 +1,6 @@
 package GUI;
 
 import javax.swing.*;
-
 import GUI.Docente.ProfesorPanel;
 
 public class MainApp {
@@ -28,8 +27,8 @@ public class MainApp {
     public static void mostrarPantalla(JPanel panel) {
         frame.getContentPane().removeAll();  // Eliminar cualquier componente anterior
         frame.getContentPane().add(panel);   // Añadir el nuevo panel
-        frame.revalidate();  // Realizar la validación de la nueva interfaz
-        frame.repaint();     // Actualizar la interfaz
+        frame.revalidate();  // Validar la nueva interfaz
+        frame.repaint();     // Actualizar la UI
     }
 
     public static void mostrarPantallaDocente(int profesorId) {
@@ -38,8 +37,9 @@ public class MainApp {
         mostrarPantalla(new ProfesorPanel(profesorId).getPanel()); // Pasar el ID del profesor
     }
 
+    // Método para mostrar la pantalla del estudiante
     public static void mostrarPantallaEstudiante() {
-        frame.setSize(900, 600); // Tamaño grande para el panel del docente
+        frame.setSize(900, 600); // Ajustar tamaño grande para el panel del estudiante
         frame.setLocationRelativeTo(null); // Mantener centrado
         mostrarPantalla(new EstudiantePanel().getPanel());
     }

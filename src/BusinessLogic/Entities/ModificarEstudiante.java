@@ -1,7 +1,8 @@
 package BusinessLogic.Entities;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.*;
+
 import BusinessLogic.BL_estudiante;
 
 public class ModificarEstudiante {
@@ -52,4 +53,3 @@ public class ModificarEstudiante {
         }
     }
 }
-

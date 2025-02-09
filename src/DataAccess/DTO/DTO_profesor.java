@@ -40,17 +40,19 @@ public class DTO_profesor {
 
     // Constructor que omite campos con valores por defecto
     public DTO_profesor(String nombreProfesor, String apellidoProfesor, String cedulaProfesor,
-                        String correoProfesor, String usuarioProfesor, String claveProfesor) {
+                    Integer id_sexo, String correoProfesor, String usuarioProfesor, String claveProfesor) {
         this.nombreProfesor = nombreProfesor;
         this.apellidoProfesor = apellidoProfesor;
         this.cedulaProfesor = cedulaProfesor;
+        this.id_sexo = id_sexo; // Se añade este campo
         this.correoProfesor = correoProfesor;
         this.usuarioProfesor = usuarioProfesor;
         this.claveProfesor = claveProfesor;
-        this.fechaRegistro = LocalDateTime.now(); // Valor por defecto
-        this.fechaModifica = null; // Valor por defecto (opcional)
-        this.estado = 'A'; // Valor por defecto
+        this.fechaRegistro = LocalDateTime.now(); // Fecha por defecto
+        this.fechaModifica = null; // Fecha de modificación (inicialmente null)
+        this.estado = 'A'; // Estado activo por defecto
     }
+
 
     // Getters y Setters
     public int getIdProfesor() {

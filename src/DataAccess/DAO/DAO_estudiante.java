@@ -1,256 +1,144 @@
 package DataAccess.DAO;
 
-import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import DataAccess.IDAO;
+
 import DataAccess.DataHelper;
 import DataAccess.DTO.DTO_estudiante;
-import Framework.PatException;
 
-public class DAO_estudiante extends DataHelper implements IDAO<DTO_estudiante> {
+public class DAO_estudiante extends DataHelper {
 
-    @Override
-    public DTO_estudiante readBy(Integer idEstudiante) throws Exception {
-        DTO_estudiante estudiante = new DTO_estudiante();
-        String query = " SELECT id_estudiante, nombre_estudiante, apellido_estudiante, cedula_estudiante, codigo_unico_estudiante, "
-                     + " correo_estudiante, usuario_estudiante, ClaveEstudiante, "
-                     + " FechaRegistro, FechaModifica, Estado "
-                     + " FROM estudiante "
-                     + " WHERE estado = 'A' AND id_rstudiante = " + idEstudiante.toString();
-        try {
-            Connection conn = openConnection();         // Conectar a la base de datos
-            Statement stmt = conn.createStatement();    // Crear una declaración SQL
-            ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
-            while (rs.next()) {
-                estudiante = new DTO_estudiante(
-                    rs.getInt("id_estudiante"),           // IdEstudiante
-                    rs.getString("nombre_estudiante"),    // nombre_estudiante
-                    rs.getString("apellido_estudiante"),  // apellido_estudiante
-                    rs.getString("cedula_estudiante"),    // CedulaEstudiante
-                    rs.getString("codigo_unico_estudiante"),    // codigo_unico_estudiante
-                    rs.getString("correo_estudiante"),    // correo_estudiante
-                    rs.getString("usuario_estudiante"),   // usuario_estudiante
-                    rs.getString("ClaveEstudiante"),     // ClaveEstudiante
-                    rs.getTimestamp("FechaRegistro").toLocalDateTime(),  // FechaRegistro
-                    rs.getTimestamp("FechaModifica") != null ? rs.getTimestamp("FechaModifica").toLocalDateTime() : null,  // FechaModifica
-                    rs.getString("Estado").charAt(0)       // Estado
-                );
-            }
-        } catch (SQLException e) {
-            throw new PatException(e.getMessage(), getClass().getName(), "readBy()");
+    // Método para registrar un nuevo estudiante
+    public boolean create(DTO_estudiante estudiante) throws SQLException {
+        String query = "INSERT INTO estudiante (nombre_estudiante, apellido_estudiante, cedula_estudiante, " +
+                       "codigo_unico_estudiante, id_sexo, correo_estudiante, usuario_estudiante, clave_estudiante) " +
+                       "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, estudiante.getNombreEstudiante());
+            pstmt.setString(2, estudiante.getApellidoEstudiante());
+            pstmt.setString(3, estudiante.getCedulaEstudiante());
+            pstmt.setString(4, estudiante.getCodigoUnicoEstudiante());
+            pstmt.setInt(5, estudiante.getId_sexo());
+            pstmt.setString(6, estudiante.getCorreoEstudiante());
+            pstmt.setString(7, estudiante.getUsuarioEstudiante());
+            pstmt.setString(8, estudiante.getClaveEstudiante());
+
+            return pstmt.executeUpdate() > 0;
         }
-        return estudiante;
     }
-    @Override
-    public List<DTO_estudiante> readAll() throws Exception {
+
+    // Método para obtener todos los estudiantes
+    public List<DTO_estudiante> readAll() throws SQLException {
         List<DTO_estudiante> estudiantes = new ArrayList<>();
-        String query = " SELECT id_estudiante, nombre_estudiante, apellido_estudiante, cedula_estudiante, codigo_unico_estudiante"
-                     + " correo_estudiante, usuario_estudiante, ClaveEstudiante, "
-                     + " FechaRegistro, FechaModifica, Estado "
-                     + " FROM estudiante "
-                     + " WHERE Estado = 'A' ";
-        try {
-            Connection conn = openConnection();         // Conectar a la base de datos
-            Statement stmt = conn.createStatement();    // Crear una declaración SQL
-            ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
+        String query = "SELECT * FROM estudiante WHERE estado = 'A'";
+
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+
             while (rs.next()) {
-                DTO_estudiante estudiante = new DTO_estudiante(
-                    rs.getInt("IdEstudiante"),           // IdEstudiante
-                    rs.getString("nombre_estudiante"),    // nombre_estudiante
-                    rs.getString("apellido_estudiante"),  // apellido_estudiante
-                    rs.getString("cedula_estudiante"),    // CedulaEstudiante
-                    rs.getString("codigo_unico_estudiante"),    // codigo_unico_estudiante
-                    rs.getString("correo_estudiante"),    // correo_estudiante
-                    rs.getString("usuario_estudiante"),   // usuario_estudiante
-                    rs.getString("ClaveEstudiante"),     // ClaveEstudiante
-                    rs.getTimestamp("FechaRegistro").toLocalDateTime(),  // FechaRegistro
-                    rs.getTimestamp("FechaModifica") != null ? rs.getTimestamp("FechaModifica").toLocalDateTime() : null,  // FechaModifica
-                    rs.getString("Estado").charAt(0)
-                );
-                estudiantes.add(estudiante);
+                estudiantes.add(mapResultSetToEstudiante(rs));
             }
-        } catch (SQLException e) {
-            throw e; // Lanzar la excepción en caso de error
         }
         return estudiantes;
     }
 
-    @Override
-    public boolean create(DTO_estudiante entity) throws Exception {
-        String query = "INSERT INTO estudiante (nombre_estudiante, apellido_estudiante, cedula_estudiante, correo_unico_estudiante, id_sexo , "
-                     + "correo_estudiante, usuario_estudiante, clave_estudiante) "
-                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    
-        try (Connection conn = DataHelper.openConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, entity.getNombreEstudiante());
-            pstmt.setString(2, entity.getApellidoEstudiante());
-            pstmt.setString(3, entity.getCedulaEstudiante());
-            pstmt.setString(4, entity.getCodigoEstudiante());
-            pstmt.setString(4, entity.getCorreoEstudiante());
-            pstmt.setString(5, entity.getUsuarioEstudiante());
-            pstmt.setString(6, entity.getClaveEstudiante());
-            pstmt.setInt(7, entity.getId_sexo()); // Asegúrate de que el objeto DTO_estudiante tiene el valor de id_sexo
-    
-            pstmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            DataHelper.closeConnection();
-        }
-    }
-    
-
-    @Override
-    public boolean update(DTO_estudiante entity) throws Exception {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        
-        // Actualizar NombreEstudiante, apellido_estudiante, correo_estudiante, UsuarioEstudiante, ClaveEstudiante y FechaModifica
-        String query = " UPDATE estudiante SET nombre_estudiante = ?, apellido_estudiante = ?, correo_estudiante = ?, "
-                     + " usuario_estudiante = ?, clave_estudiante = ?, fecha_modifica = ? "
-                     + " WHERE IdEstudiante = ? ";
-        try {
-            Connection conn = openConnection(); // Abrir la conexión con la base de datos
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            
-            // Asignar los valores a los parámetros de la consulta
-            pstmt.setString(1, entity.getNombreEstudiante());   // NombreEstudiante
-            pstmt.setString(2, entity.getApellidoEstudiante()); // ApellidoEstudiante
-            pstmt.setString(3, entity.getCorreoEstudiante());   // CorreoEstudiante
-            pstmt.setString(4, entity.getUsuarioEstudiante());  // UsuarioEstudiante
-            pstmt.setString(5, entity.getClaveEstudiante());    // ClaveEstudiante
-            pstmt.setString(6, dtf.format(now));                // FechaModifica
-            pstmt.setInt(7, entity.getIdEstudiante());          // IdEstudiante (condición WHERE)
-            
-            pstmt.executeUpdate(); // Ejecutar la consulta de actualización
-            return true; // Retornar true si la operación fue exitosa
-        } catch (SQLException e) {
-            throw e; // Lanzar la excepción en caso de error
-        } finally {
-            closeConnection(); // Cerrar la conexión después de usarla
-        }
-    }
-
-    @Override
-    public boolean delete(Integer idEstudiante) throws Exception {
-        String query = " UPDATE estudiante SET estado = ? WHERE id_estudiante = ? ";
-        try {
-            Connection conn = openConnection(); // Abrir la conexión con la base de datos
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, "X"); // Cambiar el estado a inactivo
-            pstmt.setInt(2, idEstudiante);     // IdEstudiante (condición WHERE)
-            pstmt.executeUpdate();   // Ejecutar la consulta de actualización
-            return true; // Retornar true si la operación fue exitosa
-        } catch (SQLException e) {
-            throw new PatException(e.getMessage(), getClass().getName(), "delete()");
-        }
-    }
-
-    public DTO_estudiante findByCedula(String cedula) throws Exception {
+    // Método para obtener un estudiante por ID
+    public DTO_estudiante readBy(int idEstudiante) throws SQLException {
+        String query = "SELECT * FROM estudiante WHERE id_estudiante = ? AND estado = 'A'";
         DTO_estudiante estudiante = null;
-        String query = "SELECT cedula_estudiante FROM estudiante WHERE Estado = 'A' AND cedula_estudiante = '" + cedula + "'"; // Cierra comillas
-    
+
         try (Connection conn = openConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-    
-            if (rs.next()) { // Si hay resultados en la BD
-                estudiante = new DTO_estudiante();
-                estudiante.setCedulaEstudiante(rs.getString("cedula_estudiante"));
-                System.out.println("Cédula encontrada en BD dentro de findByCedula: " + estudiante.getCedulaEstudiante());
-            } else {
-                System.out.println("No se encontró ninguna cédula en la BD dentro de findByCedula.");
-            }
-    
-        } catch (SQLException e) {
-            throw new PatException(e.getMessage(), getClass().getName(), "findByCedula()");
-        }
-    
-        return estudiante; // Devuelve null si no encontró nada
-    }
-    
-    public DTO_estudiante readByUsuario(String usuario) throws Exception {
-        String sql = "SELECT * FROM estudiante WHERE usuario_estudiante = ?";
-        DTO_estudiante estudiante = null;
-    
-        try (Connection conn = openConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-    
-            pstmt.setString(1, usuario);  // Asignamos el valor al parámetro `?`
-            System.out.println("Ejecutando consulta con usuario: " + usuario);
-    
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    estudiante = new DTO_estudiante(
-                        rs.getInt("id_estudiante"),
-                        rs.getString("nombre_estudiante"),
-                        rs.getString("apellido_estudiante"),
-                        rs.getString("cedula_estudiante"),
-                        rs.getString("codigo_unico_estudiante"),
-                        rs.getString("correo_estudiante"),
-                        rs.getString("usuario_estudiante")
-                    );
-                } else {
-                    System.out.println("No se encontró el estudiante con usuario: " + usuario);
-                }
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, idEstudiante);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                estudiante = mapResultSetToEstudiante(rs);
             }
         }
         return estudiante;
     }
 
-    // Método genérico para actualizar un campo específico
-private boolean updateCampo(String usuario, String columna, String nuevoValor) throws Exception {
-    String query = "UPDATE estudiante SET " + columna + " = ?, fecha_modifica = ? WHERE usuario_estudiante = ? AND estado = 'A'";
+    // Método para obtener un estudiante por usuario
+    public DTO_estudiante readByUsuario(String usuario) throws SQLException {
+        String query = "SELECT * FROM estudiante WHERE usuario_estudiante = ? AND estado = 'A'";
+        DTO_estudiante estudiante = null;
 
-    LocalDateTime now = LocalDateTime.now();
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, usuario);
+            ResultSet rs = pstmt.executeQuery();
 
-    try (Connection conn = openConnection();
-         PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-        pstmt.setString(1, nuevoValor);
-        pstmt.setString(2, dtf.format(now));
-        pstmt.setString(3, usuario);
-
-        int filasActualizadas = pstmt.executeUpdate();
-        return filasActualizadas > 0;
-    } catch (SQLException e) {
-        throw new PatException(e.getMessage(), getClass().getName(), "updateCampo(" + columna + ")");
+            if (rs.next()) {
+                estudiante = mapResultSetToEstudiante(rs);
+            }
+        }
+        return estudiante;
     }
-}
 
-// Métodos específicos que usan `updateCampo`
-public boolean updateNombre(String usuario, String nuevoNombre) throws Exception {
-    return updateCampo(usuario, "nombre_estudiante", nuevoNombre);
-}
+    // Método para actualizar un estudiante
+    public boolean update(DTO_estudiante dto_estudiante) throws SQLException {
+        String query = "UPDATE estudiante SET nombre_estudiante = ?, apellido_estudiante = ?, cedula_estudiante = ?, " +
+                       "codigo_unico_estudiante = ?, id_sexo = ?, correo_estudiante = ?, usuario_estudiante = ?, clave_estudiante = ?, fecha_modifica = NOW() " +
+                       "WHERE id_estudiante = ? AND estado = 'A'";
 
-public boolean updateApellido(String usuario, String nuevoApellido) throws Exception {
-    return updateCampo(usuario, "apellido_estudiante", nuevoApellido);
-}
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-public boolean updateCedula(String usuario, String nuevaCedula) throws Exception {
-    return updateCampo(usuario, "cedula_estudiante", nuevaCedula);
-}
+            pstmt.setString(1, dto_estudiante.getNombreEstudiante());
+            pstmt.setString(2, dto_estudiante.getApellidoEstudiante());
+            pstmt.setString(3, dto_estudiante.getCedulaEstudiante());
+            pstmt.setString(4, dto_estudiante.getCodigoUnicoEstudiante());
+            pstmt.setInt(5, dto_estudiante.getId_sexo());
+            pstmt.setString(6, dto_estudiante.getCorreoEstudiante());
+            pstmt.setString(7, dto_estudiante.getUsuarioEstudiante());
+            pstmt.setString(8, dto_estudiante.getClaveEstudiante());
+            pstmt.setInt(9, dto_estudiante.getIdEstudiante());
 
-public boolean updateCorreo(String usuario, String nuevoCorreo) throws Exception {
-    return updateCampo(usuario, "correo_estudiante", nuevoCorreo);
-}
+            return pstmt.executeUpdate() > 0;
+        }
+    }
 
-public boolean updateUsuario(String usuarioAntiguo, String nuevoUsuario) throws Exception {
-    return updateCampo(usuarioAntiguo, "usuario_estudiante", nuevoUsuario);
-}
+    public DTO_estudiante findByCedula(String cedula) throws SQLException {
+        String query = "SELECT * FROM estudiante WHERE cedula_estudiante = ? AND estado = 'A'";
 
-    public Integer getMaxRow() throws Exception {
-        String query = "SELECT COUNT(*) FROM estudiante WHERE Estado = 'A'";
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, cedula);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return mapResultSetToEstudiante(rs);
+            }
+        }
+        return null;
+    }
+
+
+    // Método para eliminar un estudiante (cambia el estado a 'I')
+    public boolean delete(int idEstudiante) throws SQLException {
+        String query = "UPDATE estudiante SET estado = 'I', fecha_modifica = NOW() WHERE id_estudiante = ?";
+
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, idEstudiante);
+            return pstmt.executeUpdate() > 0;
+        }
+    }
+
+    // Método para obtener el número total de estudiantes activos
+    public Integer getMaxRow() throws SQLException {
+        String query = "SELECT COUNT(*) FROM estudiante WHERE estado = 'A'";
 
         try (Connection conn = openConnection();
              PreparedStatement pstmt = conn.prepareStatement(query);
@@ -259,9 +147,59 @@ public boolean updateUsuario(String usuarioAntiguo, String nuevoUsuario) throws 
             if (rs.next()) {
                 return rs.getInt(1);
             }
-        } catch (SQLException e) {
-            throw new PatException(e.getMessage(), getClass().getName(), "getMaxRow()");
         }
         return 0;
+    }
+
+    // Método genérico para actualizar un campo específico
+    private boolean updateCampo(String usuario, String columna, String nuevoValor) throws SQLException {
+        String query = "UPDATE estudiante SET " + columna + " = ?, fecha_modifica = NOW() WHERE usuario_estudiante = ? AND estado = 'A'";
+
+        try (Connection conn = openConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, nuevoValor);
+            pstmt.setString(2, usuario);
+            return pstmt.executeUpdate() > 0;
+        }
+    }
+
+    // Métodos específicos que llaman a updateCampo()
+    public boolean updateNombre(String usuario, String nuevoNombre) throws SQLException {
+        return updateCampo(usuario, "nombre_estudiante", nuevoNombre);
+    }
+
+    public boolean updateApellido(String usuario, String nuevoApellido) throws SQLException {
+        return updateCampo(usuario, "apellido_estudiante", nuevoApellido);
+    }
+
+    public boolean updateCedula(String usuario, String nuevaCedula) throws SQLException {
+        return updateCampo(usuario, "cedula_estudiante", nuevaCedula);
+    }
+
+    public boolean updateCorreo(String usuario, String nuevoCorreo) throws SQLException {
+        return updateCampo(usuario, "correo_estudiante", nuevoCorreo);
+    }
+
+    public boolean updateUsuario(String usuarioAntiguo, String nuevoUsuario) throws SQLException {
+        return updateCampo(usuarioAntiguo, "usuario_estudiante", nuevoUsuario);
+    }
+
+    // Método para mapear un ResultSet a un DTO_estudiante
+    private DTO_estudiante mapResultSetToEstudiante(ResultSet rs) throws SQLException {
+        return new DTO_estudiante(
+            rs.getInt("id_estudiante"),
+            rs.getString("nombre_estudiante"),
+            rs.getString("apellido_estudiante"),
+            rs.getString("cedula_estudiante"),
+            rs.getString("codigo_unico_estudiante"),
+            rs.getInt("id_sexo"),
+            rs.getString("correo_estudiante"),
+            rs.getString("usuario_estudiante"),
+            rs.getString("clave_estudiante"),
+            rs.getTimestamp("fecha_registro").toLocalDateTime(),
+            rs.getTimestamp("fecha_modifica") != null ? rs.getTimestamp("fecha_modifica").toLocalDateTime() : null,
+            rs.getString("estado").charAt(0)
+        );
     }
 }

@@ -1,6 +1,8 @@
 package GUI;
 
 import javax.swing.*;
+import GUI.Docente.ListaAsistencia;
+import GUI.Estudiante.AsistenciaEstudiante;
 import DataAccess.DataHelper;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -11,10 +13,9 @@ public class LoginPanelGeneralGUI implements Pantalla {
     private JPanel panel;
     private Image backgroundImage;
 
-    @SuppressWarnings("unused")
     public LoginPanelGeneralGUI() {
-        // BACKGROUND
-        backgroundImage = new ImageIcon("C:/Users/elian/G4_ProyectoFinal/src/GUI/Assets/fondo.png").getImage();
+        // Cargar imagen de fondo
+        backgroundImage = new ImageIcon(getClass().getResource("/GUI/Assets/fondo.png")).getImage();
 
         panel = new JPanel() {
             @Override
@@ -95,6 +96,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
         loginButton.setForeground(Color.WHITE);
         loginButton.setFocusPainted(false);
 
+        // Evento de validación al hacer clic en "Iniciar Sesión"
         loginButton.addActionListener(e -> {
             String usuario = userField.getText().trim();
             String contraseña = new String(passField.getPassword()).trim();
@@ -145,23 +147,21 @@ public class LoginPanelGeneralGUI implements Pantalla {
 
         panel.add(loginButton, gbc);
 
-        // REGISTRARSE
+        // BOTÓN DE REGISTRO
         gbc.gridy++;
-        JLabel registerLabel = new JLabel("Registrarse", SwingConstants.CENTER);
-        registerLabel.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-        registerLabel.setForeground(Color.BLACK);
-        registerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        registerLabel.setText("<html><body><span style='text-decoration:underline;'>Registrarse</span></body></html>");
-        registerLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("Redirigiendo a la pantalla de registro...");
-                MainApp.mostrarPantalla(new RegistrarUsuarioGUI().getPanel());
-            }
+        JButton registerButton = new JButton("Registrarse");
+        registerButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        registerButton.setBackground(new Color(50, 150, 250)); // Azul para diferenciarlo
+        registerButton.setForeground(Color.WHITE);
+        registerButton.setFocusPainted(false);
+
+        // Evento para cambiar a la pantalla de registro
+        registerButton.addActionListener(e -> {
+            System.out.println("Redirigiendo a la pantalla de registro...");
+            MainApp.mostrarPantalla(new RegistrarUsuarioGUI().getPanel());
         });
 
-        gbc.gridwidth = 2;
-        panel.add(registerLabel, gbc);
+        panel.add(registerButton, gbc);
     }
 
     private int validarCredenciales(String rol, String usuario, String contraseña) throws Exception {
@@ -188,7 +188,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
                 return rs.getInt(idColumn); // Devuelve el ID del usuario
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(panel, "Error en la consulta SQL: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            throw new Exception("Error en la consulta SQL: " + e.getMessage());
         }
         return -1; // Retorna -1 si las credenciales no son válidas
     }
@@ -198,4 +198,3 @@ public class LoginPanelGeneralGUI implements Pantalla {
         return panel;
     }
 }
-
