@@ -1,11 +1,11 @@
 package BusinessLogic;
 
 import java.util.List;
+
 import DataAccess.DAO.DAO_estudiante;
 import DataAccess.DTO.DTO_estudiante;
 
 public class BL_estudiante {
-    private DTO_estudiante estudiante; // Cache
     private DAO_estudiante sDAO = new DAO_estudiante();
 
     public BL_estudiante() {}
@@ -15,8 +15,11 @@ public class BL_estudiante {
     }
 
     public DTO_estudiante getByIdestudiante(int idEstudiante) throws Exception {
-        estudiante = sDAO.readBy(idEstudiante);
-        return estudiante;
+        return sDAO.readBy(idEstudiante);
+    }
+
+    public DTO_estudiante getByUsuario(String usuario) throws Exception {
+        return sDAO.readByUsuario(usuario);  // Se agregó este método
     }
 
     public boolean create(DTO_estudiante dto_estudiante) throws Exception {
@@ -32,18 +35,14 @@ public class BL_estudiante {
     }
 
     public DTO_estudiante findByCedula(String cedula) throws Exception {
-        return sDAO.findByCedula(cedula); // Debe devolver un DTO_estudiante o null
+        return sDAO.findByCedula(cedula);
     }
 
     public Integer getMaxRow() throws Exception {
         return sDAO.getMaxRow();
     }
 
-    public DTO_estudiante getByUsuario(String usuario) throws Exception {
-        return sDAO.readByUsuario(usuario);
-    }
-
-    // Métodos para actualizar atributos individuales
+    // Métodos de actualización
     public boolean actualizarNombre(String usuario, String nuevoNombre) throws Exception {
         return sDAO.updateNombre(usuario, nuevoNombre);
     }

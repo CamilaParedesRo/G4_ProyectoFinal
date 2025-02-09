@@ -2,7 +2,9 @@ package GUI;
 
 import javax.swing.*;
 import DataAccess.DAO.DAO_estudiante;
+import DataAccess.DAO.DAO_profesor;
 import DataAccess.DTO.DTO_estudiante;
+import DataAccess.DTO.DTO_profesor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,12 +37,11 @@ public class RegistrarUsuarioGUI implements Pantalla {
         gbc.gridwidth = 1;
 
         // TÍTULO
-        gbc.gridwidth = 2; // Ocupar dos columnas
+        gbc.gridwidth = 2;
         JLabel titleLabel = new JLabel("Registro de Usuario", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
         panel.add(titleLabel, gbc);
-
-        gbc.gridwidth = 1; // Restaurar a una columna
+        gbc.gridwidth = 1;
 
         // CAMPOS
         addField("Nombre:", gbc, panel);
@@ -51,17 +52,11 @@ public class RegistrarUsuarioGUI implements Pantalla {
         JTextField apellidoField = new JTextField(15);
         panel.add(apellidoField, gbc);
 
-        addField("Sexo:", gbc, panel);
-        // Crear un JComboBox con opciones predefinidas
-        String[] sexOptions = {"Masculino", "Femenino"};
-        JComboBox<String> sexoComboBox = new JComboBox<>(sexOptions);
-        panel.add(sexoComboBox, gbc);
-
         addField("Número de Cédula:", gbc, panel);
         JTextField cedulaField = new JTextField(15);
         panel.add(cedulaField, gbc);
 
-        addField("Correo:", gbc, panel);  // Agregar campo de correo
+        addField("Correo:", gbc, panel);
         JTextField correoField = new JTextField(15);
         panel.add(correoField, gbc);
 
@@ -72,6 +67,12 @@ public class RegistrarUsuarioGUI implements Pantalla {
         addField("Contraseña:", gbc, panel);
         JPasswordField passField = new JPasswordField(15);
         panel.add(passField, gbc);
+
+        // ComboBox para seleccionar el rol (Estudiante o Docente)
+        addField("Rol:", gbc, panel);
+        String[] roles = {"Estudiante", "Docente"};
+        JComboBox<String> roleComboBox = new JComboBox<>(roles);
+        panel.add(roleComboBox, gbc);
 
         // BOTÓN DE REGISTRO
         gbc.gridx = 0;
@@ -87,59 +88,54 @@ public class RegistrarUsuarioGUI implements Pantalla {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Obtener los datos del formulario
                 String nombre = nameField.getText().trim();
                 String apellido = apellidoField.getText().trim();
-                String sexo = (String) sexoComboBox.getSelectedItem();
                 String cedula = cedulaField.getText().trim();
                 String correo = correoField.getText().trim();
                 String usuario = userField.getText().trim();
-                String contrasena = new String(passField.getPassword());
+                String clave = new String(passField.getPassword()).trim();
+                String rolSeleccionado = (String) roleComboBox.getSelectedItem(); // Obtener el rol seleccionado
 
-                // Validación: Todos los campos son obligatorios
-                if (nombre.isEmpty() || apellido.isEmpty() || sexo.isEmpty() || cedula.isEmpty() || correo.isEmpty() || usuario.isEmpty() || contrasena.isEmpty()) {
-                    JOptionPane.showMessageDialog(panel, "Error: Todos los campos deben ser completados.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // Validaciones específicas
-                if (!nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
-                    JOptionPane.showMessageDialog(panel, "Error: El nombre solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                if (!apellido.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
-                    JOptionPane.showMessageDialog(panel, "Error: El apellido solo debe contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                if (!cedula.matches("^\\d{10}$")) {
-                    JOptionPane.showMessageDialog(panel, "Error: La cédula debe tener exactamente 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                if (!correo.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
-                    JOptionPane.showMessageDialog(panel, "Error: El correo no tiene un formato válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                // Validar que ningún campo esté vacío
+                if (nombre.isEmpty() || apellido.isEmpty() || cedula.isEmpty() ||
+                        correo.isEmpty() || usuario.isEmpty() || clave.isEmpty()) {
+                    JOptionPane.showMessageDialog(panel, "Error: Todos los campos deben ser completados.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                // Crear un objeto DTO_estudiante con los datos
-                DTO_estudiante estudianteDTO = new DTO_estudiante(nombre, apellido, cedula, correo, usuario, contrasena, null);
-                // Establecer valores adicionales como fecha de registro, estado, etc.
-
-                // Aquí asumimos que tienes un DAO para interactuar con la base de datos
-                DAO_estudiante usuarioDAO = new DAO_estudiante();
-                
-                // Insertar el estudiante en la base de datos
                 boolean registrado = false;
                 try {
-                    registrado = usuarioDAO.create(estudianteDTO);
-                } catch (Exception e1) {
+                    if (rolSeleccionado.equals("Estudiante")) {
+                        String codigoUnico = JOptionPane.showInputDialog("Ingrese el código único del estudiante:").trim();
+                        int idSexo = 1; // Asigna un valor predeterminado o reemplázalo con un ComboBox
 
-                    e1.printStackTrace();
+                        // Crear objeto DTO para Estudiante
+                        DTO_estudiante estudianteDTO = new DTO_estudiante(nombre, apellido, cedula, codigoUnico, idSexo, correo, usuario, clave);
+                        DAO_estudiante estudianteDAO = new DAO_estudiante();
+
+                        registrado = estudianteDAO.create(estudianteDTO);
+                    } else if (rolSeleccionado.equals("Docente")) {
+                        int idSexo = 1; // Asigna un valor predeterminado o reemplázalo con un ComboBox
+
+                        // Crear objeto DTO para Docente
+                        DTO_profesor profesorDTO = new DTO_profesor(nombre, apellido, cedula, idSexo, correo, usuario, clave);
+                        DAO_profesor profesorDAO = new DAO_profesor();
+
+                        registrado = profesorDAO.create(profesorDTO);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel, "Error en la base de datos: " + ex.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace(); // Para depuración
                 }
 
                 if (registrado) {
-                    JOptionPane.showMessageDialog(panel, "Usuario registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, "Usuario registrado exitosamente.", "Éxito",
+                            JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(panel, "Error al registrar el usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, "Error al registrar el usuario.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -150,14 +146,14 @@ public class RegistrarUsuarioGUI implements Pantalla {
         gbc.gridy++;
         JButton backButton = new JButton("Regresar");
         backButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
-        backButton.setBackground(new Color(220, 50, 50)); // Rojo para destacar
+        backButton.setBackground(new Color(220, 50, 50));
         backButton.setForeground(Color.WHITE);
         backButton.setFocusPainted(false);
 
         // Evento para volver al login
         backButton.addActionListener(e -> {
             System.out.println("Volviendo al Login...");
-            MainApp.mostrarPantalla(new LoginPanelGeneralGUI().getPanel()); // Redirigir al Login
+            MainApp.mostrarPantalla(new LoginPanelGeneralGUI().getPanel());
         });
 
         panel.add(backButton, gbc);

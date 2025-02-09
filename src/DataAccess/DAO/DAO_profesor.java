@@ -21,10 +21,10 @@ public class DAO_profesor extends DataHelper implements IDAO<DTO_profesor> {
     public DTO_profesor readBy(Integer id) throws Exception {
         DTO_profesor profesor = new DTO_profesor();
         String query = " SELECT IdProfesor, NombreProfesor, ApellidoProfesor, CedulaProfesor, "
-                     + " CorreoProfesor, UsuarioProfesor, ClaveProfesor, "
-                     + " FechaRegistro, FechaModifica, Estado "
-                     + " FROM Profesor "
-                     + " WHERE Estado = 'A' AND IdProfesor = " + id.toString();
+                    + " CorreoProfesor, UsuarioProfesor, ClaveProfesor, "
+                    + " FechaRegistro, FechaModifica, Estado "
+                    + " FROM Profesor "
+                    + " WHERE Estado = 'A' AND IdProfesor = " + id.toString();
         try {
             Connection conn = openConnection();         // Conectar a la base de datos
             Statement stmt = conn.createStatement();    // Crear una declaración SQL
@@ -83,27 +83,31 @@ public class DAO_profesor extends DataHelper implements IDAO<DTO_profesor> {
     }
 
     @Override
-    public boolean create(DTO_profesor entity) throws Exception {
-        String query = " INSERT INTO Profesor (NombreProfesor, ApellidoProfesor, CedulaProfesor, "
-                     + " CorreoProfesor, UsuarioProfesor, ClaveProfesor) "
-                     + " VALUES (?, ?, ?, ?, ?, ?) ";
-        try {
-            Connection conn = openConnection(); // Abrir la conexión con la base de datos
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            
-            // Asignar los valores a los parámetros de la consulta
-            pstmt.setString(1, entity.getNombreProfesor());   // NombreProfesor
-            pstmt.setString(2, entity.getApellidoProfesor()); // ApellidoProfesor
-            pstmt.setString(3, entity.getCedulaProfesor());   // CedulaProfesor
-            pstmt.setString(4, entity.getCorreoProfesor());   // CorreoProfesor
-            pstmt.setString(5, entity.getUsuarioProfesor());  // UsuarioProfesor
-            pstmt.setString(6, entity.getClaveProfesor());    // ClaveProfesor
-            
-            pstmt.executeUpdate(); // Ejecutar la consulta de inserción
-            return true; // Retornar true si la operación fue exitosa
-        } catch (SQLException e) {
-            throw e; // Lanzar la excepción en caso de error
-        } finally {
+public boolean create(DTO_profesor entity) throws Exception {
+    String query = "INSERT INTO profesor (nombre_profesor, apellido_profesor, cedula_profesor, "
+                + "id_sexo, correo_profesor, usuario_profesor, clave_profesor, fecha_registro, estado) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now','localtime'), 'A')";
+    try (Connection conn = openConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+        // Verificar que id_sexo no sea nulo antes de asignarlo
+        if (entity.getId_sexo() == null) {
+            throw new Exception("El campo id_sexo no puede ser nulo.");
+        }
+
+        pstmt.setString(1, entity.getNombreProfesor());
+        pstmt.setString(2, entity.getApellidoProfesor());
+        pstmt.setString(3, entity.getCedulaProfesor());
+        pstmt.setInt(4, entity.getId_sexo()); // Se añadió id_sexo aquí
+        pstmt.setString(5, entity.getCorreoProfesor());
+        pstmt.setString(6, entity.getUsuarioProfesor());
+        pstmt.setString(7, entity.getClaveProfesor());
+
+        int rowsInserted = pstmt.executeUpdate();
+        return rowsInserted > 0;
+    } catch (SQLException e) {
+        throw e;
+    } finally {
             closeConnection(); // Cerrar la conexión después de usarla
         }
     }
@@ -114,9 +118,9 @@ public class DAO_profesor extends DataHelper implements IDAO<DTO_profesor> {
         LocalDateTime now = LocalDateTime.now();
         
         // Actualizar NombreProfesor, ApellidoProfesor, CorreoProfesor, UsuarioProfesor, ClaveProfesor y FechaModifica
-        String query = " UPDATE Profesor SET NombreProfesor = ?, ApellidoProfesor = ?, CorreoProfesor = ?, "
-                     + " UsuarioProfesor = ?, ClaveProfesor = ?, FechaModifica = ? "
-                     + " WHERE IdProfesor = ? ";
+        String query = " UPDATE Profesor SET nombre_profesor = ?, apellido_profesor = ?, correo_profesor = ?, "
+                    + " usuario_profesor = ?, clave_profesor = ?, fecha_modifica = ? "
+                    + " WHERE id_profesor = ? ";
         try {
             Connection conn = openConnection(); // Abrir la conexión con la base de datos
             PreparedStatement pstmt = conn.prepareStatement(query);

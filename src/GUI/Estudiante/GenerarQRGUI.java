@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Estudiante;
 
 
 import javax.swing.*;
