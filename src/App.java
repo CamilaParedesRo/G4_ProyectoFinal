@@ -1,6 +1,4 @@
-import BusinessLogic.BL_asistencia;
-import BusinessLogic.BL_estudiante;
-import BusinessLogic.Entities.LectoQRr;
+
 import GUI.MainApp;
 
 public class App {

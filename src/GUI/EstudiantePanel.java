@@ -109,121 +109,95 @@ private class InicioPanel {
     }
 
     
-private class AsistenciaPanel {
-    private JPanel panel;
-    private JTextField cedulaField;
-    private JTextField codigoQRField;  // Campo para mostrar el contenido del QR escaneado
-    private JComboBox<String> registrationOptions;
-    private JButton continueButton;
-    private JLabel statusLabel;
-    private JButton showQRButton;
-
-
-    @SuppressWarnings("unused")
-    public AsistenciaPanel() {
-
-        panel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                ImageIcon imagenFondo = new ImageIcon("src\\GUI\\Resource\\Fondo.jpg"); // Reemplaza con la ruta real
-                g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-
-
-        panel.setLayout(new GridBagLayout());
-        panel.setBackground(Color.WHITE);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        JLabel optionLabel = new JLabel("Elija cómo desea registrarse:");
-        optionLabel.setForeground(Color.blue);
-        panel.add(optionLabel, gbc);
-
-        String[] options = {"Ingresar por QR", "Ingresar por Cédula"};
-        registrationOptions = new JComboBox<>(options);
-        gbc.gridx = 1;
-        panel.add(registrationOptions, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        JLabel cedulaLabel = new JLabel("Ingrese su cédula:");
-        panel.add(cedulaLabel, gbc);
-        cedulaLabel.setVisible(false);
-
-        gbc.gridy = 2;
-        cedulaField = new JTextField(10);
-        panel.add(cedulaField, gbc);
-        cedulaField.setVisible(false);
-
-        gbc.gridy = 3;
-        continueButton = new JButton("Registrar Asistencia");
-        panel.add(continueButton, gbc);
-
-        gbc.gridy = 4;
-        codigoQRField = new JTextField(20);
-        panel.add(codigoQRField, gbc);
-        codigoQRField.setVisible(false);
-
-        gbc.gridy = 5;
-        statusLabel = new JLabel(" ");
-        panel.add(statusLabel, gbc);
-        statusLabel.setVisible(false);
-
-        // Campo para mostrar el QR escaneado
-        gbc.gridy = 6;
-        JLabel qrLabel = new JLabel("QR Escaneado:");
-        qrLabel.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-        panel.add(qrLabel, gbc);
-        qrLabel.setVisible(false);
-        
-        gbc.gridy = 7;
-        codigoQRField = new JTextField(20);  // Este campo muestra el contenido del QR escaneado
-        codigoQRField.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-        panel.add(codigoQRField, gbc);
-        codigoQRField.setVisible(false); // Inicialmente invisible
-
-        gbc.gridy = 8;
-        statusLabel = new JLabel(" ");
-        statusLabel.setFont(new Font("Times New Roman", Font.BOLD, 14));
-        statusLabel.setForeground(Color.RED);
-        panel.add(statusLabel, gbc);
-        statusLabel.setVisible(false); // Inicialmente invisible
-
-        gbc.gridy = 9 ;
-        showQRButton = new JButton("Mostrar QR");
-        showQRButton.setFont(new Font("Times New Roman", Font.BOLD, 18));
-        showQRButton.setBackground(new Color(0, 100, 200));
-        showQRButton.setForeground(Color.WHITE);
-        panel.add(showQRButton, gbc);
-        showQRButton.setVisible(false); // Solo se muestra si se selecciona "Generar QR"
-
-
-        registrationOptions.addActionListener(e -> {
-            String selectedOption = (String) registrationOptions.getSelectedItem();
-            
-        if ("Ingresar por QR".equals(selectedOption)) { // Botones para "Generar QR"
-                codigoQRField.setVisible(true); 
-                cedulaLabel.setVisible(false); 
-                cedulaField.setVisible(false); 
-                statusLabel.setVisible(true);  
-                qrLabel.setVisible(true); 
-                showQRButton.setVisible(true);
-                continueButton.setVisible(false);
-            } else {                                    // Botones para "Ingresar Cédula"
-                codigoQRField.setVisible(false);  
-                cedulaLabel.setVisible(true);   
-                cedulaField.setVisible(true);  
-                statusLabel.setVisible(false);  
-                qrLabel.setVisible(false); 
-                showQRButton.setVisible(false);
-                continueButton.setVisible(true);
-            }
-        });
+    private class AsistenciaPanel {
+        private JPanel panel;
+        private JTextField cedulaField;
+        private JTextField codigoQRField;
+        private JComboBox<String> registrationOptions;
+        private JButton continueButton;
+        private JLabel statusLabel;
+        private JButton showQRButton;
+        private JLabel qrImageLabel; // Nuevo JLabel para mostrar el QR
+    
+        public AsistenciaPanel() {
+            panel = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    ImageIcon imagenFondo = new ImageIcon("src\\GUI\\Resource\\Fondo.jpg");
+                    g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            };
+    
+            panel.setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(10, 10, 10, 10);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+    
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            JLabel optionLabel = new JLabel("Elija cómo desea registrarse:");
+            panel.add(optionLabel, gbc);
+    
+            String[] options = {"Ingresar por QR", "Ingresar por Cédula"};
+            registrationOptions = new JComboBox<>(options);
+            gbc.gridx = 1;
+            panel.add(registrationOptions, gbc);
+    
+            gbc.gridx = 0;
+            gbc.gridy = 1;
+            JLabel cedulaLabel = new JLabel("Ingrese su cédula:");
+            panel.add(cedulaLabel, gbc);
+            cedulaLabel.setVisible(false);
+    
+            gbc.gridy = 2;
+            cedulaField = new JTextField(10);
+            panel.add(cedulaField, gbc);
+            cedulaField.setVisible(false);
+    
+            gbc.gridy = 3;
+            continueButton = new JButton("Registrar Asistencia");
+            panel.add(continueButton, gbc);
+    
+            gbc.gridy = 4;
+            codigoQRField = new JTextField(20);
+            panel.add(codigoQRField, gbc);
+            codigoQRField.setVisible(false);
+    
+            gbc.gridy = 5;
+            statusLabel = new JLabel(" ");
+            panel.add(statusLabel, gbc);
+            statusLabel.setVisible(false);
+    
+            gbc.gridy = 6;
+            showQRButton = new JButton("Mostrar QR");
+            panel.add(showQRButton, gbc);
+            showQRButton.setVisible(false);
+    
+            gbc.gridy = 7;
+            qrImageLabel = new JLabel(); // JLabel para la imagen del QR
+            panel.add(qrImageLabel, gbc);
+            qrImageLabel.setVisible(false);
+    
+            registrationOptions.addActionListener(e -> {
+                String selectedOption = (String) registrationOptions.getSelectedItem();
+                if ("Ingresar por QR".equals(selectedOption)) {
+                    codigoQRField.setVisible(true);
+                    cedulaLabel.setVisible(false);
+                    cedulaField.setVisible(false);
+                    statusLabel.setVisible(true);
+                    showQRButton.setVisible(true);
+                    continueButton.setVisible(false);
+                } else {
+                    codigoQRField.setVisible(false);
+                    cedulaLabel.setVisible(true);
+                    cedulaField.setVisible(true);
+                    statusLabel.setVisible(false);
+                    showQRButton.setVisible(false);
+                    continueButton.setVisible(true);
+                    qrImageLabel.setVisible(false);
+                }
+            });
 
         continueButton.addActionListener(e -> registrarAsistencia());
         showQRButton.addActionListener(e -> mostrarQR());
@@ -298,40 +272,27 @@ private class AsistenciaPanel {
         }
         
         private void mostrarQR() {
-            String usuarioLogueado = SesionUsuario.getUsuario(); // Recuperar usuario
-        
+            String usuarioLogueado = SesionUsuario.getUsuario();
             if (usuarioLogueado == null || usuarioLogueado.isEmpty()) {
                 statusLabel.setText("Error: Usuario no válido.");
                 statusLabel.setForeground(Color.RED);
                 return;
             }
-        
+    
             CreacionLecturaBaseDatos CreacionQR = new CreacionLecturaBaseDatos(usuarioLogueado);
             BufferedImage qrImage = CreacionQR.generarQRUsuario();
-            
             if (qrImage != null) {
-                ImageIcon qrIcon = new ImageIcon(qrImage);
-                JLabel qrLabel = new JLabel(qrIcon);
-                JPanel qrPanel = new JPanel();
-                qrPanel.setLayout(new BorderLayout());
-                qrPanel.add(qrLabel, BorderLayout.CENTER);
-                
-                JFrame qrFrame = new JFrame("Código QR");
-                qrFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                qrFrame.add(qrPanel);
-                qrFrame.pack();
-                qrFrame.setLocationRelativeTo(null);
-                qrFrame.setVisible(true);
+                qrImageLabel.setIcon(new ImageIcon(qrImage));
+                qrImageLabel.setVisible(true);
             } else {
                 statusLabel.setText("No se pudo generar el QR.");
                 statusLabel.setForeground(Color.RED);
             }
         }
+    
 
-  
-        
         public JPanel getPanel() { return panel; }
-}
+    }
 
 }
     
