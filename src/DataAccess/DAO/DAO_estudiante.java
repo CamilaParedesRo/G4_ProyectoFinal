@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import DataAccess.DataHelper;
 import DataAccess.DTO.DTO_estudiante;
+import Framework.PatException;
 
 public class DAO_estudiante extends DataHelper {
 
@@ -151,40 +154,47 @@ public class DAO_estudiante extends DataHelper {
         return 0;
     }
 
-    // Método genérico para actualizar un campo específico
-    private boolean updateCampo(String usuario, String columna, String nuevoValor) throws SQLException {
-        String query = "UPDATE estudiante SET " + columna + " = ?, fecha_modifica = NOW() WHERE usuario_estudiante = ? AND estado = 'A'";
+   // Método genérico para actualizar un campo específico
+private boolean updateCampo(String usuario, String columna, String nuevoValor) throws Exception {
+    String query = "UPDATE estudiante SET " + columna + " = ?, fecha_modifica = ? WHERE usuario_estudiante = ? AND estado = 'A'";
 
-        try (Connection conn = openConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+    LocalDateTime now = LocalDateTime.now();
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-            pstmt.setString(1, nuevoValor);
-            pstmt.setString(2, usuario);
-            return pstmt.executeUpdate() > 0;
-        }
+    try (Connection conn = openConnection();
+         PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+        pstmt.setString(1, nuevoValor);
+        pstmt.setString(2, dtf.format(now));
+        pstmt.setString(3, usuario);
+
+        int filasActualizadas = pstmt.executeUpdate();
+        return filasActualizadas > 0;
+    } catch (SQLException e) {
+        throw new PatException(e.getMessage(), getClass().getName(), "updateCampo(" + columna + ")");
     }
+}
 
-    // Métodos específicos que llaman a updateCampo()
-    public boolean updateNombre(String usuario, String nuevoNombre) throws SQLException {
-        return updateCampo(usuario, "nombre_estudiante", nuevoNombre);
-    }
+// Métodos específicos que usan `updateCampo`
+public boolean updateNombre(String usuario, String nuevoNombre) throws Exception {
+    return updateCampo(usuario, "nombre_estudiante", nuevoNombre);
+}
 
-    public boolean updateApellido(String usuario, String nuevoApellido) throws SQLException {
-        return updateCampo(usuario, "apellido_estudiante", nuevoApellido);
-    }
+public boolean updateApellido(String usuario, String nuevoApellido) throws Exception {
+    return updateCampo(usuario, "apellido_estudiante", nuevoApellido);
+}
 
-    public boolean updateCedula(String usuario, String nuevaCedula) throws SQLException {
-        return updateCampo(usuario, "cedula_estudiante", nuevaCedula);
-    }
+public boolean updateCedula(String usuario, String nuevaCedula) throws Exception {
+    return updateCampo(usuario, "cedula_estudiante", nuevaCedula);
+}
 
-    public boolean updateCorreo(String usuario, String nuevoCorreo) throws SQLException {
-        return updateCampo(usuario, "correo_estudiante", nuevoCorreo);
-    }
+public boolean updateCorreo(String usuario, String nuevoCorreo) throws Exception {
+    return updateCampo(usuario, "correo_estudiante", nuevoCorreo);
+}
 
-    public boolean updateUsuario(String usuarioAntiguo, String nuevoUsuario) throws SQLException {
-        return updateCampo(usuarioAntiguo, "usuario_estudiante", nuevoUsuario);
-    }
-
+public boolean updateUsuario(String usuarioAntiguo, String nuevoUsuario) throws Exception {
+    return updateCampo(usuarioAntiguo, "usuario_estudiante", nuevoUsuario);
+}
     // Método para mapear un ResultSet a un DTO_estudiante
     private DTO_estudiante mapResultSetToEstudiante(ResultSet rs) throws SQLException {
         return new DTO_estudiante(
