@@ -7,6 +7,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ListaAsistencia implements Pantalla {
     private JPanel panel;
@@ -61,26 +63,33 @@ public class ListaAsistencia implements Pantalla {
 
     // Método para cargar datos desde la vista de la base de datos
     private void cargarDatos() {
-        String query = "SELECT * FROM vista_historial_asistencia";
-        try (Connection connection = DriverManager.getConnection(DB_URL);
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
+    String query = "SELECT * FROM vista_historial_asistencia";
+    try (Connection connection = DriverManager.getConnection(DB_URL);
+         Statement statement = connection.createStatement();
+         ResultSet resultSet = statement.executeQuery(query)) {
 
-            while (resultSet.next()) {
-                int idAsistencia = resultSet.getInt("ID_Asistencia");
-                String nombre = resultSet.getString("Nombre_Estudiante");
-                String apellido = resultSet.getString("Apellido_Estudiante");
-                String codigoUnico = resultSet.getString("Codigo_Unico_Estudiante");
-                Date fechaAsistencia = resultSet.getDate("Fecha_Asistencia");
-                String metodoAsistencia = resultSet.getString("Metodo_Asistencia");
+        while (resultSet.next()) {
+            int idAsistencia = resultSet.getInt("ID_Asistencia");
+            String nombre = resultSet.getString("Nombre_Estudiante");
+            String apellido = resultSet.getString("Apellido_Estudiante");
+            String codigoUnico = resultSet.getString("Codigo_Unico_Estudiante");
 
-                // Agregar los datos a la tabla
-                tableModel.addRow(new Object[]{idAsistencia, nombre, apellido, codigoUnico, fechaAsistencia, metodoAsistencia});
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(panel, "Error al cargar los datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            // Obtener fecha con hora correctamente
+            Timestamp timestamp = resultSet.getTimestamp("Fecha_Asistencia");
+            LocalDateTime fechaAsistencia = timestamp.toLocalDateTime();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String fechaFormateada = fechaAsistencia.format(formatter);
+
+            String metodoAsistencia = resultSet.getString("Metodo_Asistencia");
+
+            // Agregar los datos a la tabla con la fecha y hora formateada
+            tableModel.addRow(new Object[]{idAsistencia, nombre, apellido, codigoUnico, fechaFormateada, metodoAsistencia});
         }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(panel, "Error al cargar los datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
+
 
     @Override
     public JPanel getPanel() {
