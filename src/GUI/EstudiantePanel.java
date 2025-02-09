@@ -38,23 +38,50 @@ public class EstudiantePanel implements Pantalla {
         return panel;
     }
 
-    // Panel de Inicio
-    private class InicioPanel {
-        private JPanel panel;
 
-        public InicioPanel() {
-            panel = new JPanel();
-            panel.add(new JLabel("Bienvenido al sistema de gestión para estudiantes."));
-        }
+// Panel de Inicio
+private class InicioPanel {
+    private JPanel panel;
 
-        public JPanel getPanel() {
-            return panel;
-        }
+    public InicioPanel() {
+        panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon imagenFondo = new ImageIcon("src\\GUI\\Resource\\EPN.jpg");
+                g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        panel.setLayout(new GridBagLayout()); // Centrar el texto en el panel
+        
+
+        // Crear un panel para el texto con borde
+        JPanel textPanel = new JPanel();
+        textPanel.setBackground(new Color(255, 255, 255, 180)); // Blanco con transparencia
+        textPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3)); // Borde negro de 3 px
+        textPanel.setLayout(new BorderLayout()); 
+
+        JLabel texto = new JLabel("Bienvenido al sistema de gestión para estudiantes.", SwingConstants.CENTER);
+        texto.setFont(new Font("Serif", Font.BOLD, 20));
+        texto.setForeground(Color.BLACK);
+        textPanel.add(texto, BorderLayout.CENTER);
+
+        // Ajustar tamaño del panel de texto
+        textPanel.setPreferredSize(new Dimension(500, 100)); // Ajusta el tamaño según necesites
+
+        // Agregar textPanel al panel principal
+        panel.add(textPanel);
     }
+
+    public JPanel getPanel() {
+        return panel;
+    }
+}
+
 
     private JButton createLogoutButton() {
         JButton logoutButton = new JButton("Cerrar Sesión");
-        logoutButton.setFont(new Font("Arial", Font.BOLD, 14));
+        logoutButton.setFont(new Font("Serif", Font.BOLD, 14));
         logoutButton.setBackground(Color.RED);
         logoutButton.setForeground(Color.WHITE);
         logoutButton.setFocusPainted(false);
@@ -94,7 +121,18 @@ private class AsistenciaPanel {
 
     @SuppressWarnings("unused")
     public AsistenciaPanel() {
-        panel = new JPanel(new GridBagLayout());
+
+        panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon imagenFondo = new ImageIcon("src\\GUI\\Resource\\Fondo.jpg"); // Reemplaza con la ruta real
+                g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+
+        panel.setLayout(new GridBagLayout());
         panel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -103,6 +141,7 @@ private class AsistenciaPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         JLabel optionLabel = new JLabel("Elija cómo desea registrarse:");
+        optionLabel.setForeground(Color.blue);
         panel.add(optionLabel, gbc);
 
         String[] options = {"Ingresar por QR", "Ingresar por Cédula"};
@@ -200,6 +239,8 @@ private class AsistenciaPanel {
                 public void changedUpdate(DocumentEvent e) { validarQRIngresado(); }
             });
         }
+
+        
 
 
         private void registrarAsistencia() {

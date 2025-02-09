@@ -4,7 +4,6 @@ import BusinessLogic.BL_estudiante;
 import BusinessLogic.Entities.ModificarEstudiante;
 import DataAccess.DTO.DTO_estudiante;
 import java.awt.*;
-
 public class PerfilPanel {
     private JPanel panel;
     private JLabel tituloLabel;
@@ -14,10 +13,19 @@ public class PerfilPanel {
     private JLabel correoLabel;
     private JLabel usuarioLabel;
     private JLabel statusLabel;
-    
+
     @SuppressWarnings("unused")
     public PerfilPanel() {
-        panel = new JPanel(new GridBagLayout()); // Diseño flexible y centrado
+        panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon imagenFondo = new ImageIcon("src\\GUI\\Resource\\Fondo.jpg"); // Cambia la ruta si es necesario
+                g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        panel.setLayout(new GridBagLayout()); // Diseño flexible y centrado
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 10, 5, 10);
         gbc.gridx = 0;
@@ -27,12 +35,12 @@ public class PerfilPanel {
 
         // Título "Perfil"
         tituloLabel = new JLabel("Perfil", SwingConstants.CENTER);
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        tituloLabel.setFont(new Font("Serif", Font.BOLD, 24));
         tituloLabel.setForeground(Color.BLUE);
 
         // Mensaje de estado
         statusLabel = new JLabel("", SwingConstants.CENTER);
-        statusLabel.setFont(new Font("Arial", Font.ITALIC, 12));
+        statusLabel.setFont(new Font("Serif", Font.ITALIC, 15));
 
         nombreLabel = new JLabel("Nombre: ");
         apellidoLabel = new JLabel("Apellido: ");
@@ -41,7 +49,7 @@ public class PerfilPanel {
         usuarioLabel = new JLabel("Usuario: ");
 
         // Fuente y estilo
-        Font font = new Font("Arial", Font.BOLD, 14);
+        Font font = new Font("Serif", Font.BOLD, 14);
         nombreLabel.setFont(font);
         apellidoLabel.setFont(font);
         cedulaLabel.setFont(font);
@@ -87,6 +95,18 @@ public class PerfilPanel {
         JButton modificarCedula = new JButton("Modificar");
         JButton modificarCorreo = new JButton("Modificar");
         JButton modificarUsuario = new JButton("Modificar");
+
+
+        JPanel infoPanel = new JPanel(new GridBagLayout());
+        infoPanel.setBackground(new Color(255, 255, 255, 180)); // Blanco con transparencia
+        infoPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3)); // Borde negro
+
+        GridBagConstraints gbcInfo = new GridBagConstraints();
+        gbcInfo.insets = new Insets(5, 10, 5, 10);
+        gbcInfo.gridx = 0;
+        gbcInfo.gridy = 0;
+        gbcInfo.anchor = GridBagConstraints.WEST;
+        gbcInfo.fill = GridBagConstraints.HORIZONTAL;
 
         // Agregar los elementos al panel
         panel.add(tituloLabel, gbc);

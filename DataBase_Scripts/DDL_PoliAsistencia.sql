@@ -53,8 +53,6 @@ CREATE TABLE estudiante (
     fecha_modifica DATETIME,
     estado CHAR(1) NOT NULL DEFAULT 'A'
 );
-
--- 6. Crear tabla asistencia
 CREATE TABLE asistencia (
     id_asistencia INTEGER PRIMARY KEY AUTOINCREMENT,
     id_estudiante INTEGER NOT NULL REFERENCES estudiante(id_estudiante) ON DELETE CASCADE,
@@ -62,7 +60,8 @@ CREATE TABLE asistencia (
     metodo_asistencia VARCHAR(50) NOT NULL,
     fecha_registro DATETIME NOT NULL DEFAULT (datetime('now','localtime')),
     fecha_modifica DATETIME,
-    estado CHAR(1) NOT NULL DEFAULT 'A'
+    estado CHAR(1) NOT NULL DEFAULT 'A',
+    UNIQUE (id_estudiante, fecha_asistencia)
 );
 
 -- 7. Crear tabla QRS
