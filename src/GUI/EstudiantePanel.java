@@ -119,6 +119,7 @@ private class InicioPanel {
         private JButton showQRButton;
         private JLabel qrImageLabel; // Nuevo JLabel para mostrar el QR
     
+        @SuppressWarnings("unused")
         public AsistenciaPanel() {
             panel = new JPanel() {
                 @Override

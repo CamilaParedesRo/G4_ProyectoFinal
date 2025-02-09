@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.sql.Timestamp;
 import DataAccess.DataHelper;
 
@@ -30,6 +32,8 @@ public class AsistenciaCedula extends DataHelper {
                 // Verificar si ya hay un registro hoy
                 try (PreparedStatement pstmtVerificarAsistencia = conn.prepareStatement(queryVerificarAsistencia)) {
                     pstmtVerificarAsistencia.setInt(1, idEstudiante);
+                    pstmtVerificarAsistencia.setString(2, LocalDate.now().toString()); // Fecha del día actual
+
                     try (ResultSet rsAsistencia = pstmtVerificarAsistencia.executeQuery()) {
                         if (rsAsistencia.next() && rsAsistencia.getInt(1) > 0) {
                             throw new PatException("El estudiante ya registró asistencia hoy.", getClass().getName(), "registrarAsistenciaPorCedula()");
@@ -37,14 +41,16 @@ public class AsistenciaCedula extends DataHelper {
                     }
                 }
 
-                // Insertar nuevo registro de asistencia
+                // Insertar nuevo registro de asistencia con formato correcto
                 try (PreparedStatement pstmtInsertar = conn.prepareStatement(queryInsertar)) {
                     LocalDateTime fechaActual = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                    String fechaFormateada = fechaActual.format(formatter);
 
                     pstmtInsertar.setInt(1, idEstudiante);
-                    pstmtInsertar.setTimestamp(2, Timestamp.valueOf(fechaActual));
+                    pstmtInsertar.setString(2, fechaFormateada); // Fecha de asistencia
                     pstmtInsertar.setString(3, metodoAsistencia);
-                    pstmtInsertar.setTimestamp(4, Timestamp.valueOf(fechaActual));
+                    pstmtInsertar.setString(4, fechaFormateada); // Fecha de registro
                     pstmtInsertar.setString(5, "A"); // Estado activo
 
                     pstmtInsertar.executeUpdate();
@@ -58,5 +64,6 @@ public class AsistenciaCedula extends DataHelper {
         throw new PatException(e.getMessage(), getClass().getName(), "registrarAsistenciaPorCedula()");
     }
 }
+
 
 }
