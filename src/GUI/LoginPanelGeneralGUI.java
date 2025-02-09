@@ -5,16 +5,9 @@ import GUI.Docente.ListaAsistencia;
 import GUI.Estudiante.AsistenciaEstudiante;
 import DataAccess.DataHelper;
 import java.awt.*;
-<<<<<<< HEAD
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-=======
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.*;
->>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
 
 public class LoginPanelGeneralGUI implements Pantalla {
     private JPanel panel;
@@ -22,7 +15,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
 
     public LoginPanelGeneralGUI() {
         // Cargar imagen de fondo
-        backgroundImage = new ImageIcon("C:/Users/elian/G4_ProyectoFinal/src/GUI/Assets/fondo.png").getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("/GUI/Assets/fondo.png")).getImage();
 
         panel = new JPanel() {
             @Override
@@ -115,24 +108,6 @@ public class LoginPanelGeneralGUI implements Pantalla {
                 return;
             }
 
-<<<<<<< HEAD
-            boolean validLogin = false;
-            try {
-                validLogin = validarCredenciales(selectedRole, usuario, contraseña);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(panel, "Error en la autenticación: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
-            }
-
-            if (validLogin) {
-                if ("Docente".equals(selectedRole)) {
-                    System.out.println("Usuario Docente autenticado. Redirigiendo a la lista de asistencia...");
-                    MainApp.mostrarPantalla(new ListaAsistencia().getPanel());
-                } else {
-                    System.out.println("Usuario Estudiante autenticado.");
-                    JOptionPane.showMessageDialog(panel, "Bienvenido, " + usuario + ". Redirección en proceso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    MainApp.mostrarPantalla(new AsistenciaEstudiante().getPanel());
-=======
             try {
                 // Validar credenciales y obtener el ID del profesor si es docente
                 int idUsuario = validarCredenciales(selectedRole, usuario, contraseña);
@@ -151,15 +126,12 @@ public class LoginPanelGeneralGUI implements Pantalla {
                     }
                 } else {
                     JOptionPane.showMessageDialog(panel, "Error: Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
->>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(panel, "Error: No se pudo validar las credenciales.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-<<<<<<< HEAD
-=======
 
         loginButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -172,7 +144,6 @@ public class LoginPanelGeneralGUI implements Pantalla {
                 loginButton.setBackground(new Color(0, 200, 0));
             }
         });
->>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
 
         panel.add(loginButton, gbc);
 
@@ -204,12 +175,8 @@ public class LoginPanelGeneralGUI implements Pantalla {
             query = "SELECT id_profesor FROM profesor WHERE usuario_profesor = ? AND clave_profesor = ?";
             idColumn = "id_profesor";
         } else {
-<<<<<<< HEAD
-            throw new Exception("Rol inválido");
-=======
             JOptionPane.showMessageDialog(panel, "Error: Rol inválido.", "Error", JOptionPane.ERROR_MESSAGE);
             return -1;
->>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
         }
 
         try (Connection conn = DataHelper.openConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -231,7 +198,3 @@ public class LoginPanelGeneralGUI implements Pantalla {
         return panel;
     }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0

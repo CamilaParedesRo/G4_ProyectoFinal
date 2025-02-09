@@ -1,9 +1,5 @@
 package GUI.Docente;
 
-<<<<<<< HEAD
-import GUI.MainApp;
-=======
->>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
 import GUI.Pantalla;
 
 import javax.swing.*;
