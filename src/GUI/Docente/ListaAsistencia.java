@@ -1,19 +1,25 @@
 package GUI.Docente;
 
+<<<<<<< HEAD
 import GUI.MainApp;
+=======
+>>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
 import GUI.Pantalla;
-import GUI.LoginPanelGeneralGUI;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class ListaAsistencia implements Pantalla {
     private JPanel panel;
     private JTable table;
     private DefaultTableModel tableModel;
+
+    // Parámetros de conexión a la base de datos
+    private static final String DB_URL = "jdbc:sqlite:Database/PoliAsistencia.sqlite";
+
 
     public ListaAsistencia() {
         panel = new JPanel(new BorderLayout());
@@ -22,7 +28,7 @@ public class ListaAsistencia implements Pantalla {
         // Enmarcado con título
         panel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(50, 150, 250), 2),
-                "Lista de Estudiantes",
+                "Historial de Asistencia",
                 TitledBorder.CENTER,
                 TitledBorder.TOP,
                 new Font("Times New Roman", Font.BOLD, 20),
@@ -30,21 +36,14 @@ public class ListaAsistencia implements Pantalla {
         ));
 
         // Definir columnas de la tabla
-        String[] columnNames = {"ID", "Nombre", "Código", "Asistencia"};
-
-        // Datos de prueba (luego se reemplazarán con la base de datos)
-        Object[][] data = {
-                {1, "Juan Pérez", "202312345", false},
-                {2, "Ana Gómez", "202398765", false},
-                {3, "Carlos Sánchez", "202354321", false},
-                {4, "María López", "202367890", false}
+        String[] columnNames = {
+            "ID Asistencia", "Nombre Estudiante", "Apellido Estudiante",
+            "Código Único", "Fecha Asistencia", "Método Asistencia"
         };
-
-        // Modelo de tabla para que la columna de asistencia sea editable (checkbox)
-        tableModel = new DefaultTableModel(data, columnNames) {
+        tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
-            public Class<?> getColumnClass(int column) {
-                return column == 3 ? Boolean.class : String.class; // Checkbox en columna "Asistencia"
+            public boolean isCellEditable(int row, int column) {
+                return false; // Deshabilitar la edición de celdas
             }
         };
 
@@ -60,59 +59,31 @@ public class ListaAsistencia implements Pantalla {
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // PANEL DE BOTONES
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        buttonPanel.setBackground(Color.WHITE);
-
-        // BOTÓN "GUARDAR ASISTENCIA"
-        JButton saveButton = new JButton("Guardar Asistencia");
-        saveButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
-        saveButton.setBackground(new Color(0, 150, 0)); // Verde
-        saveButton.setForeground(Color.WHITE);
-        saveButton.setFocusPainted(false);
-
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guardarAsistencia();
-            }
-        });
-
-        // BOTÓN "CERRAR SESIÓN"
-        JButton logoutButton = new JButton("Cerrar Sesión");
-        logoutButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
-        logoutButton.setBackground(new Color(200, 50, 50)); // Rojo
-        logoutButton.setForeground(Color.WHITE);
-        logoutButton.setFocusPainted(false);
-
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Cerrando sesión...");
-                MainApp.mostrarPantalla(new LoginPanelGeneralGUI().getPanel()); // Redirigir a login
-            }
-        });
-
-        // Agregar botones al panel de botones
-        buttonPanel.add(saveButton);
-        buttonPanel.add(logoutButton);
-
-        // Agregar panel de botones en la parte inferior
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+        // Cargar datos desde la vista de la base de datos
+        cargarDatos();
     }
 
-    // Método para guardar asistencia (simulado, en el futuro irá a la base de datos)
-    private void guardarAsistencia() {
-        StringBuilder asistencia = new StringBuilder("Asistencia guardada:\n");
+    // Método para cargar datos desde la vista de la base de datos
+    private void cargarDatos() {
+        String query = "SELECT * FROM vista_historial_asistencia";
+        try (Connection connection = DriverManager.getConnection(DB_URL);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
 
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            String nombre = (String) tableModel.getValueAt(i, 1);
-            boolean presente = (Boolean) tableModel.getValueAt(i, 3);
-            asistencia.append(nombre).append(": ").append(presente ? "Presente" : "Ausente").append("\n");
+            while (resultSet.next()) {
+                int idAsistencia = resultSet.getInt("ID_Asistencia");
+                String nombre = resultSet.getString("Nombre_Estudiante");
+                String apellido = resultSet.getString("Apellido_Estudiante");
+                String codigoUnico = resultSet.getString("Codigo_Unico_Estudiante");
+                Date fechaAsistencia = resultSet.getDate("Fecha_Asistencia");
+                String metodoAsistencia = resultSet.getString("Metodo_Asistencia");
+
+                // Agregar los datos a la tabla
+                tableModel.addRow(new Object[]{idAsistencia, nombre, apellido, codigoUnico, fechaAsistencia, metodoAsistencia});
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(panel, "Error al cargar los datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        JOptionPane.showMessageDialog(panel, asistencia.toString(), "Confirmación", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override

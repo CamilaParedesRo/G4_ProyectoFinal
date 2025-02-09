@@ -5,10 +5,16 @@ import GUI.Docente.ListaAsistencia;
 import GUI.Estudiante.AsistenciaEstudiante;
 import DataAccess.DataHelper;
 import java.awt.*;
+<<<<<<< HEAD
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+=======
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.*;
+>>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
 
 public class LoginPanelGeneralGUI implements Pantalla {
     private JPanel panel;
@@ -109,6 +115,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
                 return;
             }
 
+<<<<<<< HEAD
             boolean validLogin = false;
             try {
                 validLogin = validarCredenciales(selectedRole, usuario, contraseña);
@@ -125,11 +132,47 @@ public class LoginPanelGeneralGUI implements Pantalla {
                     System.out.println("Usuario Estudiante autenticado.");
                     JOptionPane.showMessageDialog(panel, "Bienvenido, " + usuario + ". Redirección en proceso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     MainApp.mostrarPantalla(new AsistenciaEstudiante().getPanel());
+=======
+            try {
+                // Validar credenciales y obtener el ID del profesor si es docente
+                int idUsuario = validarCredenciales(selectedRole, usuario, contraseña);
+
+                if (idUsuario != -1) { // Si las credenciales son válidas
+                    // Guardar el usuario en la clase SesionUsuario
+                    SesionUsuario.setUsuario(usuario);  // Guardamos el usuario autenticado
+
+                    if (selectedRole.equals("Docente")) {
+                        System.out.println("Usuario Docente autenticado. Redirigiendo a la interfaz del docente...");
+                        MainApp.mostrarPantallaDocente(idUsuario);  // Pasar el ID del profesor
+                    } else if (selectedRole.equals("Estudiante")) {
+                        System.out.println("Usuario Estudiante autenticado. Redirigiendo a la interfaz del Estudiante...");
+                        JOptionPane.showMessageDialog(panel, "Bienvenido, " + usuario + ". Redirección en proceso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        MainApp.mostrarPantallaEstudiante();  // Cambia la vista y el tamaño de la ventana
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Error: Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
+>>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
                 }
-            } else {
-                JOptionPane.showMessageDialog(panel, "Error: Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(panel, "Error: No se pudo validar las credenciales.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+<<<<<<< HEAD
+=======
+
+        loginButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                loginButton.setBackground(new Color(0, 180, 0));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                loginButton.setBackground(new Color(0, 200, 0));
+            }
+        });
+>>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
 
         panel.add(loginButton, gbc);
 
@@ -150,16 +193,23 @@ public class LoginPanelGeneralGUI implements Pantalla {
         panel.add(registerButton, gbc);
     }
 
-    private boolean validarCredenciales(String rol, String usuario, String contraseña) throws Exception {
-        boolean esValido = false;
+    private int validarCredenciales(String rol, String usuario, String contraseña) throws Exception {
         String query;
+        String idColumn;
 
         if ("Estudiante".equals(rol)) {
-            query = "SELECT * FROM estudiante WHERE usuario_estudiante = ? AND clave_estudiante = ?";
+            query = "SELECT id_estudiante FROM estudiante WHERE usuario_estudiante = ? AND clave_estudiante = ?";
+            idColumn = "id_estudiante";
         } else if ("Docente".equals(rol)) {
-            query = "SELECT * FROM profesor WHERE usuario_profesor = ? AND clave_profesor = ?";
+            query = "SELECT id_profesor FROM profesor WHERE usuario_profesor = ? AND clave_profesor = ?";
+            idColumn = "id_profesor";
         } else {
+<<<<<<< HEAD
             throw new Exception("Rol inválido");
+=======
+            JOptionPane.showMessageDialog(panel, "Error: Rol inválido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return -1;
+>>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
         }
 
         try (Connection conn = DataHelper.openConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -168,12 +218,12 @@ public class LoginPanelGeneralGUI implements Pantalla {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                esValido = true;
+                return rs.getInt(idColumn); // Devuelve el ID del usuario
             }
         } catch (SQLException e) {
             throw new Exception("Error en la consulta SQL: " + e.getMessage());
         }
-        return esValido;
+        return -1; // Retorna -1 si las credenciales no son válidas
     }
 
     @Override
@@ -181,3 +231,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
         return panel;
     }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c8b0494b5d1edcf0792b9b9dec0c3c2367e57c0
