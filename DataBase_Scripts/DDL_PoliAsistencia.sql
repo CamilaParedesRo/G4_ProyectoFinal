@@ -1,7 +1,7 @@
 -- database: ../Database/PoliAsistencia.sqlite
 /* 
 copyRigth Epn 2025
-Autor: Anahi Pillajo, Camila Paredes, Eliana Pinargote, Adayeli 
+Autor: Anahi Pillajo, Camila Paredes, Eliana Pinargote, Adayely
 Fecha: 20-01-2025
 DDL--Data base para crear las bases principales del sistema PoliAsistencia. 
 */ 
