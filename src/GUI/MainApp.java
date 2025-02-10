@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.*;
 import GUI.Docente.ProfesorPanel;
+import GUI.Estudiante.EstudiantePanel;
 
 public class MainApp {
     private static JFrame frame;

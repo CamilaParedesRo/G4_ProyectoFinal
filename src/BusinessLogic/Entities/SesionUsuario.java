@@ -1,4 +1,4 @@
-package GUI;
+package BusinessLogic.Entities;
 
 public class SesionUsuario {
     private static String usuario;

@@ -9,7 +9,6 @@ DDL--Data base para crear las bases principales del sistema PoliAsistencia.
 PRAGMA foreign_keys = OFF;
 -- 2. Eliminar tablas en el orden correcto
 DROP TABLE IF EXISTS asistencia;
-DROP TABLE IF EXISTS QRS;
 DROP TABLE IF EXISTS estudiante;
 DROP TABLE IF EXISTS profesor;
 DROP TABLE IF EXISTS sexo;
@@ -62,16 +61,6 @@ CREATE TABLE asistencia (
     fecha_modifica DATETIME,
     estado CHAR(1) NOT NULL DEFAULT 'A',
     UNIQUE (id_estudiante, fecha_asistencia)
-);
-
--- 7. Crear tabla QRS
-CREATE TABLE QRS (
-    id_QR INTEGER PRIMARY KEY AUTOINCREMENT,
-    QR VARCHAR(225) UNIQUE NOT NULL,
-    id_estudiante INTEGER NOT NULL REFERENCES estudiante(id_estudiante) ON DELETE CASCADE,
-    fecha_registro DATETIME NOT NULL DEFAULT (datetime('now','localtime')),
-    fecha_modifica DATETIME,
-    estado CHAR(1) NOT NULL DEFAULT 'A'
 );
 
 -- 8. Reactivar las restricciones de claves foráneas

@@ -13,11 +13,11 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 
 
-public class CreacionLecturaBaseDatos {
+public class ObtenerQR {
 
     private String usuario_estudiante; // Usuario logueado
 
-    public CreacionLecturaBaseDatos(String Usuario_estudiante) {
+    public ObtenerQR(String Usuario_estudiante) {
         this.usuario_estudiante = Usuario_estudiante;
     }
 

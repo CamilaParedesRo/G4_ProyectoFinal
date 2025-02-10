@@ -1,7 +1,8 @@
-package GUI;
+package GUI.Estudiante;
 import javax.swing.*;
 import BusinessLogic.BL_estudiante;
 import BusinessLogic.Entities.ModificarEstudiante;
+import BusinessLogic.Entities.SesionUsuario;
 import DataAccess.DTO.DTO_estudiante;
 import java.awt.*;
 public class PerfilPanel {

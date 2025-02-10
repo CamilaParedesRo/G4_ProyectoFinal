@@ -1,8 +1,7 @@
 package GUI;
 
 import javax.swing.*;
-import GUI.Docente.ListaAsistencia;
-import GUI.Estudiante.AsistenciaEstudiante;
+import BusinessLogic.Entities.SesionUsuario;
 import DataAccess.DataHelper;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -13,6 +12,7 @@ public class LoginPanelGeneralGUI implements Pantalla {
     private JPanel panel;
     private Image backgroundImage;
 
+    @SuppressWarnings("unused")
     public LoginPanelGeneralGUI() {
         // Cargar imagen de fondo
         backgroundImage = new ImageIcon(getClass().getResource("/GUI/Assets/fondo.png")).getImage();
