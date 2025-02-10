@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
 import DataAccess.IDAO;
 import DataAccess.DataHelper;
 import DataAccess.DTO.DTO_profesor;
@@ -26,21 +25,21 @@ public class DAO_profesor extends DataHelper implements IDAO<DTO_profesor> {
                     + " FROM Profesor "
                     + " WHERE Estado = 'A' AND IdProfesor = " + id.toString();
         try {
-            Connection conn = openConnection();         // Conectar a la base de datos
-            Statement stmt = conn.createStatement();    // Crear una declaración SQL
-            ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
+            Connection conn = openConnection();         
+            Statement stmt = conn.createStatement();    
+            ResultSet rs = stmt.executeQuery(query);    
             while (rs.next()) {
                 profesor = new DTO_profesor(
-                    rs.getInt(1),           // IdProfesor
-                    rs.getString(2),        // NombreProfesor
-                    rs.getString(3),        // ApellidoProfesor
-                    rs.getString(4),        // CedulaProfesor
-                    rs.getString(5),        // CorreoProfesor
-                    rs.getString(6),        // UsuarioProfesor
-                    rs.getString(7),        // ClaveProfesor
-                    rs.getTimestamp(8).toLocalDateTime(), // FechaRegistro
-                    rs.getTimestamp(9) != null ? rs.getTimestamp(9).toLocalDateTime() : null, // FechaModifica
-                    rs.getString(10).charAt(0) // Estado
+                    rs.getInt(1),           
+                    rs.getString(2),        
+                    rs.getString(3),    
+                    rs.getString(4),        
+                    rs.getString(5),       
+                    rs.getString(6),        
+                    rs.getString(7),        
+                    rs.getTimestamp(8).toLocalDateTime(), 
+                    rs.getTimestamp(9) != null ? rs.getTimestamp(9).toLocalDateTime() : null, 
+                    rs.getString(10).charAt(0) 
                 );
             }
         } catch (SQLException e) {
@@ -58,26 +57,26 @@ public class DAO_profesor extends DataHelper implements IDAO<DTO_profesor> {
                      + " FROM Profesor "
                      + " WHERE Estado = 'A' ";
         try {
-            Connection conn = openConnection();         // Conectar a la base de datos
-            Statement stmt = conn.createStatement();    // Crear una declaración SQL
-            ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
+            Connection conn = openConnection();         
+            Statement stmt = conn.createStatement();    
+            ResultSet rs = stmt.executeQuery(query);    
             while (rs.next()) {
                 DTO_profesor profesor = new DTO_profesor(
-                    rs.getInt(1),           // IdProfesor
-                    rs.getString(2),        // NombreProfesor
-                    rs.getString(3),        // ApellidoProfesor
-                    rs.getString(4),        // CedulaProfesor
-                    rs.getString(5),        // CorreoProfesor
-                    rs.getString(6),        // UsuarioProfesor
-                    rs.getString(7),        // ClaveProfesor
-                    rs.getTimestamp(8).toLocalDateTime(), // FechaRegistro
-                    rs.getTimestamp(9) != null ? rs.getTimestamp(9).toLocalDateTime() : null, // FechaModifica
-                    rs.getString(10).charAt(0) // Estado
+                    rs.getInt(1),         
+                    rs.getString(2),       
+                    rs.getString(3),        
+                    rs.getString(4),       
+                    rs.getString(5),        
+                    rs.getString(6),        
+                    rs.getString(7),        
+                    rs.getTimestamp(8).toLocalDateTime(),
+                    rs.getTimestamp(9) != null ? rs.getTimestamp(9).toLocalDateTime() : null, 
+                    rs.getString(10).charAt(0) 
                 );
                 profesores.add(profesor);
             }
         } catch (SQLException e) {
-            throw e; // Lanzar la excepción en caso de error
+            throw e; 
         }
         return profesores;
     }
@@ -90,7 +89,6 @@ public boolean create(DTO_profesor entity) throws Exception {
     try (Connection conn = openConnection();
         PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-        // Verificar que id_sexo no sea nulo antes de asignarlo
         if (entity.getId_sexo() == null) {
             throw new Exception("El campo id_sexo no puede ser nulo.");
         }
@@ -98,7 +96,7 @@ public boolean create(DTO_profesor entity) throws Exception {
         pstmt.setString(1, entity.getNombreProfesor());
         pstmt.setString(2, entity.getApellidoProfesor());
         pstmt.setString(3, entity.getCedulaProfesor());
-        pstmt.setInt(4, entity.getId_sexo()); // Se añadió id_sexo aquí
+        pstmt.setInt(4, entity.getId_sexo()); 
         pstmt.setString(5, entity.getCorreoProfesor());
         pstmt.setString(6, entity.getUsuarioProfesor());
         pstmt.setString(7, entity.getClaveProfesor());
@@ -108,7 +106,7 @@ public boolean create(DTO_profesor entity) throws Exception {
     } catch (SQLException e) {
         throw e;
     } finally {
-            closeConnection(); // Cerrar la conexión después de usarla
+            closeConnection(); 
         }
     }
 
@@ -116,30 +114,28 @@ public boolean create(DTO_profesor entity) throws Exception {
     public boolean update(DTO_profesor entity) throws Exception {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        
-        // Actualizar NombreProfesor, ApellidoProfesor, CorreoProfesor, UsuarioProfesor, ClaveProfesor y FechaModifica
+
         String query = " UPDATE Profesor SET nombre_profesor = ?, apellido_profesor = ?, correo_profesor = ?, "
                     + " usuario_profesor = ?, clave_profesor = ?, fecha_modifica = ? "
                     + " WHERE id_profesor = ? ";
         try {
-            Connection conn = openConnection(); // Abrir la conexión con la base de datos
+            Connection conn = openConnection(); 
             PreparedStatement pstmt = conn.prepareStatement(query);
             
-            // Asignar los valores a los parámetros de la consulta
-            pstmt.setString(1, entity.getNombreProfesor());   // NombreProfesor
-            pstmt.setString(2, entity.getApellidoProfesor()); // ApellidoProfesor
-            pstmt.setString(3, entity.getCorreoProfesor());   // CorreoProfesor
-            pstmt.setString(4, entity.getUsuarioProfesor());  // UsuarioProfesor
-            pstmt.setString(5, entity.getClaveProfesor());    // ClaveProfesor
-            pstmt.setString(6, dtf.format(now));              // FechaModifica
-            pstmt.setInt(7, entity.getIdProfesor());          // IdProfesor (condición WHERE)
+            pstmt.setString(1, entity.getNombreProfesor());   
+            pstmt.setString(2, entity.getApellidoProfesor()); 
+            pstmt.setString(3, entity.getCorreoProfesor());   
+            pstmt.setString(4, entity.getUsuarioProfesor());  
+            pstmt.setString(5, entity.getClaveProfesor());    
+            pstmt.setString(6, dtf.format(now));              
+            pstmt.setInt(7, entity.getIdProfesor());          
             
-            pstmt.executeUpdate(); // Ejecutar la consulta de actualización
-            return true; // Retornar true si la operación fue exitosa
+            pstmt.executeUpdate(); 
+            return true; 
         } catch (SQLException e) {
-            throw e; // Lanzar la excepción en caso de error
+            throw e; 
         } finally {
-            closeConnection(); // Cerrar la conexión después de usarla
+            closeConnection(); 
         }
     }
 
@@ -149,10 +145,10 @@ public boolean create(DTO_profesor entity) throws Exception {
         try {
             Connection conn = openConnection(); // Abrir la conexión con la base de datos
             PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, "X"); // Cambiar el estado a inactivo
-            pstmt.setInt(2, id);     // IdProfesor (condición WHERE)
-            pstmt.executeUpdate();   // Ejecutar la consulta de actualización
-            return true; // Retornar true si la operación fue exitosa
+            pstmt.setString(1, "X"); 
+            pstmt.setInt(2, id);     
+            pstmt.executeUpdate();   
+            return true; 
         } catch (SQLException e) {
             throw new PatException(e.getMessage(), getClass().getName(), "delete()");
         }
@@ -162,15 +158,15 @@ public boolean create(DTO_profesor entity) throws Exception {
         String query = " SELECT COUNT(*) TotalReg FROM Profesor "
                      + " WHERE Estado = 'A' ";
         try {
-            Connection conn = openConnection();         // Conectar a la base de datos
-            Statement stmt = conn.createStatement();    // Crear una declaración SQL
-            ResultSet rs = stmt.executeQuery(query);    // Ejecutar la consulta
+            Connection conn = openConnection();         
+            Statement stmt = conn.createStatement();   
+            ResultSet rs = stmt.executeQuery(query);    
             while (rs.next()) {
-                return rs.getInt(1); // Retornar el total de registros
+                return rs.getInt(1); 
             }
         } catch (SQLException e) {
-            throw e; // Lanzar la excepción en caso de error
+            throw e; 
         }
-        return 0; // Retornar 0 si no hay registros
+        return 0; 
     }
 }

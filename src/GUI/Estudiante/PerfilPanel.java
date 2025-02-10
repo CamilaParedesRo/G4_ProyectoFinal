@@ -21,12 +21,12 @@ public class PerfilPanel {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon imagenFondo = new ImageIcon("src\\GUI\\Resource\\Fondo.jpg"); // Cambia la ruta si es necesario
+                ImageIcon imagenFondo = new ImageIcon("src\\GUI\\Resource\\Fondo.jpg"); 
                 g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
 
-        panel.setLayout(new GridBagLayout()); // Diseño flexible y centrado
+        panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 10, 5, 10);
         gbc.gridx = 0;

@@ -15,10 +15,7 @@ public class RegistrarUsuarioGUI implements Pantalla {
 
     @SuppressWarnings("unused")
     public RegistrarUsuarioGUI() {
-        // Cargar imagen de fondo
         backgroundImage = new ImageIcon("C:/Users/elian/G4_ProyectoFinal/src/GUI/Assets/fondo.png").getImage();
-
-        // Crear panel con fondo
         panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -68,7 +65,6 @@ public class RegistrarUsuarioGUI implements Pantalla {
         JPasswordField passField = new JPasswordField(15);
         panel.add(passField, gbc);
 
-        // ComboBox para seleccionar el rol (Estudiante o Docente)
         addField("Rol:", gbc, panel);
         String[] roles = {"Estudiante", "Docente"};
         JComboBox<String> roleComboBox = new JComboBox<>(roles);
@@ -84,7 +80,6 @@ public class RegistrarUsuarioGUI implements Pantalla {
         registerButton.setForeground(Color.WHITE);
         registerButton.setFocusPainted(false);
 
-        // Evento del botón de registro con validaciones
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -94,9 +89,8 @@ public class RegistrarUsuarioGUI implements Pantalla {
                 String correo = correoField.getText().trim();
                 String usuario = userField.getText().trim();
                 String clave = new String(passField.getPassword()).trim();
-                String rolSeleccionado = (String) roleComboBox.getSelectedItem(); // Obtener el rol seleccionado
+                String rolSeleccionado = (String) roleComboBox.getSelectedItem(); 
 
-                // Validar que ningún campo esté vacío
                 if (nombre.isEmpty() || apellido.isEmpty() || cedula.isEmpty() ||
                         correo.isEmpty() || usuario.isEmpty() || clave.isEmpty()) {
                     JOptionPane.showMessageDialog(panel, "Error: Todos los campos deben ser completados.", "Error",
@@ -108,17 +102,15 @@ public class RegistrarUsuarioGUI implements Pantalla {
                 try {
                     if (rolSeleccionado.equals("Estudiante")) {
                         String codigoUnico = JOptionPane.showInputDialog("Ingrese el código único del estudiante:").trim();
-                        int idSexo = 1; // Asigna un valor predeterminado o reemplázalo con un ComboBox
+                        int idSexo = 1;
 
-                        // Crear objeto DTO para Estudiante
                         DTO_estudiante estudianteDTO = new DTO_estudiante(nombre, apellido, cedula, codigoUnico, idSexo, correo, usuario, clave);
                         DAO_estudiante estudianteDAO = new DAO_estudiante();
 
                         registrado = estudianteDAO.create(estudianteDTO);
                     } else if (rolSeleccionado.equals("Docente")) {
-                        int idSexo = 1; // Asigna un valor predeterminado o reemplázalo con un ComboBox
+                        int idSexo = 1; 
 
-                        // Crear objeto DTO para Docente
                         DTO_profesor profesorDTO = new DTO_profesor(nombre, apellido, cedula, idSexo, correo, usuario, clave);
                         DAO_profesor profesorDAO = new DAO_profesor();
 
@@ -127,7 +119,7 @@ public class RegistrarUsuarioGUI implements Pantalla {
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, "Error en la base de datos: " + ex.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace(); // Para depuración
+                    ex.printStackTrace(); 
                 }
 
                 if (registrado) {
@@ -150,7 +142,6 @@ public class RegistrarUsuarioGUI implements Pantalla {
         backButton.setForeground(Color.WHITE);
         backButton.setFocusPainted(false);
 
-        // Evento para volver al login
         backButton.addActionListener(e -> {
             System.out.println("Volviendo al Login...");
             MainApp.mostrarPantalla(new LoginPanelGeneralGUI().getPanel());
@@ -159,7 +150,6 @@ public class RegistrarUsuarioGUI implements Pantalla {
         panel.add(backButton, gbc);
     }
 
-    // Método auxiliar para agregar etiquetas con alineación correcta
     private void addField(String labelText, GridBagConstraints gbc, JPanel panel) {
         gbc.gridx = 0;
         gbc.gridy++;

@@ -6,8 +6,8 @@ import DataAccess.DAO.DAO_asistencia;
 import DataAccess.DTO.DTO_asistencia;
 
 public class BL_asistencia {
-    private DTO_asistencia asistencia;       // cache
-   private DAO_asistencia sDAO = new DAO_asistencia();
+    private DTO_asistencia asistencia;   
+    private DAO_asistencia sDAO = new DAO_asistencia();
 
    public BL_asistencia(){}
 

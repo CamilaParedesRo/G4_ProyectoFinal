@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public abstract class DataHelper {
-    // Ruta de la base de datos SQLite
+
     private static final String DB_URL = "jdbc:sqlite:DataBase/PoliAsistencia.sqlite";
     private static Connection conn = null;
 
@@ -14,7 +14,6 @@ public abstract class DataHelper {
     public static synchronized Connection openConnection() throws SQLException {
         try {
             if (conn == null || conn.isClosed()) {
-                // Cargar el driver de SQLite
                 Class.forName("org.sqlite.JDBC");
 
                 System.out.println("Intentando conectar a la base de datos SQLite en: " + DB_URL);
@@ -33,7 +32,7 @@ public abstract class DataHelper {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
-                conn = null; // Reiniciar la conexión
+                conn = null; 
                 System.out.println("Conexión a SQLite cerrada correctamente.");
             }
         } catch (SQLException e) {

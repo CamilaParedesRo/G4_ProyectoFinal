@@ -13,34 +13,31 @@ import java.sql.*;
 public class ProfesorPanel implements Pantalla {
     private JPanel panel;
     private JTabbedPane tabbedPane;
-    private int profesorId; // Variable para almacenar el ID del profesor
+    private int profesorId; 
 
-    private static final String DB_URL = "jdbc:sqlite:Database/PoliAsistencia.sqlite"; // Ruta a la base de datos
+    private static final String DB_URL = "jdbc:sqlite:Database/PoliAsistencia.sqlite";
 
     public ProfesorPanel(int profesorId) {
-        this.profesorId = profesorId; // Asignar el ID del profesor
+        this.profesorId = profesorId; 
         panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.decode("#F5F5F5")); // Fondo suave
+        panel.setBackground(Color.decode("#F5F5F5")); 
 
         tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
         tabbedPane.setBackground(Color.decode("#E3F2FD"));
         tabbedPane.setFont(new Font("Sans-Serif", Font.BOLD, 14));
 
-        // Pestañas
         tabbedPane.addTab("Inicio", new InicioPanel().getPanel());
-        tabbedPane.addTab("Listado de Estudiantes", new ListaEstudiantesPanel().getPanel());// Dentro del constructor de ProfesorPanel
+        tabbedPane.addTab("Listado de Estudiantes", new ListaEstudiantesPanel().getPanel());
         tabbedPane.addTab("Historial de Asistencia", new ListaAsistencia().getPanel());
         tabbedPane.addTab("Perfil", new InformacionProfesorPanel().getPanel());
 
         // Crear el botón de cerrar sesión
         JButton logoutButton = createLogoutButton();
 
-        // Panel superior con el botón de cerrar sesión
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(Color.decode("#F5F5F5"));
         topPanel.add(logoutButton, BorderLayout.EAST);
 
-        // Agregar el panel superior y el tabbedPane al panel principal
         panel.add(topPanel, BorderLayout.NORTH);
         panel.add(tabbedPane, BorderLayout.CENTER);
     }
@@ -57,21 +54,19 @@ public class ProfesorPanel implements Pantalla {
         logoutButton.setBackground(Color.RED);
         logoutButton.setForeground(Color.WHITE);
         logoutButton.setFocusPainted(false);
-        logoutButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Margen interno
-        logoutButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambiar el cursor al pasar sobre el botón
+        logoutButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); 
+        logoutButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 
-        // Efecto de cambio de color al pasar el ratón
         logoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                logoutButton.setBackground(new Color(255, 80, 80)); // Rojo más claro
+                logoutButton.setBackground(new Color(255, 80, 80)); 
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                logoutButton.setBackground(Color.RED); // Volver al color original
+                logoutButton.setBackground(Color.RED); 
             }
         });
 
-        // Acción al hacer clic
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,7 +101,6 @@ public class ProfesorPanel implements Pantalla {
             panel = new BackgroundPanel("src\\GUI\\Resource\\EPN.jpg"); // Cambiar ruta de la imagen
             panel.setLayout(new GridBagLayout());
 
-            // Crear un panel interno para resaltar el texto
             JPanel textPanel = new JPanel();
             textPanel.setBackground(Color.WHITE);
             textPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -115,11 +109,11 @@ public class ProfesorPanel implements Pantalla {
             ));
 
             JLabel label = new JLabel("Bienvenido al sistema de gestión de asistencia");
-            label.setFont(new Font("Serif", Font.BOLD, 24)); // Fuente más grande
-            label.setForeground(Color.BLACK); // Letras negras
+            label.setFont(new Font("Serif", Font.BOLD, 24));
+            label.setForeground(Color.BLACK); 
             textPanel.add(label);
 
-            panel.add(textPanel); // Agregar el panel interno al panel principal
+            panel.add(textPanel); 
         }
 
         public JPanel getPanel() {
@@ -134,7 +128,7 @@ public class ProfesorPanel implements Pantalla {
         private DefaultTableModel tableModel;
 
         public ListaEstudiantesPanel() {
-            panel = new BackgroundPanel("src\\GUI\\Resource\\InicioPanel.png"); // Cambiar ruta de la imagen
+            panel = new BackgroundPanel("src\\GUI\\Resource\\InicioPanel.png"); 
             panel.setLayout(new BorderLayout());
 
             // Columnas de la tabla
@@ -142,7 +136,7 @@ public class ProfesorPanel implements Pantalla {
             tableModel = new DefaultTableModel(columnNames, 0) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
-                    return false; // Tabla no editable
+                    return false; 
                 }
             };
 
@@ -150,7 +144,7 @@ public class ProfesorPanel implements Pantalla {
             table.setFont(new Font("Serif", Font.PLAIN, 14));
             table.setRowHeight(25);
             table.getTableHeader().setFont(new Font("Serif", Font.BOLD, 14));
-            table.getTableHeader().setBackground(Color.decode("#64B5F6")); // Azul para el encabezado
+            table.getTableHeader().setBackground(Color.decode("#64B5F6")); 
             table.getTableHeader().setForeground(Color.WHITE);
 
             JScrollPane scrollPane = new JScrollPane(table);
@@ -161,7 +155,7 @@ public class ProfesorPanel implements Pantalla {
         }
 
         private void cargarEstudiantes() {
-            String query = "SELECT * FROM vista_estudiantes"; // Usamos la vista
+            String query = "SELECT * FROM vista_estudiantes"; 
             try (Connection connection = DriverManager.getConnection(DB_URL);
                  Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery(query)) {
@@ -194,13 +188,13 @@ public class ProfesorPanel implements Pantalla {
         private JPanel panel;
 
         public InformacionProfesorPanel() {
-            panel = new BackgroundPanel("src\\GUI\\Resource\\InformacionProfesor.png"); // Cambiar ruta de la imagen
-            panel.setLayout(new GridBagLayout()); // Usamos GridBagLayout para centrar el contenido
+            panel = new BackgroundPanel("src\\GUI\\Resource\\InformacionProfesor.png"); 
+            panel.setLayout(new GridBagLayout()); 
 
             JPanel infoPanel = new JPanel();
-            infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS)); // Diseño vertical
+            infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS)); 
             infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-            infoPanel.setBackground(new Color(255, 255, 255, 230)); // Fondo blanco sólido con menos transparencia
+            infoPanel.setBackground(new Color(255, 255, 255, 230)); 
 
             cargarInformacionProfesor(infoPanel);
 
@@ -214,8 +208,8 @@ public class ProfesorPanel implements Pantalla {
             try (Connection connection = DriverManager.getConnection(DB_URL);
                  PreparedStatement statement = connection.prepareStatement(query)) {
 
-                // Asignamos el ID del profesor autenticado al parámetro de la consulta
-                statement.setInt(1, profesorId); // profesorId es la variable que almacena el ID del profesor autenticado
+                
+                statement.setInt(1, profesorId);
 
                 ResultSet resultSet = statement.executeQuery();
 
@@ -238,10 +232,10 @@ public class ProfesorPanel implements Pantalla {
 
                     for (JLabel label : labels) {
                         label.setFont(new Font("Serif", Font.PLAIN, 16));
-                        label.setForeground(Color.BLACK); // Cambiamos el color de las letras a negro
+                        label.setForeground(Color.BLACK); 
                         label.setAlignmentX(Component.LEFT_ALIGNMENT);
                         infoPanel.add(label);
-                        infoPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Espacio entre etiquetas
+                        infoPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
                     }
                 } else {
                     JLabel noInfo = new JLabel("No se encontró información del profesor.");
@@ -259,7 +253,6 @@ public class ProfesorPanel implements Pantalla {
         }
     }
 
-    // Clase para manejar el fondo del panel
     private class BackgroundPanel extends JPanel {
         private Image backgroundImage;
 

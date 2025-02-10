@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 import DataAccess.DataHelper;
 
     public class Login {
@@ -66,50 +65,4 @@ import DataAccess.DataHelper;
             return encontrado;
         }
     
-        
-        public static void main(String[] args) {
-            Scanner sc = new Scanner(System.in);
-            Login sistema = new Login();
-            String rol = "";
-            
-            while (!rol.equals("estudiante") && !rol.equals("profesor")) {
-                System.out.println("Seleccione su rol:");
-                System.out.println("1. Estudiante");
-                System.out.println("2. Profesor");
-                System.out.print("Opción: ");
-                
-                if (!sc.hasNextInt()) {
-                    System.out.println("Error: Ingrese un número válido.");
-                    sc.next();
-                    continue;
-                }
-                
-                int opcion = sc.nextInt();
-                sc.nextLine(); // Consumir la línea extra
-                
-                if (opcion == 1) {
-                    rol = "estudiante";
-                } else if (opcion == 2) {
-                    rol = "profesor";
-                } else {
-                    System.out.println("Opción inválida. Intente de nuevo.");
-                }
-            }
-
-            boolean inicioExitoso = false;
-            while (!inicioExitoso) {
-                System.out.print("Ingrese su usuario: ");
-                String usuario = sc.nextLine().trim();
-                System.out.print("Ingrese su contraseña: ");
-                String contraseña = sc.nextLine().trim();
-                
-                inicioExitoso = sistema.iniciarSesion(rol, usuario, contraseña);
-                if (!inicioExitoso) {
-                    System.out.println("No se pudo iniciar sesión. Intente de nuevo.");
-                }
-            }
-            
-            System.out.println("Inicio de sesión exitoso.");
-            sc.close();
-        }
     }

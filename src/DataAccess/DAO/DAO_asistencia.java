@@ -91,23 +91,23 @@ public class DAO_asistencia extends DataHelper implements IDAO<DTO_asistencia> {
     }
 
     @Override
-public boolean update(DTO_asistencia entity) throws Exception {
-    LocalDateTime now = LocalDateTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    String fechaFormateada = now.format(formatter);
+    public boolean update(DTO_asistencia entity) throws Exception {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String fechaFormateada = now.format(formatter);
     
-    String query = "UPDATE asistencia SET metodo_asistencia = ?, fecha_modifica = ? WHERE id_asistencia = ?";
-    try (Connection conn = openConnection();
-         PreparedStatement pstmt = conn.prepareStatement(query)) {
-        pstmt.setString(1, entity.getMetodoAsistencia());
-        pstmt.setString(2, fechaFormateada); // Guardar en formato de texto en vez de timestamp
-        pstmt.setInt(3, entity.getIdAsistencia());
-        pstmt.executeUpdate();
-        return true;
-    } catch (SQLException e) {
-        throw new PatException(e.getMessage(), getClass().getName(), "update()");
+        String query = "UPDATE asistencia SET metodo_asistencia = ?, fecha_modifica = ? WHERE id_asistencia = ?";
+        try (Connection conn = openConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, entity.getMetodoAsistencia());
+            pstmt.setString(2, fechaFormateada); // Guardar en formato de texto en vez de timestamp
+            pstmt.setInt(3, entity.getIdAsistencia());
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            throw new PatException(e.getMessage(), getClass().getName(), "update()");
+        }
     }
-}
 
 
     @Override

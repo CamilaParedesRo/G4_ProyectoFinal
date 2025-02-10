@@ -19,14 +19,13 @@ public class ListaAsistencia implements Pantalla {
     private JTextField fechaInicioField;
     private JTextField fechaFinField;
 
-    // Parámetros de conexión a la base de datos
     private static final String DB_URL = "jdbc:sqlite:Database/PoliAsistencia.sqlite";
 
+    @SuppressWarnings("unused")
     public ListaAsistencia() {
         panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
 
-        // Enmarcado con título
         panel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(50, 150, 250), 2),
                 "Historial de Asistencia",
@@ -36,7 +35,6 @@ public class ListaAsistencia implements Pantalla {
                 new Color(50, 150, 250)
         ));
 
-        // Definir columnas de la tabla
         String[] columnNames = {
             "ID Asistencia", "Nombre Estudiante", "Apellido Estudiante",
             "Código Único", "Fecha Asistencia", "Método Asistencia"
@@ -48,7 +46,6 @@ public class ListaAsistencia implements Pantalla {
             }
         };
 
-        // Crear la tabla
         table = new JTable(tableModel);
         table.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         table.setRowHeight(30);
@@ -60,12 +57,12 @@ public class ListaAsistencia implements Pantalla {
         TableColumn column;
         for (int i = 0; i < table.getColumnCount(); i++) {
             column = table.getColumnModel().getColumn(i);
-            if (i == 0) { // ID Asistencia
-                column.setPreferredWidth(80); // Ancho más pequeño
+            if (i == 0) { 
+                column.setPreferredWidth(80); 
             } else if (i == 4) { // Fecha Asistencia
-                column.setPreferredWidth(200); // Ancho más grande
+                column.setPreferredWidth(200); 
             } else {
-                column.setPreferredWidth(150); // Ancho por defecto para otras columnas
+                column.setPreferredWidth(150); 
             }
         }
 
@@ -106,7 +103,6 @@ public class ListaAsistencia implements Pantalla {
 
     // Método para cargar datos desde la vista de la base de datos
     private void cargarDatos(String fechaInicio, String fechaFin) {
-        // Construir la consulta SQL con el filtro de fechas
         String query = "SELECT * FROM vista_historial_asistencia WHERE 1=1";
         if (fechaInicio != null && !fechaInicio.isEmpty()) {
             query += " AND DATE(Fecha_Asistencia) >= '" + fechaInicio + "'";
@@ -116,7 +112,6 @@ public class ListaAsistencia implements Pantalla {
         }
         query += " ORDER BY ID_Asistencia";
 
-        // Limpiar la tabla antes de cargar nuevos datos
         tableModel.setRowCount(0);
 
         try (Connection connection = DriverManager.getConnection(DB_URL);
@@ -129,7 +124,6 @@ public class ListaAsistencia implements Pantalla {
                 String apellido = resultSet.getString("Apellido_Estudiante");
                 String codigoUnico = resultSet.getString("Codigo_Unico_Estudiante");
 
-                // Obtener fecha con hora correctamente
                 Timestamp timestamp = resultSet.getTimestamp("Fecha_Asistencia");
                 LocalDateTime fechaAsistencia = timestamp.toLocalDateTime();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -137,7 +131,6 @@ public class ListaAsistencia implements Pantalla {
 
                 String metodoAsistencia = resultSet.getString("Metodo_Asistencia");
 
-                // Agregar los datos a la tabla con la fecha y hora formateada
                 tableModel.addRow(new Object[]{idAsistencia, nombre, apellido, codigoUnico, fechaFormateada, metodoAsistencia});
             }
         } catch (SQLException e) {
@@ -150,20 +143,18 @@ public class ListaAsistencia implements Pantalla {
         String fechaInicio = fechaInicioField.getText().trim();
         String fechaFin = fechaFinField.getText().trim();
 
-        // Validar el formato de las fechas
         try {
             if (!fechaInicio.isEmpty()) {
-                LocalDateTime.parse(fechaInicio + "T00:00:00"); // Validar formato
+                LocalDateTime.parse(fechaInicio + "T00:00:00"); 
             }
             if (!fechaFin.isEmpty()) {
-                LocalDateTime.parse(fechaFin + "T00:00:00"); // Validar formato
+                LocalDateTime.parse(fechaFin + "T00:00:00"); 
             }
         } catch (DateTimeParseException e) {
             JOptionPane.showMessageDialog(panel, "Formato de fecha inválido. Use yyyy-MM-dd.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Cargar datos con el filtro aplicado
         cargarDatos(fechaInicio, fechaFin);
     }
 

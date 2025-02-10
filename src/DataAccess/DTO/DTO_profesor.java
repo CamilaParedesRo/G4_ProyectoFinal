@@ -1,12 +1,9 @@
 package DataAccess.DTO;
 
-
-
 import java.time.LocalDateTime;
 
 public class DTO_profesor {
 
-    // Atributos
     private int idProfesor;
     private String nombreProfesor;
     private String apellidoProfesor;
@@ -19,10 +16,8 @@ public class DTO_profesor {
     private LocalDateTime fechaModifica;
     private char estado;
 
-    // Constructor vacío
     public DTO_profesor() { }
 
-    // Constructor con todos los campos
     public DTO_profesor(int idProfesor, String nombreProfesor, String apellidoProfesor, String cedulaProfesor,
                         String correoProfesor, String usuarioProfesor, String claveProfesor,
                         LocalDateTime fechaRegistro, LocalDateTime fechaModifica, char estado) {
@@ -38,23 +33,20 @@ public class DTO_profesor {
         this.estado = estado;
     }
 
-    // Constructor que omite campos con valores por defecto
     public DTO_profesor(String nombreProfesor, String apellidoProfesor, String cedulaProfesor,
                     Integer id_sexo, String correoProfesor, String usuarioProfesor, String claveProfesor) {
         this.nombreProfesor = nombreProfesor;
         this.apellidoProfesor = apellidoProfesor;
         this.cedulaProfesor = cedulaProfesor;
-        this.id_sexo = id_sexo; // Se añade este campo
+        this.id_sexo = id_sexo; 
         this.correoProfesor = correoProfesor;
         this.usuarioProfesor = usuarioProfesor;
         this.claveProfesor = claveProfesor;
-        this.fechaRegistro = LocalDateTime.now(); // Fecha por defecto
-        this.fechaModifica = null; // Fecha de modificación (inicialmente null)
-        this.estado = 'A'; // Estado activo por defecto
+        this.fechaRegistro = LocalDateTime.now(); 
+        this.fechaModifica = null; 
+        this.estado = 'A'; 
     }
 
-
-    // Getters y Setters
     public int getIdProfesor() {
         return idProfesor;
     }
@@ -143,7 +135,6 @@ public class DTO_profesor {
         this.estado = estado;
     }
 
-    // Método toString para representación en texto
     @Override
     public String toString() {
         return getClass().getName()

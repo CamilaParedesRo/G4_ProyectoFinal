@@ -17,11 +17,8 @@ public class DTO_estudiante {
     private LocalDateTime fechaModifica;
     private char estado;
     
-
-    // Constructor vacío
     public DTO_estudiante() {}
 
-    // Constructor para registro de estudiantes
     public DTO_estudiante(String nombre, String apellido, String cedula, String codigoUnico, int id_sexo, 
                         String correo, String usuario, String clave) {
         this.nombreEstudiante = nombre;
@@ -33,10 +30,9 @@ public class DTO_estudiante {
         this.usuarioEstudiante = usuario;
         this.claveEstudiante = clave;
         this.fechaRegistro = LocalDateTime.now();
-        this.estado = 'A'; // Estado activo por defecto
+        this.estado = 'A'; 
     }
 
-    // Constructor completo para la base de datos
     public DTO_estudiante(int idEstudiante, String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
                         String codigoUnicoEstudiante, int id_sexo, String correoEstudiante, String usuarioEstudiante, 
                         String claveEstudiante, LocalDateTime fechaRegistro, LocalDateTime fechaModifica, char estado) {
@@ -54,7 +50,6 @@ public class DTO_estudiante {
         this.estado = estado;
     }
 
-    // Constructor adicional para búsqueda por cédula
     public DTO_estudiante(String nombreEstudiante, String apellidoEstudiante, String cedulaEstudiante,
                         String correoEstudiante, String usuarioEstudiante, String claveEstudiante, Integer id_sexo) {
         this.nombreEstudiante = nombreEstudiante;
@@ -68,7 +63,6 @@ public class DTO_estudiante {
         this.estado = 'A';
     }
 
-    // Getters y Setters
     public int getIdEstudiante() { return idEstudiante; }
     public void setIdEstudiante(int idEstudiante) { this.idEstudiante = idEstudiante; }
 
@@ -106,8 +100,6 @@ public class DTO_estudiante {
     public void setEstado(char estado) { this.estado = estado; }
 
 
-
-    // Método toString para depuración
     @Override
     public String toString() {
         return "DTO_estudiante{" +

@@ -15,7 +15,6 @@ public class EstudiantePanel implements Pantalla {
         panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
 
-        // Crear un panel superior para el botón de cerrar sesión
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(Color.WHITE);
         topPanel.add(createLogoutButton(), BorderLayout.EAST);
@@ -48,13 +47,12 @@ private class InicioPanel {
                 g.drawImage(imagenFondo.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
-        panel.setLayout(new GridBagLayout()); // Centrar el texto en el panel
-        
+        panel.setLayout(new GridBagLayout());
 
         // Crear un panel para el texto con borde
         JPanel textPanel = new JPanel();
-        textPanel.setBackground(new Color(255, 255, 255, 180)); // Blanco con transparencia
-        textPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3)); // Borde negro de 3 px
+        textPanel.setBackground(new Color(255, 255, 255, 180)); 
+        textPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3)); 
         textPanel.setLayout(new BorderLayout()); 
 
         JLabel texto = new JLabel("Bienvenido al sistema de gestión para estudiantes.", SwingConstants.CENTER);
@@ -63,7 +61,7 @@ private class InicioPanel {
         textPanel.add(texto, BorderLayout.CENTER);
 
         // Ajustar tamaño del panel de texto
-        textPanel.setPreferredSize(new Dimension(500, 100)); // Ajusta el tamaño según necesites
+        textPanel.setPreferredSize(new Dimension(500, 100)); 
 
         // Agregar textPanel al panel principal
         panel.add(textPanel);

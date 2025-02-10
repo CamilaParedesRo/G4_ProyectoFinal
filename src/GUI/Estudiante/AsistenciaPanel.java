@@ -18,7 +18,7 @@ public class AsistenciaPanel {
     private JButton continueButton;
     private JLabel statusLabel; 
     private JButton showQRButton;
-    private JLabel qrImageLabel; // Nuevo JLabel para mostrar el QR
+    private JLabel qrImageLabel; 
 
     @SuppressWarnings("unused")
     public AsistenciaPanel() {
@@ -77,7 +77,7 @@ public class AsistenciaPanel {
         showQRButton.setVisible(false);
 
         gbc.gridy = 7;
-        qrImageLabel = new JLabel(); // JLabel para la imagen del QR
+        qrImageLabel = new JLabel(); 
         panel.add(qrImageLabel, gbc);
         qrImageLabel.setVisible(false);
 
@@ -104,8 +104,6 @@ public class AsistenciaPanel {
     continueButton.addActionListener(e -> registrarAsistencia());
     showQRButton.addActionListener(e -> mostrarQR());
 
-
-    // Agregar DocumentListener al campo codigoQRField para detectar cambios
         codigoQRField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) { validarQRIngresado(); }
@@ -163,7 +161,7 @@ public class AsistenciaPanel {
                 } catch (Exception ex) {
                     statusLabel.setText("Error: " + ex.getMessage());
                     statusLabel.setForeground(Color.RED);
-                    ex.printStackTrace(); // Muestra errores detallados en la consola
+                    ex.printStackTrace(); 
                 }
             } else {
                 statusLabel.setText(" ");

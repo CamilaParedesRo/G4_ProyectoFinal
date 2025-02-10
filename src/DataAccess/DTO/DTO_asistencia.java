@@ -16,15 +16,12 @@ public class DTO_asistencia {
     private LocalDateTime fecha_modifica;
     private char estado;
 
-    // Constructor 
     public DTO_asistencia() {}
 
-    // Constructor básico
     public DTO_asistencia(String metodoAsistencia) {
         this.metodoAsistencia = metodoAsistencia;
     }
 
-    // Constructor con todos los atributos
     public DTO_asistencia(int idAsistencia, int idEstudiante, LocalDateTime fechaAsistencia,
                           String metodoAsistencia, LocalDateTime fecha_registro,
                           LocalDateTime fecha_modifica, char Estado ) {  
@@ -37,7 +34,6 @@ public class DTO_asistencia {
         this.estado = Estado;
     }
 
-    // Getters y Setters
     public int getIdAsistencia() {
         return idAsistencia;
     }
@@ -125,7 +121,6 @@ public class DTO_asistencia {
         this.CodigoEstudiante = codigoEstudiante;
     }
 
-    // Método toString para representación en texto
     @Override
     public String toString() {
         return getClass().getName()

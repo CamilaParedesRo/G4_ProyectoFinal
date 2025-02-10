@@ -10,7 +10,6 @@ public class DTO_sexo {
     private LocalDateTime fecha_modifica;
     private String estado;
 
-    // Constructor
     public DTO_sexo() {}
 
     public DTO_sexo(String nombreSexo) {
@@ -26,7 +25,6 @@ public class DTO_sexo {
         this.estado = estado;
     }
 
-    // Getters and Setters
     public Integer getId_sexo() {
         return id_sexo;
     }
@@ -67,7 +65,6 @@ public class DTO_sexo {
         this.estado = estado;
     }
 
-    // Método toString para representación en texto
     @Override
     public String toString() {
         return getClass().getName()

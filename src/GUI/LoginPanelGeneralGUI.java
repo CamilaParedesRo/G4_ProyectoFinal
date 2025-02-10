@@ -14,7 +14,6 @@ public class LoginPanelGeneralGUI implements Pantalla {
 
     @SuppressWarnings("unused")
     public LoginPanelGeneralGUI() {
-        // Cargar imagen de fondo
         backgroundImage = new ImageIcon(getClass().getResource("/GUI/Assets/fondo.png")).getImage();
 
         panel = new JPanel() {
@@ -96,33 +95,29 @@ public class LoginPanelGeneralGUI implements Pantalla {
         loginButton.setForeground(Color.WHITE);
         loginButton.setFocusPainted(false);
 
-        // Evento de validación al hacer clic en "Iniciar Sesión"
         loginButton.addActionListener(e -> {
             String usuario = userField.getText().trim();
             String contraseña = new String(passField.getPassword()).trim();
             String selectedRole = (String) roleSelect.getSelectedItem();
 
-            // Verificar que los campos no estén vacíos
             if (usuario.isEmpty() || contraseña.isEmpty()) {
                 JOptionPane.showMessageDialog(panel, "Error: Usuario y contraseña no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try {
-                // Validar credenciales y obtener el ID del profesor si es docente
                 int idUsuario = validarCredenciales(selectedRole, usuario, contraseña);
 
-                if (idUsuario != -1) { // Si las credenciales son válidas
-                    // Guardar el usuario en la clase SesionUsuario
-                    SesionUsuario.setUsuario(usuario);  // Guardamos el usuario autenticado
+                if (idUsuario != -1) { 
+                    SesionUsuario.setUsuario(usuario); 
 
                     if (selectedRole.equals("Docente")) {
                         System.out.println("Usuario Docente autenticado. Redirigiendo a la interfaz del docente...");
-                        MainApp.mostrarPantallaDocente(idUsuario);  // Pasar el ID del profesor
+                        MainApp.mostrarPantallaDocente(idUsuario);  
                     } else if (selectedRole.equals("Estudiante")) {
                         System.out.println("Usuario Estudiante autenticado. Redirigiendo a la interfaz del Estudiante...");
                         JOptionPane.showMessageDialog(panel, "Bienvenido, " + usuario + ". Redirección en proceso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                        MainApp.mostrarPantallaEstudiante();  // Cambia la vista y el tamaño de la ventana
+                        MainApp.mostrarPantallaEstudiante();  
                     }
                 } else {
                     JOptionPane.showMessageDialog(panel, "Error: Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -151,11 +146,10 @@ public class LoginPanelGeneralGUI implements Pantalla {
         gbc.gridy++;
         JButton registerButton = new JButton("Registrarse");
         registerButton.setFont(new Font("Times New Roman", Font.BOLD, 16));
-        registerButton.setBackground(new Color(50, 150, 250)); // Azul para diferenciarlo
+        registerButton.setBackground(new Color(50, 150, 250)); 
         registerButton.setForeground(Color.WHITE);
         registerButton.setFocusPainted(false);
 
-        // Evento para cambiar a la pantalla de registro
         registerButton.addActionListener(e -> {
             System.out.println("Redirigiendo a la pantalla de registro...");
             MainApp.mostrarPantalla(new RegistrarUsuarioGUI().getPanel());
@@ -185,12 +179,12 @@ public class LoginPanelGeneralGUI implements Pantalla {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return rs.getInt(idColumn); // Devuelve el ID del usuario
+                return rs.getInt(idColumn); 
             }
         } catch (SQLException e) {
             throw new Exception("Error en la consulta SQL: " + e.getMessage());
         }
-        return -1; // Retorna -1 si las credenciales no son válidas
+        return -1; 
     }
 
     @Override

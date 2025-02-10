@@ -6,10 +6,6 @@ import DataAccess.DTO.DTO_estudiante;
 
 public class LectoQRr {
 
-    /**
-     * Método para la lectura del QR (comentado por ahora).
-     * Simula la lectura del QR pidiendo manualmente la cédula si no se tiene escáner.
-     */
     public String validarQR() {
         @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
@@ -17,12 +13,9 @@ public class LectoQRr {
         return scanner.nextLine();
     }
 
-    /**
-     * Valida si la cédula del estudiante existe en la base de datos.
-     */
-    public boolean validarDataBase(String cedula) throws Exception {
+    public boolean validarDataBase(String cedula) throws Exception { // Buscar estudiante por cédula
         BL_estudiante blEstudiante = new BL_estudiante();
-        DTO_estudiante estudiante = blEstudiante.findByCedula(cedula); // Buscar estudiante por cédula
+        DTO_estudiante estudiante = blEstudiante.findByCedula(cedula); 
     
         if (estudiante != null) {
             System.out.println("Cédula encontrada en BD: " + estudiante.getCedulaEstudiante());
